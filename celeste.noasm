@@ -1,0 +1,1707 @@
+IDEAL
+MODEL small
+STACK 100h
+
+DATASEG
+
+; *********************************IMAGES START********************************
+
+palette db 48,48,49,0,0,0,63,29,42,63,0,19,42,20,13,63,60,58,63,40,0,23,21,19,0,57,13,7,10,20,63,51,42,10,43
+db 63,0,33,20
+db 972 dup(0)
+
+backgroundImage dw 128, 128
+db 7 dup(5),7,5,5,92 dup(11),5,5,16 dup(1),5,5,6 dup(11),10 dup(5),23 dup(11),5,5,67 dup(11),5,5
+db 16 dup(1),5,5,5,9 dup(11),6 dup(5),11,11,5,20 dup(11),5,5,11,11,5,59 dup(11),5,5,11,11,11,5,5
+db 16 dup(1),5,5,5,10 dup(11),5 dup(5),50 dup(11),0,36 dup(11),5,5,11,11,11,5,5,16 dup(1),4 dup(5)
+db 10 dup(11),5 dup(5),48 dup(11),5,5,6 dup(11),5,5,6 dup(11),5,5,6 dup(11),5,5,6 dup(11),5,5
+db 8 dup(11),5,5,5,16 dup(1),4 dup(5),7 dup(11),5,11,11,6 dup(5),22 dup(11),5,22 dup(11),6 dup(5)
+db 11,11,6 dup(5),11,11,6 dup(5),11,11,6 dup(5),11,11,6 dup(5),5 dup(11),4 dup(5),16 dup(1),5,5,5
+db 11 dup(11),10 dup(5),21 dup(11),5,18 dup(11),48 dup(5),16 dup(1),5,5,5,11 dup(11),5,5,7,7 dup(5)
+db 40 dup(11),47 dup(5),7,16 dup(1),5,5,14 dup(11),7 dup(5),7,5,5,36 dup(11),5,5,7 dup(7),0,16 dup(1)
+db 16 dup(7),24 dup(1),5,5,14 dup(11),10 dup(5),36 dup(11),5,5,7 dup(7),17 dup(1),15 dup(7),25 dup(1)
+db 5,5,5,17 dup(11),6 dup(5),11,11,5,28 dup(11),5,5,11,11,11,5,5,6 dup(7),18 dup(1),14 dup(7)
+db 26 dup(1),5,5,5,18 dup(11),5 dup(5),31 dup(11),5,5,11,11,11,5,5,5 dup(7),19 dup(1),13 dup(7)
+db 27 dup(1),4 dup(5),18 dup(11),5 dup(5),8 dup(11),5,5,6 dup(11),5,5,6 dup(11),5,5,8 dup(11),5,5,5
+db 4 dup(7),20 dup(1),12 dup(7),28 dup(1),4 dup(5),15 dup(11),5,11,11,6 dup(5),5 dup(11),6 dup(5)
+db 11,11,6 dup(5),11,11,6 dup(5),5 dup(11),4 dup(5),7,7,7,21 dup(1),11 dup(7),29 dup(1),5,5,5
+db 19 dup(11),42 dup(5),7,7,22 dup(1),10 dup(7),30 dup(1),5,5,5,19 dup(11),5,5,7,38 dup(5),7,7
+db 23 dup(1),9 dup(7),31 dup(1),5,5,22 dup(11),7 dup(5),7,7,6 dup(5),25 dup(7),24 dup(1),8 dup(7)
+db 32 dup(1),5,5,22 dup(11),16 dup(5),17 dup(7),1,6 dup(7),25 dup(1),7 dup(7),32 dup(1),5,5,5
+db 25 dup(11),7 dup(5),11,4 dup(5),7,7,4 dup(1),14 dup(7),1,1,7,7,26 dup(1),6 dup(7),32 dup(1),5,5,5
+db 26 dup(11),5 dup(5),4 dup(11),5,5,7,7,4 dup(1),14 dup(7),1,1,7,7,27 dup(1),5 dup(7),32 dup(1)
+db 4 dup(5),26 dup(11),4 dup(5),4 dup(11),5,5,7,7,4 dup(1),18 dup(7),28 dup(1),4 dup(7),28 dup(1),8
+db 1,1,1,4 dup(5),23 dup(11),5,11,11,5 dup(5),11,11,5,5,5,7,7,4 dup(1),12 dup(7),1,5 dup(7),29 dup(1)
+db 7,7,7,27 dup(1),8,1,5,1,1,5,5,5,27 dup(11),10 dup(5),24 dup(7),30 dup(1),7,7,25 dup(1),12,1,8,1,1
+db 12,1,5,5,5,27 dup(11),5,5,7,6 dup(5),25 dup(7),31 dup(1),7,25 dup(1),12,1,12,12,1,12,1,5,5
+db 28 dup(11),5,5,32 dup(7),48 dup(1),7,6 dup(5),7,7,6 dup(5),7,5,5,28 dup(11),5,5,31 dup(7),49 dup(1)
+db 19 dup(5),22 dup(11),5,5,11,11,11,5,5,30 dup(7),48 dup(1),12,1,5,5,5,11,7 dup(5),11,7 dup(5)
+db 22 dup(11),5,5,11,11,11,5,5,29 dup(7),49 dup(1),8,1,5,5,4 dup(11),4 dup(5),4 dup(11),6 dup(5)
+db 7 dup(11),5,5,6 dup(11),5,5,8 dup(11),5,5,5,28 dup(7),49 dup(1),8,12,1,5,5,4 dup(11),4 dup(5)
+db 4 dup(11),6 dup(5),5 dup(11),6 dup(5),11,11,6 dup(5),5 dup(11),4 dup(5),27 dup(7),46 dup(1),12
+db 1,1,1,8,1,1,5,5,5,11,11,6 dup(5),11,11,6 dup(5),5 dup(11),24 dup(5),26 dup(7),48 dup(1),8,1,8,12
+db 1,1,19 dup(5),5 dup(11),23 dup(5),26 dup(7),49 dup(1),12,1,12,12,1,1,7,6 dup(5),7,7,6 dup(5),7,5,5
+db 6 dup(11),7 dup(5),7,7,4 dup(5),7,7,5,5,5,7,4 dup(5),25 dup(7),7 dup(1),10 dup(7),31 dup(1),7
+db 23 dup(5),8 dup(11),24 dup(5),7,1,21 dup(7),7 dup(1),12 dup(7),30 dup(1),24 dup(5),12 dup(11)
+db 8 dup(5),11,11,4 dup(5),11,11,4 dup(5),4 dup(7),1,1,16 dup(7),7 dup(1),14 dup(7),29 dup(1),4 dup(5)
+db 11,11,11,9 dup(5),11,6 dup(5),14 dup(11),6 dup(5),10 dup(11),5,5,5,4 dup(7),1,1,15 dup(7),7 dup(1)
+db 16 dup(7),28 dup(1),5,5,5,5 dup(11),5,11,4 dup(5),5 dup(11),5,5,17 dup(11),4 dup(5),12 dup(11),5,5
+db 20 dup(7),7 dup(1),18 dup(7),27 dup(1),5,5,5,7 dup(11),4 dup(5),11,5,19 dup(11),5,11,11,5,5,7,5
+db 11,11,5,5,5 dup(11),5,11,11,5,7,7,7,1,16 dup(7),7 dup(1),20 dup(7),26 dup(1),4 dup(5),11,11,11
+db 9 dup(5),22 dup(11),5,5,7,5,5,11,5,5,7 dup(11),5,5,19 dup(7),7 dup(1),22 dup(7),25 dup(1),16 dup(5)
+db 22 dup(11),5 dup(5),10 dup(11),5,5,5,17 dup(7),7 dup(1),24 dup(7),24 dup(1),7,15 dup(5),22 dup(11)
+db 5 dup(5),10 dup(11),5,5,5,40 dup(7),48 dup(1),5,5,19 dup(11),5,5,5,7,5,5,10 dup(11),5,5,5,39 dup(7)
+db 49 dup(1),5,5,19 dup(11),5,5,5,7,5,11,11,5,4 dup(11),5,5,11,11,11,5,19 dup(7),4 dup(1),16 dup(7)
+db 50 dup(1),5,5,11,11,5,15 dup(11),6 dup(5),7 dup(11),5,5,11,11,11,5,5,18 dup(7),4 dup(1),15 dup(7)
+db 51 dup(1),5,5,18 dup(11),7 dup(5),10 dup(11),5,5,5,18 dup(7),4 dup(1),14 dup(7),52 dup(1),5,5,5
+db 18 dup(11),7 dup(5),11,11,4 dup(5),11,11,4 dup(5),18 dup(7),4 dup(1),13 dup(7),53 dup(1),4 dup(5)
+db 17 dup(11),19 dup(5),34 dup(7),54 dup(1),8 dup(5),14 dup(11),5,5,7,4 dup(5),7,4 dup(5),7,7,5,5,5
+db 34 dup(7),55 dup(1),7,7 dup(5),16 dup(11),31 dup(5),17 dup(7),55 dup(1),9 dup(7),5,5,14 dup(11)
+db 32 dup(5),16 dup(7),54 dup(1),10 dup(7),5,5,5,14 dup(11),6 dup(5),11,17 dup(5),11,11,11,4 dup(5)
+db 16 dup(7),53 dup(1),11 dup(7),5,5,5,16 dup(11),5,5,11,11,11,5,11,4 dup(5),11,0,5,11,4 dup(5)
+db 7 dup(11),5,5,5,16 dup(7),52 dup(1),12 dup(7),4 dup(5),22 dup(11),4 dup(5),11,5,11,11,4 dup(5),11,5
+db 5 dup(11),5,5,5,16 dup(7),51 dup(1),13 dup(7),4 dup(5),20 dup(11),17 dup(5),11,11,11,4 dup(5)
+db 16 dup(7),50 dup(1),14 dup(7),5,5,5,21 dup(11),24 dup(5),16 dup(7),49 dup(1),15 dup(7),5,5,5
+db 21 dup(11),23 dup(5),17 dup(7),48 dup(1),16 dup(7),5,5,20 dup(11),5,5,32 dup(7),56 dup(1),16 dup(7)
+db 5,5,20 dup(11),5,5,7,1,29 dup(7),57 dup(1),9 dup(7),1,6 dup(7),5,5,5,14 dup(11),5,5,11,11,11,5,5
+db 4 dup(7),1,1,24 dup(7),58 dup(1),12 dup(7),1,1,7,7,5,5,5,14 dup(11),5,5,11,11,11,5,5,4 dup(7),1,1
+db 23 dup(7),59 dup(1),12 dup(7),1,1,7,7,4 dup(5),17 dup(11),5,5,5,28 dup(7),60 dup(1),16 dup(7)
+db 4 dup(5),16 dup(11),4 dup(5),7,7,1,24 dup(7),61 dup(1),10 dup(7),1,5 dup(7),5,5,5,13 dup(11)
+db 8 dup(5),26 dup(7),62 dup(1),16 dup(7),5,5,5,13 dup(11),7 dup(5),26 dup(7),63 dup(1),16 dup(7),5,5
+db 12 dup(11),5,5,16 dup(1),16 dup(7),39 dup(1),9 dup(7),7 dup(1),25 dup(7),5,5,11 dup(11),5,5,5
+db 17 dup(1),15 dup(7),38 dup(1),10 dup(7),6 dup(1),26 dup(7),5,5,5,10 dup(11),5,5,5,18 dup(1)
+db 14 dup(7),37 dup(1),11 dup(7),5 dup(1),27 dup(7),5,5,5,9 dup(11),4 dup(5),19 dup(1),13 dup(7)
+db 36 dup(1),12 dup(7),4 dup(1),28 dup(7),4 dup(5),8 dup(11),4 dup(5),20 dup(1),12 dup(7),35 dup(1)
+db 13 dup(7),1,1,1,29 dup(7),4 dup(5),9 dup(11),5,5,5,21 dup(1),11 dup(7),34 dup(1),14 dup(7),1,1
+db 30 dup(7),5,5,5,10 dup(11),5,5,5,22 dup(1),10 dup(7),33 dup(1),15 dup(7),1,31 dup(7),5,5,5
+db 11 dup(11),5,5,23 dup(1),9 dup(7),32 dup(1),48 dup(7),5,5,12 dup(11),5,5,24 dup(1),9 dup(7)
+db 31 dup(1),33 dup(7),15 dup(5),14 dup(11),5,5,24 dup(1),10 dup(7),30 dup(1),32 dup(7),16 dup(5)
+db 9 dup(11),5,5,11,11,11,5,5,24 dup(1),11 dup(7),29 dup(1),10 dup(7),4 dup(1),18 dup(7),4 dup(5)
+db 11,11,11,5,11,6 dup(5),10 dup(11),5,5,11,11,11,5,5,24 dup(1),12 dup(7),28 dup(1),10 dup(7),4 dup(1)
+db 18 dup(7),5,5,5,8 dup(11),5,5,16 dup(11),5,5,5,24 dup(1),24 dup(7),16 dup(1),10 dup(7),4 dup(1)
+db 18 dup(7),5,5,5,25 dup(11),4 dup(5),24 dup(1),24 dup(7),16 dup(1),10 dup(7),4 dup(1),18 dup(7)
+db 4 dup(5),11,11,11,5,16 dup(11),8 dup(5),24 dup(1),24 dup(7),16 dup(1),32 dup(7),8 dup(5),16 dup(11)
+db 7 dup(5),7,24 dup(1),24 dup(7),16 dup(1),33 dup(7),7 dup(5),16 dup(11),31 dup(1),25 dup(7)
+db 15 dup(1),41 dup(7),5,5,14 dup(11),30 dup(1),19 dup(7),1,6 dup(7),1,1,2,2,1,2,2,7 dup(1),27 dup(7)
+db 1,14 dup(7),5,5,5,13 dup(11),29 dup(1),23 dup(7),1,1,7,7,1,1,5 dup(2),6 dup(1),31 dup(7),1,1
+db 10 dup(7),5,5,5,13 dup(11),28 dup(1),24 dup(7),1,1,7,7,1,1,1,2,3,2,6 dup(1),32 dup(7),1,1,10 dup(7)
+db 4 dup(5),12 dup(11),27 dup(1),29 dup(7),1,1,5 dup(2),4 dup(1),45 dup(7),4 dup(5),12 dup(11)
+db 26 dup(1),24 dup(7),1,5 dup(7),1,1,2,2,12,2,2,1,1,1,32 dup(7),1,13 dup(7),5,5,5,13 dup(11)
+db 25 dup(1),31 dup(7),4 dup(1),8,4 dup(1),47 dup(7),5,5,5,13 dup(11),24 dup(1),32 dup(7),4 dup(1),8
+db 1,1,1,48 dup(7),5,5,14 dup(11),24 dup(1),33 dup(7),14 dup(5),9 dup(7),16 dup(1),16 dup(7),5,5
+db 14 dup(11),24 dup(1),9 dup(7),1,22 dup(7),16 dup(5),8 dup(7),17 dup(1),15 dup(7),5,5,5,13 dup(11)
+db 24 dup(1),12 dup(7),1,1,18 dup(7),4 dup(5),8 dup(11),4 dup(5),8 dup(7),18 dup(1),14 dup(7),5,5,5
+db 13 dup(11),24 dup(1),12 dup(7),1,1,18 dup(7),5,5,5,10 dup(11),5,5,5,8 dup(7),19 dup(1),13 dup(7)
+db 4 dup(5),12 dup(11),24 dup(1),32 dup(7),5,5,12 dup(11),5,5,8 dup(7),20 dup(1),12 dup(7),4 dup(5)
+db 12 dup(11),24 dup(1),10 dup(7),1,21 dup(7),5,5,11,11,5,5,5 dup(11),5,11,11,5,5,8 dup(7),21 dup(1)
+db 11 dup(7),5,5,5,13 dup(11),24 dup(1),32 dup(7),5,5,11,11,5,5,8 dup(11),5,5,8 dup(7),22 dup(1)
+db 10 dup(7),5,5,5,13 dup(11),24 dup(1),32 dup(7),5,5,12 dup(11),5,5,8 dup(7),23 dup(1),9 dup(7),5,5
+db 14 dup(11),23 dup(1),7,7,15 dup(5),16 dup(7),5,5,12 dup(11),5,5,8 dup(7),32 dup(1),5,5,14 dup(11)
+db 22 dup(1),7,7,16 dup(5),8 dup(7),1,7 dup(7),5,5,12 dup(11),5,5,7 dup(7),33 dup(1),5,5,5,13 dup(11)
+db 21 dup(1),7,7,7,4 dup(5),8 dup(11),4 dup(5),8 dup(7),1,1,6 dup(7),5,5,11,11,5,4 dup(11),5,5
+db 11,11,11,5,5,6 dup(7),34 dup(1),5,5,5,13 dup(11),20 dup(1),4 dup(7),5,5,5,10 dup(11),5,5,5,8 dup(7)
+db 1,1,1,5 dup(7),5,5,7 dup(11),5,5,11,11,11,5,5,5 dup(7),13 dup(1),5,1,1,1,5,1,1,1,5,1,1,1,5,1,1,1,5
+db 1,1,1,5,1,4 dup(5),12 dup(11),19 dup(1),5 dup(7),5,5,12 dup(11),5,5,8 dup(7),4 dup(1),4 dup(7)
+db 5,5,5,10 dup(11),5,0,5,4 dup(7),14 dup(1),5,1,1,1,5,1,1,1,5,1,1,1,5,1,1,1,5,1,1,1,5,1,4 dup(5)
+db 12 dup(11),18 dup(1),6 dup(7),5,5,11,11,5,5,5 dup(11),5,11,11,5,5,8 dup(7),5 dup(1),7,7,7,4 dup(5)
+db 8 dup(11),4 dup(5),7,7,7,14 dup(1),0,5,5,1,0,5,5,1,0,5,5,1,0,5,5,1,0,5,5,1,0,5 dup(5),13 dup(11)
+db 17 dup(1),7 dup(7),5,5,11,11,5,5,8 dup(11),5,5,8 dup(7),6 dup(1),7,7,16 dup(5),7,7,14 dup(1),7,0,5
+db 0,7,0,5,0,7,0,5,0,7,0,5,0,7,0,5,0,7,0,5,0,5,5,5,13 dup(11),16 dup(1),8 dup(7),5,5,12 dup(11),5,5
+db 8 dup(7),7 dup(1),7,7,14 dup(5),7,7,15 dup(1),7,0,0,0,7,0,0,0,7,0,0,0,7,0,0,0,7,0,0,0,7,0,0,0,5,5
+db 14 dup(11),24 dup(5),14 dup(11),5,5,8 dup(7),8 dup(1),7,14 dup(5),7,16 dup(1),7,23 dup(5)
+db 16 dup(11),24 dup(5),13 dup(11),5,5,5,7 dup(7),9 dup(1),16 dup(5),16 dup(1),24 dup(5),17 dup(11)
+db 6 dup(5),11,11,6 dup(5),11,11,6 dup(5),14 dup(11),5,5,5,6 dup(7),10 dup(1),4 dup(5),8 dup(11)
+db 4 dup(5),16 dup(1),4 dup(5),5 dup(11),6 dup(5),11,11,6 dup(5),20 dup(11),5,5,6 dup(11),5,5
+db 6 dup(11),5,5,15 dup(11),4 dup(5),5 dup(7),11 dup(1),5,5,5,10 dup(11),5,5,5,1,1,5,1,1,1,5,1,1,1,5
+db 1,1,1,5,1,5,5,5,8 dup(11),5,5,6 dup(11),5,5,55 dup(11),4 dup(5),4 dup(7),12 dup(1),5,5,12 dup(11)
+db 5,5,1,1,5,1,1,1,5,1,1,1,5,1,1,1,5,1,5,5,75 dup(11),5,5,5,7,7,7,13 dup(1),5,5,11,11,5,5,5 dup(11),5
+db 11,11,5,5,1,0,5,5,1,0,5,5,1,0,5,5,1,0,4 dup(5),11,11,5,5,71 dup(11),5,5,5,7,7,14 dup(1),5,5,11,11
+db 5,5,8 dup(11),5,5,7,0,5,0,7,0,5,0,7,0,5,0,7,0,5,0,5,5,11,11,5,5,72 dup(11),5,5,7,15 dup(1),5,5
+db 12 dup(11),5,5,7,0,0,0,7,0,0,0,7,0,0,0,7,0,0,0,5,5,76 dup(11),5,5,16 dup(1),5,5,14 dup(11)
+db 16 dup(5),49 dup(11),5,5,26 dup(11),5,5,5,16 dup(1),5,5,5,13 dup(11),16 dup(5),25 dup(11),5,5
+db 5 dup(11),5,16 dup(11),5,5,11,11,5,23 dup(11),5,5,5,16 dup(1),5,5,5,14 dup(11),6 dup(5),11,11
+db 6 dup(5),26 dup(11),5,5,11,11,5,46 dup(11),4 dup(5),1,1,5,1,1,1,5,1,1,1,5,1,1,1,5,1,4 dup(5)
+db 15 dup(11),5,5,6 dup(11),5,5,79 dup(11),4 dup(5),1,1,5,1,1,1,5,1,1,1,5,1,1,1,5,1,4 dup(5)
+db 78 dup(11),5,26 dup(11),5,5,5,1,0,5,5,1,0,5,5,1,0,5,5,1,0,5 dup(5),55 dup(11),5,26 dup(11),5
+db 23 dup(11),5,5,5,7,0,5,0,7,0,5,0,7,0,5,0,7,0,5,0,5,5,5,58 dup(11),5,48 dup(11),5,5,7,0,0,0,7,0,0,0
+db 7,0,0,0,7,0,0,0,5,5,110 dup(11),16 dup(5),112 dup(11),16 dup(5),113 dup(11),6 dup(5),11,11,6 dup(5)
+db 116 dup(11),5,5,6 dup(11),5,5,587 dup(11)
+
+boxImage1 dw 8, 8
+db 4,6 dup(6),4,6,6 dup(9),6,6,6 dup(9),6,6,6 dup(9),6,6,6 dup(9),6,6,6 dup(9),6,6,6 dup(9),6,4
+db 6 dup(6),4
+
+boxImage2 dw 8, 8
+db 4,6 dup(6),4,6,9,9,9,4,9,9,6,6,9,9,9,6,9,9,6,6,4,6,4,1,4,9,6,6,9,9,4,1,6,4,6,6,9,9,9,6,9,9,6,6,9,9
+db 4,9,9,9,6,4,6 dup(6),4
+
+boxImage3 dw 8, 8
+db 4,6,6,6,1,6,4,4,6,9,9,4,1,6,9,6,4,6,4,1,1,4,9,6,6 dup(1),4,4,6,4,6 dup(1),6,9,4,1,1,4,4,6,6,9,4,1,4
+db 9,9,6,4,4,1,1,4,6,6,4
+
+playerImage dw 16, 16
+db 68 dup(-1),7 dup(3),8 dup(-1),9 dup(3),7 dup(-1),4 dup(3),4 dup(10),3,7 dup(-1),3,3,3,10,9,10,10,9
+db 3,8 dup(-1),3,3,5 dup(10),10 dup(-1),3,4 dup(12),12 dup(-1),5,-1,-1,5,86 dup(-1)
+
+circleImage1 dw 8, 8
+db -1,0,4 dup(5),0,-1,0,5,5,11,11,5,5,0,5,5,4 dup(11),5,5,5,6 dup(11),5,5,6 dup(11),5,5,5,4 dup(11)
+db 5,5,0,5,5,11,11,5,5,0,-1,0,4 dup(5),0,-1
+
+circleImage2 dw 8, 8
+db -1,0,4 dup(5),0,-1,0,5,5,3,3,5,5,0,5,5,4 dup(3),5,5,5,6 dup(3),5,5,6 dup(3),5,5,5,4 dup(3),5,5,0
+db 5,5,3,3,5,5,0,-1,0,4 dup(5),0,-1
+
+borderImage dw 128, 16
+db 128*16 dup(0)
+
+; *********************************OFFSET CONSTANTS*********************************
+
+PhysicsControllerId            equ 5
+PhysicsControllerVelocityX     equ 1
+PhysicsControllerAccelerationX equ 3
+PhysicsControllerFrictionX     equ 5
+PhysicsControllerMaxVelocityX  equ 7
+PhysicsControllerVelocityY     equ 9
+PhysicsControllerAccelerationY equ 11
+PhysicsControllerFrictionY     equ 13
+PhysicsControllerMaxVelocityY  equ 15
+PhysicsControllerPosition      equ 17
+PhysicsControllerImage         equ 19
+PhysicsControllerWidth         equ 21
+PhysicsControllerHeight        equ 23
+PhysicsControllerStore         equ 25
+
+PhysicsAnimatedControllerId            equ 6
+PhysicsAnimatedControllerVelocityX     equ 1
+PhysicsAnimatedControllerAccelerationX equ 3
+PhysicsAnimatedControllerFrictionX     equ 5
+PhysicsAnimatedControllerMaxVelocityX  equ 7
+PhysicsAnimatedControllerVelocityY     equ 9
+PhysicsAnimatedControllerAccelerationY equ 11
+PhysicsAnimatedControllerFrictionY     equ 13
+PhysicsAnimatedControllerMaxVelocityY  equ 15
+PhysicsAnimatedControllerPosition      equ 17
+PhysicsAnimatedControllerSize          equ 19
+PhysicsAnimatedControllerWidth         equ 21
+PhysicsAnimatedControllerHeight        equ 23
+PhysicsAnimatedControllerStore         equ 25
+
+AnimatorCurrentAnimation equ 0
+AnimatorCurrentFrame     equ 1
+AnimatorAnimationAmount  equ 2
+AnimatorFirstAnimation   equ 3
+
+VelocityAxisVelocity     equ 0
+VelocityAxisAcceleration equ 2
+VelocityAxisFriction     equ 4
+VelocityAxisMaxVelocity  equ 6
+
+AnimationId         equ 3
+AnimationSize       equ 1
+AnimationSpeed      equ 2
+AnimationFirstFrame equ 3
+
+AnimatedControllerId           equ 2
+AnimatedControllerPosition     equ 1
+AnimatedControllerSize         equ 3
+AnimatedControllerWidth        equ 5
+AnimatedControllerHeight       equ 7
+AnimatedControllerStore        equ 9
+
+ControllerId       equ 1
+ControllerPosition equ 1
+ControllerImage    equ 3
+ControllerWidth    equ 5
+ControllerHeight   equ 7
+ControllerStore    equ 9
+
+ImageWidth  equ 0
+ImageHeight equ 2
+ImageData   equ 4
+
+PrintManagerId equ 4
+PrintManagerControllerAmount equ 1
+PrintManagerFirstController  equ 2
+
+; *********************************CONTROLLERS START********************************
+
+borderController db ControllerId
+dw 0, offset borderImage, 128, 16
+db 128*16 dup(0)
+
+boxController db PhysicsAnimatedControllerId         ; id
+dw 0, 0, 1, 12             ; vx, ax, fx, mx
+dw 0, 2*320, 1*320, 12*320 ; vy, ay, fy, my
+dw 0, 64, 8, 8             ; pos, size, width, height
+db 64 dup(0),0,0,1
+dw offset boxAnimation
+
+; *********************************ANIMATIONS START********************************
+
+circleAnimation db AnimationId, 2, 20
+dw offset circleImage1, offset circleImage2
+
+boxAnimation db AnimationId, 3, 10
+dw offset boxImage1,offset boxImage2,offset boxImage3
+
+; *********************************GENERAL START********************************
+
+printManager db PrintManagerId, 0
+dw 25 dup(0)
+
+directionX dw 0
+directionY dw 0
+
+previousIRQMask db ?       ; Save the original mask for restoration
+time db 0
+gameLoopSpeed equ 42 ; in ms
+globalTime dw 0     ; in ms
+
+CODESEG
+
+proc clock far
+    push bp
+    mov bp, sp
+    push ax
+    push bx
+    push dx
+    push ds
+    ; Preserve port 70h contents
+    in al, 70h
+    mov bx, ax
+    ; Read status register C to acknowledge RTC interrupt
+    mov al, 0Ch
+    out 70h, al
+    mov al, 8Ch
+    out 70h, al
+    in al, 71h
+    ; Restore port 70h contents
+    mov ax, bx
+    out 70h, al
+    ; Notify PICs that interrupt is handled
+    mov al, 20h
+    out 0A0h, al
+    out 020h, al
+    push offset globalTime
+    call periodic ; every tick (1024 times a sec)
+    pop ds
+    pop dx
+    pop bx
+    pop ax
+    pop bp
+    iret
+endp clock
+
+proc setUpClock
+    push bp
+    mov bp, sp
+    push ax
+    push ds
+    push dx
+    ; Save original mask of secondary PIC
+    in al, 0A1h
+    mov [bp + 4], al
+    and al, 0FEh ; Enable IRQ 8 (RTC)
+    out 0A1h, al
+    ; Set frequency divisor in RTC register A
+    mov al, 0Ah
+    out 70h, al
+    mov al, 8Ah
+    out 70h, al
+    in al, 71h
+    and al, 11110000b ; Clear rate bits
+    or al, 0110b      ; Set rate to 1024 Hz
+    out 71h, al
+    in al, 71h        ; Ensure the write is complete
+    ; Enable periodic interrupts in RTC register B
+    mov al, 0Bh
+    out 70h, al
+    mov al, 8Bh
+    out 70h, al
+    in al, 71h
+    or al, 40h        ; Set PI (bit 6)
+    out 71h, al
+    in al, 71h        ; Acknowledge the change
+    ; Set new interrupt handler for interrupt 70h
+    mov al, 70h       ; Interrupt vector 70h
+    mov ah, 25h       ; Set interrupt vector
+    mov dx, offset clock ; Offset of the ISR
+    push seg clock
+    pop ds
+    int 21h
+    pop dx
+    pop ds
+    pop ax
+    pop bp
+    ret 2
+endp setUpClock
+
+proc cleanUpClock
+    push bp
+    mov bp, sp
+    push ax
+    ; Restore original mask of secondary PIC
+    mov al, [bp + 4] ; mask pointer
+    out 0A1h, al
+    pop ax
+    pop bp
+    ret 2
+endp cleanUpClock
+
+; Input - object pointer, offset
+; General-purpose getter for word-sized fields
+proc getWordField
+    push bp
+    mov bp, sp
+    push si
+    mov si, [bp + 6]       ; object pointer
+    add si, [bp + 4]       ; add offset
+    mov si, [si]
+    mov [bp + 4], si       ; return the value
+    pop si
+    pop bp
+    ret 4
+endp getWordField
+
+; Input - object pointer, offset, value
+; General-purpose setter for word-sized fields
+proc setWordField
+    push bp
+    mov bp, sp
+    push si
+    push ax
+    mov si, [bp + 8]   ; object pointer
+    add si, [bp + 6]   ; add offset
+    mov ax, [bp + 4]   ; value
+    mov [si], ax       ; set the value
+    pop ax
+    pop si
+    pop bp
+    ret 6
+endp setWordField
+
+; Input - object pointer, offset
+; General-purpose getter for byte-sized fields
+proc getByteField
+    push bp
+    mov bp, sp
+    push bx
+    mov bx, [bp + 6]       ; object pointer
+    add bx, [bp + 4]       ; add offset
+    mov bl, [bx]
+    mov [bp + 4], bl       ; return the value
+    pop bx
+    pop bp
+    ret 4
+endp getByteField
+
+; Input - object pointer, offset, value
+; General-purpose setter for byte-sized fields
+proc setByteField
+    push bp
+    mov bp, sp
+    push si
+    push ax
+    mov si, [bp + 8]   ; object pointer
+    add si, [bp + 6]   ; add offset
+    mov al, [bp + 4]   ; value
+    mov [si], al       ; set the value
+    pop ax
+    pop si
+    pop bp
+    ret 6
+endp setByteField
+
+proc getControllerPosition
+    push bp
+    mov bp, sp
+    push ax
+    push bx
+    mov bx, [bp + 4] ; controller pointer
+    cmp [byte ptr bx], PhysicsAnimatedControllerId
+    je .isPhysicsAnimated
+    cmp [byte ptr bx], PhysicsControllerId
+    je .isPhysics
+    cmp [byte ptr bx], AnimatedControllerId
+    je .isAnimated
+    mov ax, [bx + ControllerPosition]
+    jmp .end
+.isPhysicsAnimated:
+    mov ax, [bx + PhysicsAnimatedControllerPosition]
+    jmp .end
+.isAnimated:
+    mov ax, [bx + AnimatedControllerPosition]
+    jmp .end
+.isPhysics:
+    mov ax, [bx + PhysicsControllerPosition]
+.end:
+    mov [bp + 4], ax
+    pop bx
+    pop ax
+    pop bp
+    ret
+endp getControllerPosition
+
+proc setControllerPosition
+    push bp
+    mov bp, sp
+    push ax
+    push bx
+    mov bx, [bp + 6] ; controller pointer
+    mov ax, [bp + 4] ; position
+    cmp [byte ptr bx], PhysicsAnimatedControllerId
+    je .isPhysics
+    cmp [byte ptr bx], PhysicsControllerId
+    je .isPhysics
+    cmp [byte ptr bx], AnimatedControllerId
+    je .isAnimated
+    mov [bx + ControllerPosition], ax
+    jmp .end
+.isAnimated:
+    mov [bx + AnimatedControllerPosition], ax
+    jmp .end
+.isPhysics:
+    mov [bx + PhysicsControllerPosition], ax
+.end:
+    pop bx
+    pop ax
+    pop bp
+    ret 4
+endp setControllerPosition
+
+proc getControllerImage
+    push bp
+    mov bp, sp
+    push ax
+    push bx
+    mov bx, [bp + 4] ; controller pointer
+    cmp [byte ptr bx], PhysicsControllerId
+    je .isPhysics
+    cmp [byte ptr bx], AnimatedControllerId
+    je .isAnimated
+    cmp [byte ptr bx], PhysicsAnimatedControllerId
+    je .isAnimated
+    mov ax, [bx + ControllerImage]
+    jmp .end
+.isPhysics:
+    mov ax, [bx + PhysicsControllerImage]
+    jmp .end
+.isAnimated:
+    push bx
+    call getCurrentFrame
+    pop ax
+.end:
+    mov [bp + 4], ax
+    pop bx
+    pop ax
+    pop bp
+    ret
+endp getControllerImage
+
+proc getControllerHeight
+    push bp
+    mov bp, sp
+    push ax
+    push bx
+    mov bx, [bp + 4] ; controller pointer
+    cmp [byte ptr bx], PhysicsAnimatedControllerId
+    je .isPhysics
+    cmp [byte ptr bx], PhysicsControllerId
+    je .isPhysics
+    cmp [byte ptr bx], AnimatedControllerId
+    je .isAnimated
+    mov ax, [bx + ControllerHeight]
+    jmp .end
+.isAnimated:
+    mov ax, [bx + AnimatedControllerHeight]
+    jmp .end
+.isPhysics:
+    mov ax, [bx + PhysicsControllerHeight]
+.end:
+    mov [bp + 4], ax
+    pop bx
+    pop ax
+    pop bp
+    ret
+endp getControllerHeight
+
+proc getControllerWidth
+    push bp
+    mov bp, sp
+    push ax
+    push bx
+    mov bx, [bp + 4] ; controller pointer
+    cmp [byte ptr bx], PhysicsAnimatedControllerId
+    je .IsPhysics
+    cmp [byte ptr bx], PhysicsControllerId
+    je .IsPhysics
+    cmp [byte ptr bx], AnimatedControllerId
+    je .IsAnimated
+    mov ax, [bx + ControllerWidth]
+    jmp .End
+.IsAnimated:
+    mov ax, [bx + AnimatedControllerWidth]
+    jmp .End
+.IsPhysics:
+    mov ax, [bx + PhysicsControllerWidth]
+.End:
+    mov [bp + 4], ax
+    pop bx
+    pop ax
+    pop bp
+    ret
+endp getControllerWidth
+
+proc getControllerStorePlace
+    push bp
+    mov bp, sp
+    push bx
+    mov bx, [bp + 4] ; controller pointer
+    cmp [byte ptr bx], PhysicsAnimatedControllerId
+    je .isPhysics
+    cmp [byte ptr bx], PhysicsControllerId
+    je .isPhysics
+    cmp [byte ptr bx], AnimatedControllerId
+    je .isAnimated
+    add bx, ControllerStore
+    jmp .end
+.isAnimated:
+    add bx, AnimatedControllerStore
+    jmp .end
+.isPhysics:
+    add bx, PhysicsControllerStore
+.end:
+    mov [bp + 4], bx
+    pop bx
+    pop bp
+    ret
+endp getControllerStorePlace
+
+; creates a short delay
+proc delay
+    push ax
+    push cx
+    mov cx, 300  ; outer loop
+    mov ax, 1000 ; inner loop
+.outerLoop:
+.innerLoop:
+    dec ax
+    jnz .innerLoop
+    loop .outerLoop
+    pop cx
+    pop ax
+    ret
+endp delay
+
+; input - word directionX pointer, word directionY pointer
+proc updateDirection
+    push bp
+    mov bp, sp
+    push ax
+    push si
+    push di
+    mov si, [bp + 6]  ; directionX pointer
+    mov di, [bp + 4]  ; directionY pointer
+    mov [word ptr si], 0
+    mov [word ptr di], 0
+    ; Check if 'A' key is pressed (scan code 1Eh)
+    in al, 60h       ; Read keyboard state from port 60h
+    cmp al, 1Eh
+    je .setLeft
+    ; Check if 'D' key is pressed (scan code 20h)
+    in al, 60h       ; Read keyboard state from port 60h
+    cmp al, 20h
+    je .setRight
+    jmp .checkY
+.setLeft:
+    mov [word ptr si], -1*4
+    jmp .checkY
+.setRight:
+    mov [word ptr si], 1*4
+.checkY:
+    ; Check if 'W' key is pressed (scan code 11h)
+    in al, 60h       ; Read keyboard state from port 60h
+    cmp al, 11h
+    je .setUp
+    ; Check if 'S' key is pressed (scan code 1Fh)
+    in al, 60h       ; Read keyboard state from port 60h
+    cmp al, 1Fh
+    je .setDown
+    jmp .end
+.setUp:
+    mov [word ptr di], -320*2
+    jmp .end
+.setDown:
+    mov [word ptr di], 320*2
+.end:
+    pop di
+    pop si
+    pop ax
+    pop bp
+    ret 4
+endp updateDirection
+
+; clears the screen (turns all pixels to 0)
+proc clearScreen
+    push di
+    mov di, 64001
+.clearLoop:
+    dec di
+    mov [byte ptr es:di], 1
+    jnz .clearLoop
+    pop di
+    ret
+endp clearScreen
+
+; input - palette pointer
+; sets it to the screen's palette
+proc setPalette
+    push bp
+    mov bp, sp
+    push ax
+    push si
+    push cx
+    push dx
+	mov si, [bp + 4]
+	mov cx, 256
+	mov dx, 3C8h
+	mov al, 0
+	out dx, al ; copy starting color to port 3C8h
+	inc dx     ; copy palette itself to port 3C9h
+.setLoop:
+	mov al, [si]   ; red
+	out dx, al
+	mov al, [si+1] ; green
+	out dx, al
+	mov al, [si+2] ; blue
+	out dx, al
+	add si, 3      ; move to next color
+	loop .setLoop
+    pop dx
+    pop cx
+    pop si
+    pop ax
+    pop bp
+	ret 2
+endp setPalette
+
+; input - image pointer, position (left top corner)
+; prints the image at the specified location
+proc printImage
+    push bp
+    mov bp, sp
+    push di
+    push ax
+    push bx
+    push cx
+    push dx
+    push si
+    mov di, [bp + 4] ; screen position (left top)
+    mov bx, [bp + 6] ; image pointer
+    mov cx, [bx + ImageHeight]
+    mov dx, [bx + ImageWidth]
+    add bx, 4 ; skip the header
+    mov si, 0 ; init current width counter
+.printLoop:
+    mov al, [byte ptr bx] ; get the color
+    cmp al, -1
+    je .skipPixel ; skip if it's empty (-1)
+    mov [byte ptr es:di], al
+.skipPixel:
+    inc di ; move to the next pixel from screen
+    inc bx ; move to the next pixel from image
+    inc si ; inc the current width counter
+    cmp si, dx ; if reached end of the row
+    jne .printLoop
+    add di, 320
+    sub di, dx ; point to the next column
+    xor si, si
+    dec cx
+    jnz .printLoop
+    pop si
+    pop dx
+    pop cx
+    pop bx
+    pop ax
+    pop di
+    pop bp
+    ret 4
+endp printImage
+
+; input - controller pointer
+; prints it to the screen
+proc printController
+    push bp
+    mov bp, sp
+    push di
+    push ax
+    mov di, [bp + 4] ; controller pointer
+    push di
+    call getControllerPosition
+    pop ax ; position
+    push di
+    call getControllerImage
+    pop di ; image
+    push di
+    push ax
+    call printImage
+    pop ax
+    pop di
+    pop bp
+    ret 2
+endp printController
+
+; saves the background to the controller so it could move
+; without affecting the background
+proc saveController
+    push bp
+    mov bp, sp
+    push di
+    push ax
+    push bx
+    push cx
+    push dx
+    push si
+    mov di, [bp + 4]  ; controller
+    push di
+    call getControllerStorePlace
+    pop bx     ; saving place
+    push di
+    call getControllerHeight
+    pop cx     ; height
+    push di
+    call getControllerWidth
+    pop dx     ; width
+    push di
+    call getControllerPosition
+    pop di     ; position
+    mov si, 0  ; width counter
+.saveLoop:
+    mov al, [es:di]
+    mov [bx], al
+    inc di
+    inc bx
+    inc si
+    cmp si, dx ; if reached end of the row
+    jne .saveLoop
+    add di, 320
+    sub di, dx ; point to the next column
+    xor si, si
+    dec cx
+    jnz .saveLoop
+    pop si
+    pop dx
+    pop cx
+    pop bx
+    pop ax
+    pop di
+    pop bp
+    ret 2
+endp saveController
+
+; input - controller pointer, word position value
+; prints the saved background and moves the controller to the new position (doesn't print it)
+proc moveController
+    push bp
+    mov bp, sp
+    push di
+    push ax
+    push bx
+    push dx
+    mov di, [bp + 6] ; controller pointer
+    mov bx, [bp + 4] ; position
+    ; print the saved data
+    push di
+    call getControllerPosition
+    pop ax
+    push di
+    call getControllerStorePlace
+    pop dx
+    sub dx, 4 ; to also get the width and height
+    push dx ; (width, height, color bytes)
+    push ax ; old position
+    call printImage
+    ; set the new position
+    push di
+    push bx
+    call setControllerPosition
+    pop dx
+    pop bx
+    pop ax
+    pop di
+    pop bp
+    ret 4
+endp moveController
+
+; input - controller pointer, word init position, printManager pointer
+; init the controller to the set position (saves the background and moves to the location)
+proc initController
+    push bp
+    mov bp, sp
+    push di
+    push ax
+    push si
+    push bx
+    mov di, [bp + 8] ; controller pointer
+    mov ax, [bp + 6] ; set position
+    mov si, [bp + 4] ; printManager pointer
+    push di
+    push ax
+    call setControllerPosition
+    push si
+    push di
+    call uploadController ; save the background
+    pop bx
+    pop si
+    pop ax
+    pop di
+    pop bp
+    ret 6
+endp initController
+
+; input - animated controller pointer
+; moves the current animation a frame (if last frame resets it)
+proc moveFrame
+    push bp
+    mov bp, sp
+    push di
+    push bx
+    push ax
+    mov di, [bp + 4]          ; controller pointer
+    xor ax, ax
+    push di
+    call getControllerAnimator
+    push di                   ; start of animating (current animation)
+    call getCurrentAnimation
+    pop bx                          ; current animation
+    mov bl, [bx + AnimationSize]    ; animation size
+    pop di ; - ?
+    mov al, [di + AnimatorCurrentFrame]          ; current frame number
+    inc al                                       ; next frame
+    cmp al, bl
+    jne .end
+    mov al, 0
+.end:
+    mov [di + AnimatorCurrentFrame], al
+    pop ax
+    pop bx
+    pop di
+    pop bp
+    ret 2
+endp moveFrame
+
+; input - controller pointer, byte animation number
+; sets the current animation by number (first is 0, second is 1...)
+proc setAnimation
+    push bp
+    mov bp, sp
+    push di
+    push ax
+    xor ax, ax
+    mov al, [bp + 4] ; animation number
+    mov di, [bp + 6] ; controller pointer
+    push di
+    call getControllerAnimator
+    pop di
+    mov [byte ptr di + AnimatorCurrentAnimation], al  ; set current animation
+    mov [byte ptr di + AnimatorCurrentFrame], 0       ; set current frame 0
+    pop ax
+    pop di
+    pop bp
+    ret 4
+endp setAnimation
+
+; input - animated controller, current time (0-255)
+; updates it's current animation
+proc updateAnimation
+    push bp
+    mov bp, sp
+    push dx
+    push ax
+    push di
+    push bx
+    xor ax, ax
+    mov di, [bp + 6]          ; controller pointer
+    mov al, [bp + 4]          ; current time
+    push di
+    call getCurrentAnimation
+    pop bx
+    mov dh, [bx + AnimationSpeed]          ; animation speed
+    div dh ; ah - time % speed
+    cmp ah, 0
+    jne .end
+    push di
+    call moveFrame
+.end:
+    pop bx
+    pop di
+    pop ax
+    pop dx
+    pop bp
+    ret 4
+endp updateAnimation
+
+; updates time
+proc updateTime
+    push bp
+    mov bp, sp
+    push bx
+    mov bx, [bp + 4]    ; time pointer
+    cmp [byte ptr bx], 255
+    jne .continue
+    mov [byte ptr bx], -1
+.continue:
+    inc [byte ptr bx]
+    pop bx
+    pop bp
+    ret 2
+endp updateTime
+
+; input - printManager pointer
+; prints all the controllers
+proc printAllControllers
+    push bp
+    mov bp, sp
+    push bx
+    push di
+    push cx
+    push si
+    mov si, [bp + 4] ; offset printManager
+    inc si           ; skip id
+    mov bx, si
+    mov cl, [byte ptr bx] ; amount of controllers
+.saveLoop:
+    cmp cl, 0
+    je .saveEnd
+    push [bx + 1]      ; controller pointer
+    call saveController
+    add bx, 2
+    dec cl
+    jmp .saveLoop
+.saveEnd:
+    mov bx, si
+    mov cl, [byte ptr bx] ; amount of controllers
+    mov [byte ptr bx], 0
+.printLoop:
+    cmp cl, 0
+    je .printEnd
+    push [bx + 1]      ;  controller pointer
+    call printController
+    mov [word ptr bx + 1], 0
+    add bx, 2
+    dec cl
+    jmp .printLoop
+.printEnd:
+    pop si
+    pop cx
+    pop di
+    pop bx
+    pop bp
+    ret 2
+endp printAllControllers
+
+; input - printManager pointer, controller pointer
+; uploads the controller to the manager
+proc uploadController
+    push bp
+    mov bp, sp
+    push bx
+    push di
+    push ax
+    mov bx, [bp + 6] ; printManager pointer
+    mov di, [bp + 4] ; controller pointer
+    xor ax, ax
+    mov al, [byte ptr bx + PrintManagerControllerAmount] ; amount of controllers
+    inc [byte ptr bx + PrintManagerControllerAmount]     ; inc the amount of controllers
+    shl ax, 1
+    add bx, ax
+    mov [bx + PrintManagerFirstController], di  ; upload it
+    pop ax
+    pop di
+    pop bx
+    pop bp
+    ret 4
+endp uploadController
+
+; input - animated controller
+; returns the current animation
+proc getCurrentAnimation
+    push bp
+    mov bp, sp
+    push di
+    push bx
+    mov di, [bp + 4] ; controller pointer
+    push di
+    call getControllerAnimator
+    pop di
+    xor bx, bx
+    mov bl, [di + AnimatorCurrentAnimation]  ; current animation number
+    add di, AnimatorFirstAnimation           ; first animation pointer
+    shl bx, 1
+    add di, bx
+    mov di, [di]
+    mov [word ptr bp + 4], di
+    pop bx
+    pop di
+    pop bp
+    ret
+endp getCurrentAnimation
+
+; input - animated controller
+; returns the current animation frame
+proc getCurrentFrame
+    push bp
+    mov bp, sp
+    push di
+    push bx
+    push si
+    push ax
+    mov di, [bp + 4] ; controller pointer
+    push di
+    call getControllerAnimator
+    pop si
+    xor bx, bx
+    xor ax, ax
+    mov bl, [si + AnimatorFirstAnimation] ; current animation number
+    mov al, [si + AnimatorCurrentFrame]   ; current frame number
+    push di
+    call getCurrentAnimation
+    pop si ; current animation
+    add si, AnimationFirstFrame        ; first frame
+    shl al, 1        ; each frame is a word
+    add si, ax       ; current frame pointer
+    mov si, [si]     ; current frame
+    mov [bp + 4], si ; return it
+    pop ax
+    pop si
+    pop bx
+    pop di
+    pop bp
+    ret
+endp getCurrentFrame
+
+; input - animated controller
+; returns the start of the animating part of the controller
+proc getControllerAnimator
+    push bp
+    mov bp, sp
+    push di
+    mov di, [bp + 4] ; controller pointer
+    cmp [byte ptr di], PhysicsAnimatedControllerId
+    je .isPhysics
+    add di, [di + AnimatedControllerSize] ; add the size
+    add di, AnimatedControllerStore       ; add the storing place     
+    jmp .end   
+.isPhysics:
+    add di, [di + PhysicsAnimatedControllerSize]
+    add di, PhysicsAnimatedControllerStore
+.end:
+    mov [bp + 4], di ; send back
+    pop di
+    pop bp
+    ret
+endp getControllerAnimator
+
+; input - velocity controller
+; update its velocity (x and y)
+proc updateVelocity
+    push bp
+    mov bp, sp
+    push bx
+    mov bx, [bp + 4] ; controller
+    add bx, PhysicsControllerVelocityX
+    push bx
+    call updateAxisVelocity ; update velocity x
+    sub bx, PhysicsControllerVelocityX
+    add bx, PhysicsControllerVelocityY
+    push bx
+    call updateAxisVelocity ; update velocity y
+    pop bx
+    pop bp
+    ret 2
+endp updateVelocity
+
+; input - velocity axis pointer (start of each axis part)
+; updates it's velocity
+proc updateAxisVelocity
+    push bp
+    mov bp, sp
+    push bx
+    push dx
+    push si
+    push cx
+    mov si, [bp + 4]                        ; velocity pointer
+    mov dx, [si + VelocityAxisFriction]     ; friction
+    mov bx, [si + VelocityAxisVelocity]    
+    mov cx, [si + VelocityAxisMaxVelocity]  ; max velocity
+    cmp bx, 0
+    jl .positiveFriction ; if we go negative
+    cmp bx, 0
+    jg .negativeFriction ; if we go negative
+
+    mov bx, [si + VelocityAxisAcceleration] ; accerlation
+    add [si], bx                            ; add velocity acceleration
+
+    jmp .end
+.negativeFriction:
+    sub bx, dx ; check if the gravity is too much it will become positive, if so reset it
+    cmp bx, 0
+    jl .resetFriction
+    sub [si + VelocityAxisVelocity], dx
+
+    mov bx, [si + VelocityAxisAcceleration] ; accerlation
+    add [si], bx                            ; add velocity acceleration
+
+    jmp .limitPositiveVelocity
+.positiveFriction:
+    add bx, dx ; check if the gravity is too much it will become negative, if so reset it
+    cmp bx, 0
+    jg .resetFriction
+    add [si + VelocityAxisVelocity], dx
+    
+    mov bx, [si + VelocityAxisAcceleration] ; accerlation
+    add [si], bx                            ; add velocity acceleration
+
+    jmp .limitNegativeVelocity
+.resetFriction:
+    mov [word ptr si + VelocityAxisVelocity], 0
+    jmp .end
+.limitPositiveVelocity:
+    cmp [si + VelocityAxisVelocity], cx
+    jl .limitNegativeVelocity
+    mov [si + VelocityAxisVelocity], cx
+.limitNegativeVelocity:
+    neg cx
+    cmp [si + VelocityAxisVelocity], cx
+    jg .end
+    mov [si + VelocityAxisVelocity], cx
+.end:
+    pop cx
+    pop si
+    pop dx
+    pop bx
+    pop bp
+    ret 2
+endp updateAxisVelocity
+
+proc applyVelocity
+    push bp
+    mov bp, sp
+    push bx
+    push ax
+    mov bx, [bp + 4] ; controller
+    push bx
+    mov ax, [bx + PhysicsControllerPosition]   ; position
+    add ax, [bx + PhysicsControllerVelocityX]  ; velocityX
+    add ax, [bx + PhysicsControllerVelocityY]  ; velocityY
+    push ax
+    call moveController
+    pop ax
+    pop bx
+    pop bp
+    ret 2
+endp applyVelocity
+
+proc updateAndApplyVelocity
+    push bp
+    mov bp, sp
+    push bx
+    mov bx, [bp + 4] ; controller
+    push bx
+    call updateVelocity
+    push bx
+    call applyVelocity
+    pop bx
+    pop bp
+    ret 2
+endp updateAndApplyVelocity
+
+proc walk
+    push bp
+    mov bp, sp
+    push ax
+    push bx
+    mov bx, [bp + 6] ; controller
+    mov ax, [bp + 4] ; direction X
+    cmp ax, 0
+    je .skipX
+    push bx
+    push PhysicsControllerVelocityX
+    push ax
+    call setWordField
+.skipX:
+    pop bx
+    pop ax
+    pop bp
+    ret 4
+endp walk
+
+proc move2d
+    push bp
+    mov bp, sp
+    push ax
+    push bx
+    push dx
+    mov bx, [bp + 8] ; controller
+    mov ax, [bp + 6] ; direction X
+    mov dx, [bp + 4] ; direction Y
+    cmp ax, 0
+    je .skipX
+    push bx
+    push PhysicsControllerVelocityX
+    push ax
+    call setWordField
+.skipX:
+    cmp dx, 0
+    je .skipY
+    push bx
+    push PhysicsControllerVelocityY
+    push dx
+    call setWordField
+.skipY:
+    pop dx
+    pop bx
+    pop ax
+    pop bp
+    ret 6
+endp move2d   
+
+proc jump
+    push bp
+    mov bp, sp
+    push ax
+    push bx
+    mov bx, [bp + 4] ; controller
+    mov ah, 1
+    int 16h
+    jz .end
+    xor ah, ah
+    int 16h
+    cmp al, " "
+    jne .end
+    push bx
+    push PhysicsControllerVelocityY
+    push -50*320
+    call setWordField
+.end:
+    pop bx
+    pop ax
+    pop bp
+    ret 2
+endp jump
+
+proc getControllerY
+    push bp
+    mov bp, sp
+    push ax
+    push bx
+    push dx
+    mov bx, [bp + 4] ; first controller
+    push bx
+    call getControllerPosition
+    pop ax
+    mov bx, 320
+    xor dx, dx
+    div bx
+    mov [bp + 4], ax ; y
+    pop dx
+    pop bx
+    pop ax
+    pop bp
+    ret
+endp getControllerY
+
+proc getControllerX
+    push bp
+    mov bp, sp
+    push ax
+    push bx
+    push dx
+    mov bx, [bp + 4] ; first controller
+    push bx
+    call getControllerPosition
+    pop ax
+    mov bx, 320
+    xor dx, dx
+    div bx
+    mov [bp + 4], dx ; x
+    pop dx
+    pop bx
+    pop ax
+    pop bp
+    ret
+endp getControllerX
+
+proc getControllerYEdges
+    push bp
+    mov bp, sp
+    push ax
+    push bx
+    push dx
+    push di
+    mov bx, [bp + 4] ; controller
+    push bx
+    call getControllerY
+    pop ax ; top
+    push bx
+    call getControllerHeight
+    pop di
+    mov dx, ax
+    add dx, di       ; bottom
+    mov [bp + 6], ax
+    mov [bp + 4], dx
+    pop di
+    pop dx
+    pop bx
+    pop ax
+    pop bp
+    ret
+endp getControllerYEdges
+
+proc getControllerXEdges
+    push bp
+    mov bp, sp
+    push ax
+    push bx
+    push dx
+    push di
+    mov bx, [bp + 4] ; controller
+    push bx
+    call getControllerX
+    pop ax ; left
+    push bx
+    call getControllerWidth
+    pop di
+    mov dx, ax
+    add dx, di       ; right
+    mov [bp + 6], ax
+    mov [bp + 4], dx
+    pop di
+    pop dx
+    pop bx
+    pop ax
+    pop bp
+    ret
+endp getControllerXEdges
+
+proc isYCollision
+   push bp
+    mov bp, sp
+    push ax
+    push bx
+    push si
+    push di
+    push dx
+    mov si, [bp + 6] ; first controller
+    mov bx, [bp + 4] ; second controller
+    push si
+    push si ; garbage value
+    call getControllerYEdges
+    pop ax
+    pop dx
+    push bx
+    push bx ; garbage value
+    call getControllerYEdges
+    pop bx
+    pop si
+    push ax
+    push dx
+    push bx
+    push si
+    call isAxisCollision
+    pop ax
+    mov [bp + 6], ax
+    pop dx
+    pop di
+    pop si
+    pop bx
+    pop ax
+    pop bp
+    ret 2
+endp isYCollision
+
+proc isXCollision
+   push bp
+    mov bp, sp
+    push ax
+    push bx
+    push si
+    push di
+    push dx
+    mov si, [bp + 6] ; first controller
+    mov bx, [bp + 4] ; second controller
+    push si
+    push si ; garbage value
+    call getControllerXEdges
+    pop ax
+    pop dx
+    push bx
+    push bx ; garbage value
+    call getControllerXEdges
+    pop bx
+    pop si
+    push ax
+    push dx
+    push bx
+    push si
+    call isAxisCollision
+    pop ax
+    mov [bp + 6], ax
+    pop dx
+    pop di
+    pop si
+    pop bx
+    pop ax
+    pop bp
+    ret 2
+endp isXCollision
+
+proc areColliding
+    push bp
+    mov bp, sp
+    push ax
+    push bx
+    push si
+    push cx
+    push dx
+    mov si, [bp + 6] ; first controller
+    mov bx, [bp + 4] ; second controller
+    push bx
+    push si
+    call isXCollision
+    pop ax
+    push bx
+    push si
+    call isYCollision
+    pop dx
+    cmp dx, 0
+    je .setFalse
+    cmp ax, 0
+    je .setFalse
+    mov cx, ax
+    mov si, dx
+    test cx, cx
+    jns .xIsPositive
+    neg cx
+.xIsPositive:
+    test si, si
+    jns .yIsPositive
+    neg si
+.yIsPositive:
+    cmp cx, si
+    jb .end
+    mov ax, dx
+    mov dx, 320
+    imul dx
+    jmp .end
+.setFalse:
+    mov ax, 0
+.end:
+    mov [bp + 6], ax ; change to correctly collide
+    pop dx
+    pop cx
+    pop si
+    pop bx
+    pop ax
+    pop bp
+    ret 2
+endp areColliding
+
+proc isAxisCollision
+    push bp
+    mov bp, sp
+    push cx
+    push dx
+    push bx
+    push ax
+
+    mov ax, [bp + 10]  ; bottom/right1
+    mov bx, [bp + 8]   ; top/left1
+    mov dx, [bp + 6]   ; bottom/right2
+    mov cx, [bp + 4]   ; top/left2
+
+    ; if bottom1 is less than top2
+    cmp ax, cx
+    jle .setFalse
+    ; if bottom2 is less than top1
+    cmp dx, bx
+    jle .setFalse
+
+    cmp ax, dx ; 1 is above 2
+    ja .set2
+    sub ax, cx
+    jmp .end
+.set2:
+    sub bx, dx
+    mov ax, bx
+    jmp .end
+.setFalse:
+    mov ax, 0
+.end:
+    mov [bp + 10], ax
+    pop ax
+    pop bx
+    pop dx
+    pop cx
+    pop bp
+    ret 6
+endp isAxisCollision
+
+proc createController
+    push bp
+    mov bp, sp
+    push bx
+    push si
+    push ax
+    mov bx, [bp + 6] ; place to build it
+    mov si, [bp + 4] ; image pointer
+    mov [byte ptr bx], ControllerId
+    mov [word ptr bx + ControllerPosition], 0
+    mov [word ptr bx + ControllerImage], si
+    mov ax, [si + ImageHeight]
+    mov [word ptr bx + ControllerHeight], ax
+    mov ax, [si + ImageWidth]
+    mov [word ptr bx + ControllerWidth], ax
+    pop ax
+    pop si
+    pop bx
+    pop bp
+    ret 4
+endp createController
+
+; called 1024 times a sec
+proc periodic
+    push bp
+    mov bp, sp
+    push bx
+    push cx
+    push dx
+    push ax
+    mov bx, [bp + 4]
+    inc [bx]
+    cmp [bx], 1025
+    jl .skipReset
+    mov [bx], 0
+.skipReset:
+    mov ax, [bx]
+    mov cx, gameLoopSpeed
+    xor dx, dx
+    div cx
+    cmp dx, 0
+    jne skipGameLoop
+    call gameLoop
+skipGameLoop:
+    pop ax
+    pop dx
+    pop cx
+    pop bx
+    pop bp
+    ret 2
+endp periodic
+
+proc gameLoop
+
+    push offset directionX
+    push offset directionY
+    call updateDirection
+
+    push offset time
+    call updateTime
+
+    push offset boxController
+    call jump
+
+    push offset boxController
+    push [directionX]
+    call walk
+
+    push offset boxController
+    push [word ptr time]
+    call updateAnimation
+
+    push offset boxController
+    call updateAndApplyVelocity
+
+    push offset printManager
+    push offset boxController
+    call uploadController
+
+    push offset printManager
+    call printAllControllers
+
+    push offset boxController
+    push offset borderController
+    call areColliding
+    pop ax ; amount to move
+    cmp ax, 0
+    je continueGameLoop
+
+    push offset boxController
+    call getControllerPosition
+    pop bx
+    add bx, ax
+    push offset boxController
+    push bx
+    call moveController
+
+    push offset printManager
+    push offset boxController
+    call uploadController
+
+    push offset printManager
+    call printAllControllers
+
+continueGameLoop:
+
+    ret
+endp gameLoop
+
+start:
+    mov ax, @data
+    mov ds, ax
+    mov ax, 13h
+    int 10h
+    mov ax, 0A000h
+    mov es, ax
+
+    push offset palette
+    call setPalette
+
+    call clearScreen
+
+; *******************INIT**************
+
+    push offset backgroundImage
+    push (320 * 36) + 96
+    call printImage
+
+    push offset borderController
+    push (100 * 320) + 120
+    push offset printManager
+    call initController
+
+    push offset boxController
+    push (80 * 320) + 120
+    push offset printManager
+    call initController
+
+    push offset printManager
+    call printAllControllers
+
+; **************************************
+
+    push offset previousIRQMask
+    call setUpClock
+
+keepAliveLoop:
+    jmp keepAliveLoop
+
+exit:
+    push offset previousIRQMask
+    call cleanUpClock
+    mov ah, 0
+    mov al, 2
+    int 10h
+    mov ax, 4C00h
+    int 21h
+END start
