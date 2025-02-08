@@ -4,7 +4,7 @@ from sklearn.cluster import MiniBatchKMeans
 from PIL import Image
 
 
-def print_grouped_data(data, label="db"):
+def write_grouped_data(file, data, label="db"):
     line = []
     line_length = 0
     i = 0
@@ -23,7 +23,7 @@ def print_grouped_data(data, label="db"):
 
         # Ensure line length doesn't exceed 200 characters
         if line_length + len(formatted) > 200:
-            print(f"{label} {''.join(line)[:-1]}")
+            file.write(f"{label} {''.join(line)[:-1]}\n")
             line = []
             line_length = 0
 
@@ -31,30 +31,27 @@ def print_grouped_data(data, label="db"):
         line_length += len(formatted)
         i += count
 
-    if line: print(f"{label} {''.join(line)[:-1]}")
+    if line: file.write(f"{label} {''.join(line)[:-1]}")
+    file.write('\n')
 
 
 def quantize_colors(image, n_colors=256):
     pixels = list(image.getdata())
 
     # Filter out transparent pixels (if any)
-    pixels = [(r, g, b) for r, g, b, a in pixels if a > 0]  # Skip fully transparent
+    pixels = [(r, g, b) for r, g, b, a in pixels if a > 0]
 
-    # If there are not enough pixels, adjust the number of clusters
-    if len(pixels) < n_colors:
-        n_colors = len(pixels)
+    # Adjust cluster count if not enough colors
+    n_colors = min(n_colors, len(pixels))
 
-    # Perform MiniBatchKMeans on the reduced set of pixels
-    if len(pixels) > 1:  # Ensure there are enough samples for clustering
+    if len(pixels) > 1:
         kmeans = MiniBatchKMeans(n_clusters=n_colors, random_state=0, batch_size=128).fit(pixels)
         return [tuple(map(int, color)) for color in kmeans.cluster_centers_]
     else:
-        # Return the pixels directly if there are not enough for clustering
         return pixels
 
 
-def print_image(name, image, palette):
-    print('')
+def write_image_data(file, name, image, palette):
     width, height = image.size
     indices = []
 
@@ -63,54 +60,46 @@ def print_image(name, image, palette):
 
     for y in range(height):
         for x in range(width):
-            r, g, b, a = image_array[y, x]  # Extract alpha as well
-
-            # If pixel is fully transparent, use -1
-            if a == 0:
+            r, g, b, a = image_array[y, x]
+            if a == 0:  # Fully transparent pixel
                 indices.append(-1)
             else:
                 # Find the closest color in the palette
                 distances = np.linalg.norm(np.array(palette) - np.array((r, g, b)), axis=1)
-                closest_index = np.argmin(distances)
-                indices.append(closest_index)
+                indices.append(np.argmin(distances))
 
-    print(f"{name} dw {width}, {height}")
-    print_grouped_data(indices)
+    file.write(f"\n{name} dw {width}, {height}\n")
+    write_grouped_data(file, indices, label="db")
 
 
-def build_palette(images_dir):
+def build_palette(images_dir, file):
     colors = set()
-    for file in os.listdir(images_dir):
-        if file.endswith('.png'):
-            image = Image.open(os.path.join(images_dir, file)).convert("RGBA")
+    for file_name in os.listdir(images_dir):
+        if file_name.endswith('.png'):
+            image = Image.open(os.path.join(images_dir, file_name)).convert("RGBA")
             reduced_palette = quantize_colors(image)
             colors.update(reduced_palette)
 
-    # Add pure black as the first color (if it's not already in the palette)
-    if (0, 0, 0) not in colors:
-        colors.add((0, 0, 0))
-
-    # Convert the set of colors to a list and ensure it contains no more than 256 colors
+    # Ensure black is first in the palette
+    colors.add((0, 0, 0))
     palette = list(colors)[:256]
+    palette.sort()
 
-    # Ensure pure black is the first color in the palette
-    if (0, 0, 0) in palette:
-        palette.remove((0, 0, 0))  # Remove if already in the list
-    palette.insert(0, (0, 0, 0))  # Insert pure black at the start
-
-    print("palette", end=" ")
+    file.write("palette ")
     palette_data = []
-    for rgb in palette: palette_data.extend(rgb_to_63(rgb))
-    print_grouped_data(palette_data)
+    for rgb in palette:
+        palette_data.extend(rgb_to_63(rgb))
+    write_grouped_data(file, palette_data, label="db")
+
     return palette
 
 
-def process_images(images_dir, palette):
-    for file in os.listdir(images_dir):
-        if file.endswith('.png'):
-            image = Image.open(os.path.join(images_dir, file)).convert("RGBA")
-            name = os.path.splitext(file)[0]
-            print_image(name, image, palette)
+def process_images(images_dir, palette, file):
+    for file_name in os.listdir(images_dir):
+        if file_name.endswith('.png'):
+            image = Image.open(os.path.join(images_dir, file_name)).convert("RGBA")
+            name = os.path.splitext(file_name)[0]
+            write_image_data(file, name, image, palette)
 
 
 def rgb_to_63(rgb):
@@ -120,8 +109,9 @@ def rgb_to_63(rgb):
 
 def main():
     images_dir = 'images'
-    palette = build_palette(images_dir)
-    process_images(images_dir, palette)
+    with open("image_output.text", "w") as file:
+        palette = build_palette(images_dir, file)
+        process_images(images_dir, palette, file)
 
 
 if __name__ == "__main__":
