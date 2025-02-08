@@ -6,19 +6,17 @@
 
 **Open Source:** Free to use, modify, and distribute. Contribute and expand the framework to suit your needs.
 
-**Using the Library**
+**Using the Library:**
 start with the asm file linked, and expand from there!
 
-**Documentation**
+**Documentation:**
 For full documentation, guides, and examples, please visit:
 [CelesteLib Documentation](https://docs.google.com/document/d/1N41GW14FAARZ-Btn5ylv_6a7qQGrIWaQlG4ofJ0yTdY/edit?addon_store&tab=t.0)
 
-**Contributing**
+**Contributing:**
 Contributions are welcome! To get involved:
-
-**Fork the repository**
 Create a new branch for your changes
 Submit a pull request with a detailed description of your modifications
 
-**License**
+**License:**
 This project is licensed under the MIT License.
