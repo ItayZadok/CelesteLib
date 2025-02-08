@@ -3,7 +3,8 @@
 **8086x Assembly Framework:** Targeted for small, easier game development using asm
 
 **Python Integration:** Python assists with pre-calculating features like images, sounds, and data processing, easing the development process.
-Open Source: Free to use, modify, and distribute. Contribute and expand the framework to suit your needs.
+
+**Open Source:** Free to use, modify, and distribute. Contribute and expand the framework to suit your needs.
 
 **Using the Library**
 start with the asm file linked, and expand from there!
