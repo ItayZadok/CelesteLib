@@ -5,154 +5,97 @@ STACK 100h
 DATASEG
 
 ; *********************************IMAGES START********************************
-
-palette db 48,48,49,0,0,0,63,29,42,63,0,19,42,20,13,63,60,58,63,40,0,23,21,19,0,57,13,7,10,20,63,51,42,10,43
-db 63,0,33,20
-db 972 dup(0)
+palette db 4 dup(0),33,20,0,45,16,7,10,20,7,10,20,10,43,63,14,14,14,23,21,19,23,21,19,36,37,37,42,20,13,42,20,13,48,48,49,62,59,57,63,0,19,63,29,42,63,40,0,63,51,42,63,60,58,63,63,63
 
 backgroundImage dw 128, 128
-db 7 dup(5),7,5,5,92 dup(11),5,5,16 dup(1),5,5,6 dup(11),10 dup(5),23 dup(11),5,5,67 dup(11),5,5
-db 16 dup(1),5,5,5,9 dup(11),6 dup(5),11,11,5,20 dup(11),5,5,11,11,5,59 dup(11),5,5,11,11,11,5,5
-db 16 dup(1),5,5,5,10 dup(11),5 dup(5),50 dup(11),0,36 dup(11),5,5,11,11,11,5,5,16 dup(1),4 dup(5)
-db 10 dup(11),5 dup(5),48 dup(11),5,5,6 dup(11),5,5,6 dup(11),5,5,6 dup(11),5,5,6 dup(11),5,5
-db 8 dup(11),5,5,5,16 dup(1),4 dup(5),7 dup(11),5,11,11,6 dup(5),22 dup(11),5,22 dup(11),6 dup(5)
-db 11,11,6 dup(5),11,11,6 dup(5),11,11,6 dup(5),11,11,6 dup(5),5 dup(11),4 dup(5),16 dup(1),5,5,5
-db 11 dup(11),10 dup(5),21 dup(11),5,18 dup(11),48 dup(5),16 dup(1),5,5,5,11 dup(11),5,5,7,7 dup(5)
-db 40 dup(11),47 dup(5),7,16 dup(1),5,5,14 dup(11),7 dup(5),7,5,5,36 dup(11),5,5,7 dup(7),0,16 dup(1)
-db 16 dup(7),24 dup(1),5,5,14 dup(11),10 dup(5),36 dup(11),5,5,7 dup(7),17 dup(1),15 dup(7),25 dup(1)
-db 5,5,5,17 dup(11),6 dup(5),11,11,5,28 dup(11),5,5,11,11,11,5,5,6 dup(7),18 dup(1),14 dup(7)
-db 26 dup(1),5,5,5,18 dup(11),5 dup(5),31 dup(11),5,5,11,11,11,5,5,5 dup(7),19 dup(1),13 dup(7)
-db 27 dup(1),4 dup(5),18 dup(11),5 dup(5),8 dup(11),5,5,6 dup(11),5,5,6 dup(11),5,5,8 dup(11),5,5,5
-db 4 dup(7),20 dup(1),12 dup(7),28 dup(1),4 dup(5),15 dup(11),5,11,11,6 dup(5),5 dup(11),6 dup(5)
-db 11,11,6 dup(5),11,11,6 dup(5),5 dup(11),4 dup(5),7,7,7,21 dup(1),11 dup(7),29 dup(1),5,5,5
-db 19 dup(11),42 dup(5),7,7,22 dup(1),10 dup(7),30 dup(1),5,5,5,19 dup(11),5,5,7,38 dup(5),7,7
-db 23 dup(1),9 dup(7),31 dup(1),5,5,22 dup(11),7 dup(5),7,7,6 dup(5),25 dup(7),24 dup(1),8 dup(7)
-db 32 dup(1),5,5,22 dup(11),16 dup(5),17 dup(7),1,6 dup(7),25 dup(1),7 dup(7),32 dup(1),5,5,5
-db 25 dup(11),7 dup(5),11,4 dup(5),7,7,4 dup(1),14 dup(7),1,1,7,7,26 dup(1),6 dup(7),32 dup(1),5,5,5
-db 26 dup(11),5 dup(5),4 dup(11),5,5,7,7,4 dup(1),14 dup(7),1,1,7,7,27 dup(1),5 dup(7),32 dup(1)
-db 4 dup(5),26 dup(11),4 dup(5),4 dup(11),5,5,7,7,4 dup(1),18 dup(7),28 dup(1),4 dup(7),28 dup(1),8
-db 1,1,1,4 dup(5),23 dup(11),5,11,11,5 dup(5),11,11,5,5,5,7,7,4 dup(1),12 dup(7),1,5 dup(7),29 dup(1)
-db 7,7,7,27 dup(1),8,1,5,1,1,5,5,5,27 dup(11),10 dup(5),24 dup(7),30 dup(1),7,7,25 dup(1),12,1,8,1,1
-db 12,1,5,5,5,27 dup(11),5,5,7,6 dup(5),25 dup(7),31 dup(1),7,25 dup(1),12,1,12,12,1,12,1,5,5
-db 28 dup(11),5,5,32 dup(7),48 dup(1),7,6 dup(5),7,7,6 dup(5),7,5,5,28 dup(11),5,5,31 dup(7),49 dup(1)
-db 19 dup(5),22 dup(11),5,5,11,11,11,5,5,30 dup(7),48 dup(1),12,1,5,5,5,11,7 dup(5),11,7 dup(5)
-db 22 dup(11),5,5,11,11,11,5,5,29 dup(7),49 dup(1),8,1,5,5,4 dup(11),4 dup(5),4 dup(11),6 dup(5)
-db 7 dup(11),5,5,6 dup(11),5,5,8 dup(11),5,5,5,28 dup(7),49 dup(1),8,12,1,5,5,4 dup(11),4 dup(5)
-db 4 dup(11),6 dup(5),5 dup(11),6 dup(5),11,11,6 dup(5),5 dup(11),4 dup(5),27 dup(7),46 dup(1),12
-db 1,1,1,8,1,1,5,5,5,11,11,6 dup(5),11,11,6 dup(5),5 dup(11),24 dup(5),26 dup(7),48 dup(1),8,1,8,12
-db 1,1,19 dup(5),5 dup(11),23 dup(5),26 dup(7),49 dup(1),12,1,12,12,1,1,7,6 dup(5),7,7,6 dup(5),7,5,5
-db 6 dup(11),7 dup(5),7,7,4 dup(5),7,7,5,5,5,7,4 dup(5),25 dup(7),7 dup(1),10 dup(7),31 dup(1),7
-db 23 dup(5),8 dup(11),24 dup(5),7,1,21 dup(7),7 dup(1),12 dup(7),30 dup(1),24 dup(5),12 dup(11)
-db 8 dup(5),11,11,4 dup(5),11,11,4 dup(5),4 dup(7),1,1,16 dup(7),7 dup(1),14 dup(7),29 dup(1),4 dup(5)
-db 11,11,11,9 dup(5),11,6 dup(5),14 dup(11),6 dup(5),10 dup(11),5,5,5,4 dup(7),1,1,15 dup(7),7 dup(1)
-db 16 dup(7),28 dup(1),5,5,5,5 dup(11),5,11,4 dup(5),5 dup(11),5,5,17 dup(11),4 dup(5),12 dup(11),5,5
-db 20 dup(7),7 dup(1),18 dup(7),27 dup(1),5,5,5,7 dup(11),4 dup(5),11,5,19 dup(11),5,11,11,5,5,7,5
-db 11,11,5,5,5 dup(11),5,11,11,5,7,7,7,1,16 dup(7),7 dup(1),20 dup(7),26 dup(1),4 dup(5),11,11,11
-db 9 dup(5),22 dup(11),5,5,7,5,5,11,5,5,7 dup(11),5,5,19 dup(7),7 dup(1),22 dup(7),25 dup(1),16 dup(5)
-db 22 dup(11),5 dup(5),10 dup(11),5,5,5,17 dup(7),7 dup(1),24 dup(7),24 dup(1),7,15 dup(5),22 dup(11)
-db 5 dup(5),10 dup(11),5,5,5,40 dup(7),48 dup(1),5,5,19 dup(11),5,5,5,7,5,5,10 dup(11),5,5,5,39 dup(7)
-db 49 dup(1),5,5,19 dup(11),5,5,5,7,5,11,11,5,4 dup(11),5,5,11,11,11,5,19 dup(7),4 dup(1),16 dup(7)
-db 50 dup(1),5,5,11,11,5,15 dup(11),6 dup(5),7 dup(11),5,5,11,11,11,5,5,18 dup(7),4 dup(1),15 dup(7)
-db 51 dup(1),5,5,18 dup(11),7 dup(5),10 dup(11),5,5,5,18 dup(7),4 dup(1),14 dup(7),52 dup(1),5,5,5
-db 18 dup(11),7 dup(5),11,11,4 dup(5),11,11,4 dup(5),18 dup(7),4 dup(1),13 dup(7),53 dup(1),4 dup(5)
-db 17 dup(11),19 dup(5),34 dup(7),54 dup(1),8 dup(5),14 dup(11),5,5,7,4 dup(5),7,4 dup(5),7,7,5,5,5
-db 34 dup(7),55 dup(1),7,7 dup(5),16 dup(11),31 dup(5),17 dup(7),55 dup(1),9 dup(7),5,5,14 dup(11)
-db 32 dup(5),16 dup(7),54 dup(1),10 dup(7),5,5,5,14 dup(11),6 dup(5),11,17 dup(5),11,11,11,4 dup(5)
-db 16 dup(7),53 dup(1),11 dup(7),5,5,5,16 dup(11),5,5,11,11,11,5,11,4 dup(5),11,0,5,11,4 dup(5)
-db 7 dup(11),5,5,5,16 dup(7),52 dup(1),12 dup(7),4 dup(5),22 dup(11),4 dup(5),11,5,11,11,4 dup(5),11,5
-db 5 dup(11),5,5,5,16 dup(7),51 dup(1),13 dup(7),4 dup(5),20 dup(11),17 dup(5),11,11,11,4 dup(5)
-db 16 dup(7),50 dup(1),14 dup(7),5,5,5,21 dup(11),24 dup(5),16 dup(7),49 dup(1),15 dup(7),5,5,5
-db 21 dup(11),23 dup(5),17 dup(7),48 dup(1),16 dup(7),5,5,20 dup(11),5,5,32 dup(7),56 dup(1),16 dup(7)
-db 5,5,20 dup(11),5,5,7,1,29 dup(7),57 dup(1),9 dup(7),1,6 dup(7),5,5,5,14 dup(11),5,5,11,11,11,5,5
-db 4 dup(7),1,1,24 dup(7),58 dup(1),12 dup(7),1,1,7,7,5,5,5,14 dup(11),5,5,11,11,11,5,5,4 dup(7),1,1
-db 23 dup(7),59 dup(1),12 dup(7),1,1,7,7,4 dup(5),17 dup(11),5,5,5,28 dup(7),60 dup(1),16 dup(7)
-db 4 dup(5),16 dup(11),4 dup(5),7,7,1,24 dup(7),61 dup(1),10 dup(7),1,5 dup(7),5,5,5,13 dup(11)
-db 8 dup(5),26 dup(7),62 dup(1),16 dup(7),5,5,5,13 dup(11),7 dup(5),26 dup(7),63 dup(1),16 dup(7),5,5
-db 12 dup(11),5,5,16 dup(1),16 dup(7),39 dup(1),9 dup(7),7 dup(1),25 dup(7),5,5,11 dup(11),5,5,5
-db 17 dup(1),15 dup(7),38 dup(1),10 dup(7),6 dup(1),26 dup(7),5,5,5,10 dup(11),5,5,5,18 dup(1)
-db 14 dup(7),37 dup(1),11 dup(7),5 dup(1),27 dup(7),5,5,5,9 dup(11),4 dup(5),19 dup(1),13 dup(7)
-db 36 dup(1),12 dup(7),4 dup(1),28 dup(7),4 dup(5),8 dup(11),4 dup(5),20 dup(1),12 dup(7),35 dup(1)
-db 13 dup(7),1,1,1,29 dup(7),4 dup(5),9 dup(11),5,5,5,21 dup(1),11 dup(7),34 dup(1),14 dup(7),1,1
-db 30 dup(7),5,5,5,10 dup(11),5,5,5,22 dup(1),10 dup(7),33 dup(1),15 dup(7),1,31 dup(7),5,5,5
-db 11 dup(11),5,5,23 dup(1),9 dup(7),32 dup(1),48 dup(7),5,5,12 dup(11),5,5,24 dup(1),9 dup(7)
-db 31 dup(1),33 dup(7),15 dup(5),14 dup(11),5,5,24 dup(1),10 dup(7),30 dup(1),32 dup(7),16 dup(5)
-db 9 dup(11),5,5,11,11,11,5,5,24 dup(1),11 dup(7),29 dup(1),10 dup(7),4 dup(1),18 dup(7),4 dup(5)
-db 11,11,11,5,11,6 dup(5),10 dup(11),5,5,11,11,11,5,5,24 dup(1),12 dup(7),28 dup(1),10 dup(7),4 dup(1)
-db 18 dup(7),5,5,5,8 dup(11),5,5,16 dup(11),5,5,5,24 dup(1),24 dup(7),16 dup(1),10 dup(7),4 dup(1)
-db 18 dup(7),5,5,5,25 dup(11),4 dup(5),24 dup(1),24 dup(7),16 dup(1),10 dup(7),4 dup(1),18 dup(7)
-db 4 dup(5),11,11,11,5,16 dup(11),8 dup(5),24 dup(1),24 dup(7),16 dup(1),32 dup(7),8 dup(5),16 dup(11)
-db 7 dup(5),7,24 dup(1),24 dup(7),16 dup(1),33 dup(7),7 dup(5),16 dup(11),31 dup(1),25 dup(7)
-db 15 dup(1),41 dup(7),5,5,14 dup(11),30 dup(1),19 dup(7),1,6 dup(7),1,1,2,2,1,2,2,7 dup(1),27 dup(7)
-db 1,14 dup(7),5,5,5,13 dup(11),29 dup(1),23 dup(7),1,1,7,7,1,1,5 dup(2),6 dup(1),31 dup(7),1,1
-db 10 dup(7),5,5,5,13 dup(11),28 dup(1),24 dup(7),1,1,7,7,1,1,1,2,3,2,6 dup(1),32 dup(7),1,1,10 dup(7)
-db 4 dup(5),12 dup(11),27 dup(1),29 dup(7),1,1,5 dup(2),4 dup(1),45 dup(7),4 dup(5),12 dup(11)
-db 26 dup(1),24 dup(7),1,5 dup(7),1,1,2,2,12,2,2,1,1,1,32 dup(7),1,13 dup(7),5,5,5,13 dup(11)
-db 25 dup(1),31 dup(7),4 dup(1),8,4 dup(1),47 dup(7),5,5,5,13 dup(11),24 dup(1),32 dup(7),4 dup(1),8
-db 1,1,1,48 dup(7),5,5,14 dup(11),24 dup(1),33 dup(7),14 dup(5),9 dup(7),16 dup(1),16 dup(7),5,5
-db 14 dup(11),24 dup(1),9 dup(7),1,22 dup(7),16 dup(5),8 dup(7),17 dup(1),15 dup(7),5,5,5,13 dup(11)
-db 24 dup(1),12 dup(7),1,1,18 dup(7),4 dup(5),8 dup(11),4 dup(5),8 dup(7),18 dup(1),14 dup(7),5,5,5
-db 13 dup(11),24 dup(1),12 dup(7),1,1,18 dup(7),5,5,5,10 dup(11),5,5,5,8 dup(7),19 dup(1),13 dup(7)
-db 4 dup(5),12 dup(11),24 dup(1),32 dup(7),5,5,12 dup(11),5,5,8 dup(7),20 dup(1),12 dup(7),4 dup(5)
-db 12 dup(11),24 dup(1),10 dup(7),1,21 dup(7),5,5,11,11,5,5,5 dup(11),5,11,11,5,5,8 dup(7),21 dup(1)
-db 11 dup(7),5,5,5,13 dup(11),24 dup(1),32 dup(7),5,5,11,11,5,5,8 dup(11),5,5,8 dup(7),22 dup(1)
-db 10 dup(7),5,5,5,13 dup(11),24 dup(1),32 dup(7),5,5,12 dup(11),5,5,8 dup(7),23 dup(1),9 dup(7),5,5
-db 14 dup(11),23 dup(1),7,7,15 dup(5),16 dup(7),5,5,12 dup(11),5,5,8 dup(7),32 dup(1),5,5,14 dup(11)
-db 22 dup(1),7,7,16 dup(5),8 dup(7),1,7 dup(7),5,5,12 dup(11),5,5,7 dup(7),33 dup(1),5,5,5,13 dup(11)
-db 21 dup(1),7,7,7,4 dup(5),8 dup(11),4 dup(5),8 dup(7),1,1,6 dup(7),5,5,11,11,5,4 dup(11),5,5
-db 11,11,11,5,5,6 dup(7),34 dup(1),5,5,5,13 dup(11),20 dup(1),4 dup(7),5,5,5,10 dup(11),5,5,5,8 dup(7)
-db 1,1,1,5 dup(7),5,5,7 dup(11),5,5,11,11,11,5,5,5 dup(7),13 dup(1),5,1,1,1,5,1,1,1,5,1,1,1,5,1,1,1,5
-db 1,1,1,5,1,4 dup(5),12 dup(11),19 dup(1),5 dup(7),5,5,12 dup(11),5,5,8 dup(7),4 dup(1),4 dup(7)
-db 5,5,5,10 dup(11),5,0,5,4 dup(7),14 dup(1),5,1,1,1,5,1,1,1,5,1,1,1,5,1,1,1,5,1,1,1,5,1,4 dup(5)
-db 12 dup(11),18 dup(1),6 dup(7),5,5,11,11,5,5,5 dup(11),5,11,11,5,5,8 dup(7),5 dup(1),7,7,7,4 dup(5)
-db 8 dup(11),4 dup(5),7,7,7,14 dup(1),0,5,5,1,0,5,5,1,0,5,5,1,0,5,5,1,0,5,5,1,0,5 dup(5),13 dup(11)
-db 17 dup(1),7 dup(7),5,5,11,11,5,5,8 dup(11),5,5,8 dup(7),6 dup(1),7,7,16 dup(5),7,7,14 dup(1),7,0,5
-db 0,7,0,5,0,7,0,5,0,7,0,5,0,7,0,5,0,7,0,5,0,5,5,5,13 dup(11),16 dup(1),8 dup(7),5,5,12 dup(11),5,5
-db 8 dup(7),7 dup(1),7,7,14 dup(5),7,7,15 dup(1),7,0,0,0,7,0,0,0,7,0,0,0,7,0,0,0,7,0,0,0,7,0,0,0,5,5
-db 14 dup(11),24 dup(5),14 dup(11),5,5,8 dup(7),8 dup(1),7,14 dup(5),7,16 dup(1),7,23 dup(5)
-db 16 dup(11),24 dup(5),13 dup(11),5,5,5,7 dup(7),9 dup(1),16 dup(5),16 dup(1),24 dup(5),17 dup(11)
-db 6 dup(5),11,11,6 dup(5),11,11,6 dup(5),14 dup(11),5,5,5,6 dup(7),10 dup(1),4 dup(5),8 dup(11)
-db 4 dup(5),16 dup(1),4 dup(5),5 dup(11),6 dup(5),11,11,6 dup(5),20 dup(11),5,5,6 dup(11),5,5
-db 6 dup(11),5,5,15 dup(11),4 dup(5),5 dup(7),11 dup(1),5,5,5,10 dup(11),5,5,5,1,1,5,1,1,1,5,1,1,1,5
-db 1,1,1,5,1,5,5,5,8 dup(11),5,5,6 dup(11),5,5,55 dup(11),4 dup(5),4 dup(7),12 dup(1),5,5,12 dup(11)
-db 5,5,1,1,5,1,1,1,5,1,1,1,5,1,1,1,5,1,5,5,75 dup(11),5,5,5,7,7,7,13 dup(1),5,5,11,11,5,5,5 dup(11),5
-db 11,11,5,5,1,0,5,5,1,0,5,5,1,0,5,5,1,0,4 dup(5),11,11,5,5,71 dup(11),5,5,5,7,7,14 dup(1),5,5,11,11
-db 5,5,8 dup(11),5,5,7,0,5,0,7,0,5,0,7,0,5,0,7,0,5,0,5,5,11,11,5,5,72 dup(11),5,5,7,15 dup(1),5,5
-db 12 dup(11),5,5,7,0,0,0,7,0,0,0,7,0,0,0,7,0,0,0,5,5,76 dup(11),5,5,16 dup(1),5,5,14 dup(11)
-db 16 dup(5),49 dup(11),5,5,26 dup(11),5,5,5,16 dup(1),5,5,5,13 dup(11),16 dup(5),25 dup(11),5,5
-db 5 dup(11),5,16 dup(11),5,5,11,11,5,23 dup(11),5,5,5,16 dup(1),5,5,5,14 dup(11),6 dup(5),11,11
-db 6 dup(5),26 dup(11),5,5,11,11,5,46 dup(11),4 dup(5),1,1,5,1,1,1,5,1,1,1,5,1,1,1,5,1,4 dup(5)
-db 15 dup(11),5,5,6 dup(11),5,5,79 dup(11),4 dup(5),1,1,5,1,1,1,5,1,1,1,5,1,1,1,5,1,4 dup(5)
-db 78 dup(11),5,26 dup(11),5,5,5,1,0,5,5,1,0,5,5,1,0,5,5,1,0,5 dup(5),55 dup(11),5,26 dup(11),5
-db 23 dup(11),5,5,5,7,0,5,0,7,0,5,0,7,0,5,0,7,0,5,0,5,5,5,58 dup(11),5,48 dup(11),5,5,7,0,0,0,7,0,0,0
-db 7,0,0,0,7,0,0,0,5,5,110 dup(11),16 dup(5),112 dup(11),16 dup(5),113 dup(11),6 dup(5),11,11,6 dup(5)
-db 116 dup(11),5,5,6 dup(11),5,5,587 dup(11)
-
-boxImage1 dw 8, 8
-db 4,6 dup(6),4,6,6 dup(9),6,6,6 dup(9),6,6,6 dup(9),6,6,6 dup(9),6,6,6 dup(9),6,6,6 dup(9),6,4
-db 6 dup(6),4
-
-boxImage2 dw 8, 8
-db 4,6 dup(6),4,6,9,9,9,4,9,9,6,6,9,9,9,6,9,9,6,6,4,6,4,1,4,9,6,6,9,9,4,1,6,4,6,6,9,9,9,6,9,9,6,6,9,9
-db 4,9,9,9,6,4,6 dup(6),4
-
-boxImage3 dw 8, 8
-db 4,6,6,6,1,6,4,4,6,9,9,4,1,6,9,6,4,6,4,1,1,4,9,6,6 dup(1),4,4,6,4,6 dup(1),6,9,4,1,1,4,4,6,6,9,4,1,4
-db 9,9,6,4,4,1,1,4,6,6,4
-
-playerImage dw 16, 16
-db 68 dup(-1),7 dup(3),8 dup(-1),9 dup(3),7 dup(-1),4 dup(3),4 dup(10),3,7 dup(-1),3,3,3,10,9,10,10,9
-db 3,8 dup(-1),3,3,5 dup(10),10 dup(-1),3,4 dup(12),12 dup(-1),5,-1,-1,5,86 dup(-1)
-
-circleImage1 dw 8, 8
-db -1,0,4 dup(5),0,-1,0,5,5,11,11,5,5,0,5,5,4 dup(11),5,5,5,6 dup(11),5,5,6 dup(11),5,5,5,4 dup(11)
-db 5,5,0,5,5,11,11,5,5,0,-1,0,4 dup(5),0,-1
-
-circleImage2 dw 8, 8
-db -1,0,4 dup(5),0,-1,0,5,5,3,3,5,5,0,5,5,4 dup(3),5,5,5,6 dup(3),5,5,6 dup(3),5,5,5,4 dup(3),5,5,0
-db 5,5,3,3,5,5,0,-1,0,4 dup(5),0,-1
+db 7 dup(18),8,18,18,92 dup(5),18,18,16 dup(0),18,18,6 dup(5),10 dup(18),23 dup(5),18,18,67 dup(5),18,18,16 dup(0),18,18,18,9 dup(5),6 dup(18),5,5,18,20 dup(5),18,18,5,5,18,59 dup(5),18,18,5,5,5,18,18
+db 16 dup(0),18,18,18,10 dup(5),5 dup(18),50 dup(5),12,36 dup(5),18,18,5,5,5,18,18,16 dup(0),4 dup(18),10 dup(5),5 dup(18),48 dup(5),18,18,6 dup(5),18,18,6 dup(5),18,18,6 dup(5),18,18,6 dup(5),18,18
+db 8 dup(5),18,18,18,16 dup(0),4 dup(18),7 dup(5),18,5,5,6 dup(18),22 dup(5),18,22 dup(5),6 dup(18),5,5,6 dup(18),5,5,6 dup(18),5,5,6 dup(18),5,5,6 dup(18),5 dup(5),4 dup(18),16 dup(0),18,18,18
+db 11 dup(5),10 dup(18),21 dup(5),18,18 dup(5),48 dup(18),16 dup(0),18,18,18,11 dup(5),18,18,8,7 dup(18),40 dup(5),47 dup(18),8,16 dup(0),18,18,14 dup(5),7 dup(18),8,18,18,36 dup(5),18,18,7 dup(8),12
+db 16 dup(0),16 dup(8),24 dup(0),18,18,14 dup(5),10 dup(18),36 dup(5),18,18,7 dup(8),17 dup(0),15 dup(8),25 dup(0),18,18,18,17 dup(5),6 dup(18),5,5,18,28 dup(5),18,18,5,5,5,18,18,6 dup(8),18 dup(0)
+db 14 dup(8),26 dup(0),18,18,18,18 dup(5),5 dup(18),31 dup(5),18,18,5,5,5,18,18,5 dup(8),19 dup(0),13 dup(8),27 dup(0),4 dup(18),18 dup(5),5 dup(18),8 dup(5),18,18,6 dup(5),18,18,6 dup(5),18,18,8 dup(5)
+db 18,18,18,4 dup(8),20 dup(0),12 dup(8),28 dup(0),4 dup(18),15 dup(5),18,5,5,6 dup(18),5 dup(5),6 dup(18),5,5,6 dup(18),5,5,6 dup(18),5 dup(5),4 dup(18),8,8,8,21 dup(0),11 dup(8),29 dup(0),18,18,18
+db 19 dup(5),42 dup(18),8,8,22 dup(0),10 dup(8),30 dup(0),18,18,18,19 dup(5),18,18,8,38 dup(18),8,8,23 dup(0),9 dup(8),31 dup(0),18,18,22 dup(5),7 dup(18),8,8,6 dup(18),25 dup(8),24 dup(0),8 dup(8)
+db 32 dup(0),18,18,22 dup(5),16 dup(18),17 dup(8),0,6 dup(8),25 dup(0),7 dup(8),32 dup(0),18,18,18,25 dup(5),7 dup(18),5,4 dup(18),8,8,4 dup(0),14 dup(8),0,0,8,8,26 dup(0),6 dup(8),32 dup(0),18,18,18
+db 26 dup(5),5 dup(18),4 dup(5),18,18,8,8,4 dup(0),14 dup(8),0,0,8,8,27 dup(0),5 dup(8),32 dup(0),4 dup(18),26 dup(5),4 dup(18),4 dup(5),18,18,8,8,4 dup(0),18 dup(8),28 dup(0),4 dup(8),28 dup(0),2,0,0,0
+db 4 dup(18),23 dup(5),18,5,5,5 dup(18),5,5,18,18,18,8,8,4 dup(0),12 dup(8),0,5 dup(8),29 dup(0),8,8,8,27 dup(0),2,0,18,0,0,18,18,18,27 dup(5),10 dup(18),24 dup(8),30 dup(0),8,8,25 dup(0),1,0,2,0,0,1,0
+db 18,18,18,27 dup(5),18,18,8,6 dup(18),25 dup(8),31 dup(0),8,25 dup(0),1,0,1,1,0,1,0,18,18,28 dup(5),18,18,32 dup(8),48 dup(0),8,6 dup(18),8,8,6 dup(18),8,18,18,28 dup(5),18,18,31 dup(8),49 dup(0)
+db 19 dup(18),22 dup(5),18,18,5,5,5,18,18,30 dup(8),48 dup(0),1,0,18,18,18,5,7 dup(18),5,7 dup(18),22 dup(5),18,18,5,5,5,18,18,29 dup(8),49 dup(0),2,0,18,18,4 dup(5),4 dup(18),4 dup(5),6 dup(18)
+db 7 dup(5),18,18,6 dup(5),18,18,8 dup(5),18,18,18,28 dup(8),49 dup(0),2,1,0,18,18,4 dup(5),4 dup(18),4 dup(5),6 dup(18),5 dup(5),6 dup(18),5,5,6 dup(18),5 dup(5),4 dup(18),27 dup(8),46 dup(0),1,0,0,0,2
+db 0,0,18,18,18,5,5,6 dup(18),5,5,6 dup(18),5 dup(5),24 dup(18),26 dup(8),48 dup(0),2,0,2,1,0,0,19 dup(18),5 dup(5),23 dup(18),26 dup(8),49 dup(0),1,0,1,1,0,0,8,6 dup(18),8,8,6 dup(18),8,18,18,6 dup(5)
+db 7 dup(18),8,8,4 dup(18),8,8,18,18,18,8,4 dup(18),25 dup(8),7 dup(0),10 dup(8),31 dup(0),8,23 dup(18),8 dup(5),24 dup(18),8,0,21 dup(8),7 dup(0),12 dup(8),30 dup(0),24 dup(18),12 dup(5),8 dup(18),5,5
+db 4 dup(18),5,5,4 dup(18),4 dup(8),0,0,16 dup(8),7 dup(0),14 dup(8),29 dup(0),4 dup(18),5,5,5,9 dup(18),5,6 dup(18),14 dup(5),6 dup(18),10 dup(5),18,18,18,4 dup(8),0,0,15 dup(8),7 dup(0),16 dup(8)
+db 28 dup(0),18,18,18,5 dup(5),18,5,4 dup(18),5 dup(5),18,18,17 dup(5),4 dup(18),12 dup(5),18,18,20 dup(8),7 dup(0),18 dup(8),27 dup(0),18,18,18,7 dup(5),4 dup(18),5,18,19 dup(5),18,5,5,18,18,8,18,5,5
+db 18,18,5 dup(5),18,5,5,18,8,8,8,0,16 dup(8),7 dup(0),20 dup(8),26 dup(0),4 dup(18),5,5,5,9 dup(18),22 dup(5),18,18,8,18,18,5,18,18,7 dup(5),18,18,19 dup(8),7 dup(0),22 dup(8),25 dup(0),16 dup(18)
+db 22 dup(5),5 dup(18),10 dup(5),18,18,18,17 dup(8),7 dup(0),24 dup(8),24 dup(0),8,15 dup(18),22 dup(5),5 dup(18),10 dup(5),18,18,18,40 dup(8),48 dup(0),18,18,19 dup(5),18,18,18,8,18,18,10 dup(5)
+db 18,18,18,39 dup(8),49 dup(0),18,18,19 dup(5),18,18,18,8,18,5,5,18,4 dup(5),18,18,5,5,5,18,19 dup(8),4 dup(0),16 dup(8),50 dup(0),18,18,5,5,18,15 dup(5),6 dup(18),7 dup(5),18,18,5,5,5,18,18,18 dup(8)
+db 4 dup(0),15 dup(8),51 dup(0),18,18,18 dup(5),7 dup(18),10 dup(5),18,18,18,18 dup(8),4 dup(0),14 dup(8),52 dup(0),18,18,18,18 dup(5),7 dup(18),5,5,4 dup(18),5,5,4 dup(18),18 dup(8),4 dup(0),13 dup(8)
+db 53 dup(0),4 dup(18),17 dup(5),19 dup(18),34 dup(8),54 dup(0),8 dup(18),14 dup(5),18,18,8,4 dup(18),8,4 dup(18),8,8,18,18,18,34 dup(8),55 dup(0),8,7 dup(18),16 dup(5),31 dup(18),17 dup(8),55 dup(0)
+db 9 dup(8),18,18,14 dup(5),32 dup(18),16 dup(8),54 dup(0),10 dup(8),18,18,18,14 dup(5),6 dup(18),5,17 dup(18),5,5,5,4 dup(18),16 dup(8),53 dup(0),11 dup(8),18,18,18,16 dup(5),18,18,5,5,5,18,5,4 dup(18)
+db 5,12,18,5,4 dup(18),7 dup(5),18,18,18,16 dup(8),52 dup(0),12 dup(8),4 dup(18),22 dup(5),4 dup(18),5,18,5,5,4 dup(18),5,18,5 dup(5),18,18,18,16 dup(8),51 dup(0),13 dup(8),4 dup(18),20 dup(5)
+db 17 dup(18),5,5,5,4 dup(18),16 dup(8),50 dup(0),14 dup(8),18,18,18,21 dup(5),24 dup(18),16 dup(8),49 dup(0),15 dup(8),18,18,18,21 dup(5),23 dup(18),17 dup(8),48 dup(0),16 dup(8),18,18,20 dup(5),18,18
+db 32 dup(8),56 dup(0),16 dup(8),18,18,20 dup(5),18,18,8,0,29 dup(8),57 dup(0),9 dup(8),0,6 dup(8),18,18,18,14 dup(5),18,18,5,5,5,18,18,4 dup(8),0,0,24 dup(8),58 dup(0),12 dup(8),0,0,8,8,18,18,18
+db 14 dup(5),18,18,5,5,5,18,18,4 dup(8),0,0,23 dup(8),59 dup(0),12 dup(8),0,0,8,8,4 dup(18),17 dup(5),18,18,18,28 dup(8),60 dup(0),16 dup(8),4 dup(18),16 dup(5),4 dup(18),8,8,0,24 dup(8),61 dup(0)
+db 10 dup(8),0,5 dup(8),18,18,18,13 dup(5),8 dup(18),26 dup(8),62 dup(0),16 dup(8),18,18,18,13 dup(5),7 dup(18),26 dup(8),63 dup(0),16 dup(8),18,18,12 dup(5),18,18,16 dup(0),16 dup(8),39 dup(0),9 dup(8)
+db 7 dup(0),25 dup(8),18,18,11 dup(5),18,18,18,17 dup(0),15 dup(8),38 dup(0),10 dup(8),6 dup(0),26 dup(8),18,18,18,10 dup(5),18,18,18,18 dup(0),14 dup(8),37 dup(0),11 dup(8),5 dup(0),27 dup(8),18,18,18
+db 9 dup(5),4 dup(18),19 dup(0),13 dup(8),36 dup(0),12 dup(8),4 dup(0),28 dup(8),4 dup(18),8 dup(5),4 dup(18),20 dup(0),12 dup(8),35 dup(0),13 dup(8),0,0,0,29 dup(8),4 dup(18),9 dup(5),18,18,18
+db 21 dup(0),11 dup(8),34 dup(0),14 dup(8),0,0,30 dup(8),18,18,18,10 dup(5),18,18,18,22 dup(0),10 dup(8),33 dup(0),15 dup(8),0,31 dup(8),18,18,18,11 dup(5),18,18,23 dup(0),9 dup(8),32 dup(0),48 dup(8)
+db 18,18,12 dup(5),18,18,24 dup(0),9 dup(8),31 dup(0),33 dup(8),15 dup(18),14 dup(5),18,18,24 dup(0),10 dup(8),30 dup(0),32 dup(8),16 dup(18),9 dup(5),18,18,5,5,5,18,18,24 dup(0),11 dup(8),29 dup(0)
+db 10 dup(8),4 dup(0),18 dup(8),4 dup(18),5,5,5,18,5,6 dup(18),10 dup(5),18,18,5,5,5,18,18,24 dup(0),12 dup(8),28 dup(0),10 dup(8),4 dup(0),18 dup(8),18,18,18,8 dup(5),18,18,16 dup(5),18,18,18,24 dup(0)
+db 24 dup(8),16 dup(0),10 dup(8),4 dup(0),18 dup(8),18,18,18,25 dup(5),4 dup(18),24 dup(0),24 dup(8),16 dup(0),10 dup(8),4 dup(0),18 dup(8),4 dup(18),5,5,5,18,16 dup(5),8 dup(18),24 dup(0),24 dup(8)
+db 16 dup(0),32 dup(8),8 dup(18),16 dup(5),7 dup(18),8,24 dup(0),24 dup(8),16 dup(0),33 dup(8),7 dup(18),16 dup(5),31 dup(0),25 dup(8),15 dup(0),41 dup(8),18,18,14 dup(5),30 dup(0),19 dup(8),0,6 dup(8)
+db 0,0,15,15,0,15,15,7 dup(0),27 dup(8),0,14 dup(8),18,18,18,13 dup(5),29 dup(0),23 dup(8),0,0,8,8,0,0,5 dup(15),6 dup(0),31 dup(8),0,0,10 dup(8),18,18,18,13 dup(5),28 dup(0),24 dup(8),0,0,8,8,0,0,0,15
+db 14,15,6 dup(0),32 dup(8),0,0,10 dup(8),4 dup(18),12 dup(5),27 dup(0),29 dup(8),0,0,5 dup(15),4 dup(0),45 dup(8),4 dup(18),12 dup(5),26 dup(0),24 dup(8),0,5 dup(8),0,0,15,15,1,15,15,0,0,0,32 dup(8),0
+db 13 dup(8),18,18,18,13 dup(5),25 dup(0),31 dup(8),4 dup(0),2,4 dup(0),47 dup(8),18,18,18,13 dup(5),24 dup(0),32 dup(8),4 dup(0),2,0,0,0,48 dup(8),18,18,14 dup(5),24 dup(0),33 dup(8),14 dup(18)
+db 9 dup(8),16 dup(0),16 dup(8),18,18,14 dup(5),24 dup(0),9 dup(8),0,22 dup(8),16 dup(18),8 dup(8),17 dup(0),15 dup(8),18,18,18,13 dup(5),24 dup(0),12 dup(8),0,0,18 dup(8),4 dup(18),8 dup(5),4 dup(18)
+db 8 dup(8),18 dup(0),14 dup(8),18,18,18,13 dup(5),24 dup(0),12 dup(8),0,0,18 dup(8),18,18,18,10 dup(5),18,18,18,8 dup(8),19 dup(0),13 dup(8),4 dup(18),12 dup(5),24 dup(0),32 dup(8),18,18,12 dup(5)
+db 18,18,8 dup(8),20 dup(0),12 dup(8),4 dup(18),12 dup(5),24 dup(0),10 dup(8),0,21 dup(8),18,18,5,5,18,18,5 dup(5),18,5,5,18,18,8 dup(8),21 dup(0),11 dup(8),18,18,18,13 dup(5),24 dup(0),32 dup(8),18,18
+db 5,5,18,18,8 dup(5),18,18,8 dup(8),22 dup(0),10 dup(8),18,18,18,13 dup(5),24 dup(0),32 dup(8),18,18,12 dup(5),18,18,8 dup(8),23 dup(0),9 dup(8),18,18,14 dup(5),23 dup(0),8,8,15 dup(18),16 dup(8),18,18
+db 12 dup(5),18,18,8 dup(8),32 dup(0),18,18,14 dup(5),22 dup(0),8,8,16 dup(18),8 dup(8),0,7 dup(8),18,18,12 dup(5),18,18,7 dup(8),33 dup(0),18,18,18,13 dup(5),21 dup(0),8,8,8,4 dup(18),8 dup(5)
+db 4 dup(18),8 dup(8),0,0,6 dup(8),18,18,5,5,18,4 dup(5),18,18,5,5,5,18,18,6 dup(8),34 dup(0),18,18,18,13 dup(5),20 dup(0),4 dup(8),18,18,18,10 dup(5),18,18,18,8 dup(8),0,0,0,5 dup(8),18,18,7 dup(5)
+db 18,18,5,5,5,18,18,5 dup(8),13 dup(0),18,0,0,0,18,0,0,0,18,0,0,0,18,0,0,0,18,0,0,0,18,0,4 dup(18),12 dup(5),19 dup(0),5 dup(8),18,18,12 dup(5),18,18,8 dup(8),4 dup(0),4 dup(8),18,18,18,10 dup(5),18,12
+db 18,4 dup(8),14 dup(0),18,0,0,0,18,0,0,0,18,0,0,0,18,0,0,0,18,0,0,0,18,0,4 dup(18),12 dup(5),18 dup(0),6 dup(8),18,18,5,5,18,18,5 dup(5),18,5,5,18,18,8 dup(8),5 dup(0),8,8,8,4 dup(18),8 dup(5)
+db 4 dup(18),8,8,8,14 dup(0),12,18,18,0,12,18,18,0,12,18,18,0,12,18,18,0,12,18,18,0,12,5 dup(18),13 dup(5),17 dup(0),7 dup(8),18,18,5,5,18,18,8 dup(5),18,18,8 dup(8),6 dup(0),8,8,16 dup(18),8,8
+db 14 dup(0),8,12,18,12,8,12,18,12,8,12,18,12,8,12,18,12,8,12,18,12,8,12,18,12,18,18,18,13 dup(5),16 dup(0),8 dup(8),18,18,12 dup(5),18,18,8 dup(8),7 dup(0),8,8,14 dup(18),8,8,15 dup(0),8,12,12,12,8
+db 12,12,12,8,12,12,12,8,12,12,12,8,12,12,12,8,12,12,12,18,18,14 dup(5),24 dup(18),14 dup(5),18,18,8 dup(8),8 dup(0),8,14 dup(18),8,16 dup(0),8,23 dup(18),16 dup(5),24 dup(18),13 dup(5),18,18,18
+db 7 dup(8),9 dup(0),16 dup(18),16 dup(0),24 dup(18),17 dup(5),6 dup(18),5,5,6 dup(18),5,5,6 dup(18),14 dup(5),18,18,18,6 dup(8),10 dup(0),4 dup(18),8 dup(5),4 dup(18),16 dup(0),4 dup(18),5 dup(5)
+db 6 dup(18),5,5,6 dup(18),20 dup(5),18,18,6 dup(5),18,18,6 dup(5),18,18,15 dup(5),4 dup(18),5 dup(8),11 dup(0),18,18,18,10 dup(5),18,18,18,0,0,18,0,0,0,18,0,0,0,18,0,0,0,18,0,18,18,18,8 dup(5),18,18
+db 6 dup(5),18,18,55 dup(5),4 dup(18),4 dup(8),12 dup(0),18,18,12 dup(5),18,18,0,0,18,0,0,0,18,0,0,0,18,0,0,0,18,0,18,18,75 dup(5),18,18,18,8,8,8,13 dup(0),18,18,5,5,18,18,5 dup(5),18,5,5,18,18,0,12
+db 18,18,0,12,18,18,0,12,18,18,0,12,4 dup(18),5,5,18,18,71 dup(5),18,18,18,8,8,14 dup(0),18,18,5,5,18,18,8 dup(5),18,18,8,12,18,12,8,12,18,12,8,12,18,12,8,12,18,12,18,18,5,5,18,18,72 dup(5),18,18,8
+db 15 dup(0),18,18,12 dup(5),18,18,8,12,12,12,8,12,12,12,8,12,12,12,8,12,12,12,18,18,76 dup(5),18,18,16 dup(0),18,18,14 dup(5),16 dup(18),49 dup(5),18,18,26 dup(5),18,18,18,16 dup(0),18,18,18,13 dup(5)
+db 16 dup(18),25 dup(5),18,18,5 dup(5),18,16 dup(5),18,18,5,5,18,23 dup(5),18,18,18,16 dup(0),18,18,18,14 dup(5),6 dup(18),5,5,6 dup(18),26 dup(5),18,18,5,5,18,46 dup(5),4 dup(18),0,0,18,0,0,0,18,0,0,0
+db 18,0,0,0,18,0,4 dup(18),15 dup(5),18,18,6 dup(5),18,18,79 dup(5),4 dup(18),0,0,18,0,0,0,18,0,0,0,18,0,0,0,18,0,4 dup(18),78 dup(5),18,26 dup(5),18,18,18,0,12,18,18,0,12,18,18,0,12,18,18,0,12
+db 5 dup(18),55 dup(5),18,26 dup(5),18,23 dup(5),18,18,18,8,12,18,12,8,12,18,12,8,12,18,12,8,12,18,12,18,18,18,58 dup(5),18,48 dup(5),18,18,8,12,12,12,8,12,12,12,8,12,12,12,8,12,12,12,18,18,110 dup(5)
+db 16 dup(18),112 dup(5),16 dup(18),113 dup(5),6 dup(18),5,5,6 dup(18),116 dup(5),18,18,6 dup(5),18,18,587 dup(5)
 
 borderImage dw 128, 16
-db 128*16 dup(0)
+db 0,126 dup(18),0,18,4 dup(0),18,18,18,4 dup(0),18,18,18,5 dup(0),18,18,18,5 dup(0),18,18,18,5 dup(0),18,18,18,5 dup(0),18,18,18,5 dup(0),18,18,18,5 dup(0),18,18,18,5 dup(0),18,18,18,5 dup(0),18,18,18
+db 5 dup(0),18,18,18,5 dup(0),18,18,18,5 dup(0),18,18,18,5 dup(0),18,18,18,5 dup(0),18,18,18,5 dup(0),5 dup(18),0,5,5,18,18,18,4 dup(5),18,18,18,5 dup(5),18,18,18,5 dup(5),18,18,18,5 dup(5),18,18,18
+db 5 dup(5),18,18,18,5 dup(5),18,18,18,5 dup(5),18,18,18,5 dup(5),18,18,18,5 dup(5),18,18,18,5 dup(5),18,18,18,5 dup(5),18,18,18,5 dup(5),18,18,18,5 dup(5),18,18,18,5 dup(5),18,18,18,5 dup(5),18,18,18,5
+db 18,18,0,5,18,18,18,4 dup(5),18,18,18,5 dup(5),18,18,18,5 dup(5),18,18,18,5 dup(5),18,18,18,5 dup(5),18,18,18,5 dup(5),18,18,18,5 dup(5),18,18,18,5 dup(5),18,18,18,5 dup(5),18,18,18,5 dup(5),18,18,18
+db 5 dup(5),18,18,18,5 dup(5),18,18,18,5 dup(5),18,18,18,5 dup(5),18,18,18,5 dup(5),18,18,18,5,5,18,18,0,18,18,18,4 dup(0),18,18,18,5 dup(0),18,18,18,5 dup(0),18,18,18,5 dup(0),18,18,18,5 dup(0)
+db 18,18,18,5 dup(0),18,18,18,5 dup(0),18,18,18,5 dup(0),18,18,18,5 dup(0),18,18,18,5 dup(0),18,18,18,5 dup(0),18,18,18,5 dup(0),18,18,18,5 dup(0),18,18,18,5 dup(0),18,18,18,5 dup(0),18,18,18,0,0,0
+db 5 dup(18),4 dup(0),18,18,18,5 dup(0),18,18,18,5 dup(0),18,18,18,5 dup(0),18,18,18,5 dup(0),18,18,18,5 dup(0),18,18,18,5 dup(0),18,18,18,5 dup(0),18,18,18,5 dup(0),18,18,18,5 dup(0),18,18,18,5 dup(0)
+db 18,18,18,5 dup(0),18,18,18,5 dup(0),18,18,18,5 dup(0),18,18,18,5 dup(0),18,18,18,4 dup(0),18,18,126 dup(0),18,18,126 dup(0),18,18,126 dup(0),18,18,126 dup(0),18,18,11 dup(0),5,7 dup(0),5,7 dup(0),5
+db 7 dup(0),5,8 dup(0),5,7 dup(0),5,6 dup(0),5,7 dup(0),5,7 dup(0),5,7 dup(0),5,8 dup(0),5,7 dup(0),5,7 dup(0),5,7 dup(0),5,9 dup(0),18,18,6 dup(0),5,5,7 dup(0),5,7 dup(0),5,7 dup(0),5,7 dup(0),5,5
+db 7 dup(0),5,6 dup(0),5,7 dup(0),5,7 dup(0),5,7 dup(0),5,7 dup(0),5,5,7 dup(0),5,7 dup(0),5,7 dup(0),5,13 dup(0),18,18,6 dup(0),5,5,7 dup(0),5,7 dup(0),5,7 dup(0),5,7 dup(0),5,5,7 dup(0),5,6 dup(0),5
+db 7 dup(0),5,7 dup(0),5,7 dup(0),5,7 dup(0),5,5,7 dup(0),5,7 dup(0),5,7 dup(0),5,9 dup(0),5,0,0,0,18,18,0,5,124 dup(0),18,18,126 dup(0),18,0,126 dup(18),0
+
+boxImage1 dw 8, 8
+db 11,6 dup(16),11,16,6 dup(4),16,16,6 dup(4),16,16,6 dup(4),16,16,6 dup(4),16,16,6 dup(4),16,16,6 dup(4),16,11,6 dup(16),11
+
+boxImage2 dw 8, 8
+db 11,6 dup(16),11,16,4,4,4,11,4,4,16,16,4,4,4,16,4,4,16,16,11,16,11,0,11,4,16,16,4,4,11,0,16,11,16,16,4,4,4,16,4,4,16,16,4,4,11,4,4,4,16,11,6 dup(16),11
+
+boxImage3 dw 8, 8
+db 11,16,16,16,0,16,11,11,16,4,4,11,0,16,4,16,11,16,11,0,0,11,4,16,6 dup(0),11,11,16,11,6 dup(0),16,4,11,0,0,11,11,16,16,4,11,0,11,4,4,16,11,11,0,0,11,16,16,11
+
+cursorImage dw 10, 11
+db 7 dup(19),-1,-1,-1,19,6,4 dup(0),6,19,-1,-1,19,5 dup(0),6,19,-1,-1,19,4 dup(0),19,19,9,-1,-1,19,4 dup(0),6,19,-1,-1,-1,19,0,0,19,6,0,6,19,-1,-1,19,6,6,19,19,6,0,6,19,-1,9,19,19,9,9,19,6,0,6,19,-1,9,9
+db -1,-1,9,19,6,0,19,6 dup(-1),9,19,19,9,7 dup(-1),9,9,-1
+
+playerImageOriginal dw 16, 16
+db 68 dup(-1),7 dup(14),8 dup(-1),9 dup(14),7 dup(-1),4 dup(14),4 dup(17),14,7 dup(-1),14,14,14,17,4,17,17,4,14,8 dup(-1),14,14,5 dup(17),10 dup(-1),14,4 dup(1),12 dup(-1),18,-1,-1,18,86 dup(-1)
 
 ; *********************************OFFSET CONSTANTS*********************************
 
@@ -223,42 +166,180 @@ PrintManagerId equ 4
 PrintManagerControllerAmount equ 1
 PrintManagerFirstController  equ 2
 
+MouseId        equ 7
+MouseRightHeld equ 1
+MouseLefhtHeld equ 2
+MousePosition  equ 3
+MouseImage     equ 5
+MouseWidth     equ 7
+MouseHeight    equ 9
+MouseStore     equ 11
+
 ; *********************************CONTROLLERS START********************************
 
 borderController db ControllerId
 dw 0, offset borderImage, 128, 16
 db 128*16 dup(0)
 
-boxController db PhysicsAnimatedControllerId         ; id
-dw 0, 0, 1, 12             ; vx, ax, fx, mx
-dw 0, 2*320, 1*320, 12*320 ; vy, ay, fy, my
-dw 0, 64, 8, 8             ; pos, size, width, height
+boxController db PhysicsAnimatedControllerId
+dw 0, 0, 1, 100  ; vx, ax, fx, mx
+dw 0, 5, 1, 100  ; vy, ay, fy, my
+dw 0, 64, 8, 8  ; pos, size, width, height
 db 64 dup(0),0,0,1
 dw offset boxAnimation
 
 ; *********************************ANIMATIONS START********************************
 
-circleAnimation db AnimationId, 2, 20
-dw offset circleImage1, offset circleImage2
-
 boxAnimation db AnimationId, 3, 10
 dw offset boxImage1,offset boxImage2,offset boxImage3
 
-; *********************************GENERAL START********************************
+; *********************************OBJECTS START********************************
 
-printManager db PrintManagerId, 0
-dw 25 dup(0)
+Mouse db MouseId, 0, 0
+dw 0, offset cursorImage, 10, 11
+db 10*11 dup(0)
+
+KeyStateTable db 256 dup(0) ; Table to store key states (0 = released, 1 = pressed)
+
+PlayerSpeed equ 16*3
+JumpHeight equ 16*4
+
+SubPixelAmount equ 16
+
+; *********************************GENERAL START********************************
 
 directionX dw 0
 directionY dw 0
 
-previousIRQMask db ?       ; Save the original mask for restoration
-time db 0
-gameLoopSpeed equ 42 ; in ms
-globalTime dw 0     ; in ms
+animationTime db 0
+
+gameLoopSpeed equ 17 ; in ms (to calculate FPS -> 1024 / FPS)
+globalTime dw 0      ; in ms
+
+; Declare variables to store the old ISR
+oldKeyboardHandlerOffset dw ?
+oldKeyboardHandlerSegment dw ?
+
+; Save the original mask for restoration
+previousIRQMask db ?
+
+printManager db PrintManagerId, 0
+dw 50 dup(0)
 
 CODESEG
 
+; input - Mouse pointer
+proc initMouse
+    push bp
+    mov bp, sp
+    push ax
+    mov ax, 0 ; init Mouse
+    int 33h
+    push [bp + 4] ; mouse pointer
+    push (100 * 320) + 160
+    call initController
+    pop ax
+    pop bp
+    ret 2
+endp initMouse
+
+proc updateMouse
+    push bp
+    mov bp, sp
+    push bx
+    push ax
+    push si
+    push dx
+    push cx
+    push di
+
+    mov si, [bp + 6] ; Mouse pointer
+
+    mov ax, 3 ; get mouse position cx - x, dx - y
+    int 33h
+
+    shr cx, 1 ; 0-639 -> 0-319
+    cmp cx, 319 
+    jne .skipFixX
+    dec cx
+.skipFixX:
+
+    cmp dx, 199 
+    jne .skipFixY
+    dec dx
+.skipFixY:
+
+    mov ax, dx ;  compute screen position
+    xor dx, dx
+    mov di, 320
+    mul di
+    add ax, cx
+    
+    push si ; mouse controller
+    push ax ; position
+    call moveController
+
+    push [bp + 4]
+    push si
+    call uploadController
+
+    pop di
+    pop cx
+    pop dx
+    pop si
+    pop ax
+    pop bx
+    pop bp
+    ret 4
+endp updateMouse
+
+proc keyboardHandler far              
+	push ax
+	push bx
+    push cx
+    push dx
+	push di
+	push si
+	; read keyboard scan code
+    in al, 60h
+
+	; update keyboard state
+    xor bh, bh
+    mov bl, al
+    and bl, 7Fh     ; bl = scan code
+	
+	; save to the keyboard array
+    push cx
+	mov cx, 7
+    shr al, cl ; al = 0 if pressed, 1 if released
+	pop cx
+    xor al, 1  ; al = 1 if pressed, 0 if released
+    mov [cs:KeyStateTable + bx], al  ; save pressed buttons in array
+	
+	; send EOI to XT keyboard
+    in  al, 61h
+    mov ah, al
+    or  al, 80h
+    out 61h, al
+    mov al, ah
+    out 61h, al
+
+	; send EOI to master PIC
+    mov al, 20h
+    out 20h, al
+	
+    pop si
+    pop di
+    pop dx
+    pop cx
+    pop bx
+    pop ax
+    iret
+endp keyboardHandler
+
+; interrupt that hooks on to int70h
+; that is called by the computer
+; and call the "periodic" method 1024 times a sec
 proc clock far
     push bp
     mov bp, sp
@@ -292,17 +373,21 @@ proc clock far
     iret
 endp clock
 
+; setup the game clock
 proc setUpClock
     push bp
     mov bp, sp
     push ax
     push ds
     push dx
+
+    cli
     ; Save original mask of secondary PIC
     in al, 0A1h
     mov [bp + 4], al
     and al, 0FEh ; Enable IRQ 8 (RTC)
     out 0A1h, al
+
     ; Set frequency divisor in RTC register A
     mov al, 0Ah
     out 70h, al
@@ -313,6 +398,7 @@ proc setUpClock
     or al, 0110b      ; Set rate to 1024 Hz
     out 71h, al
     in al, 71h        ; Ensure the write is complete
+
     ; Enable periodic interrupts in RTC register B
     mov al, 0Bh
     out 70h, al
@@ -322,6 +408,7 @@ proc setUpClock
     or al, 40h        ; Set PI (bit 6)
     out 71h, al
     in al, 71h        ; Acknowledge the change
+
     ; Set new interrupt handler for interrupt 70h
     mov al, 70h       ; Interrupt vector 70h
     mov ah, 25h       ; Set interrupt vector
@@ -329,6 +416,8 @@ proc setUpClock
     push seg clock
     pop ds
     int 21h
+    sti
+
     pop dx
     pop ds
     pop ax
@@ -336,6 +425,7 @@ proc setUpClock
     ret 2
 endp setUpClock
 
+; clean up the game's clock
 proc cleanUpClock
     push bp
     mov bp, sp
@@ -357,10 +447,10 @@ proc getWordField
     mov si, [bp + 6]       ; object pointer
     add si, [bp + 4]       ; add offset
     mov si, [si]
-    mov [bp + 4], si       ; return the value
+    mov [bp + 6], si       ; return the value
     pop si
     pop bp
-    ret 4
+    ret 2
 endp getWordField
 
 ; Input - object pointer, offset, value
@@ -392,7 +482,7 @@ proc getByteField
     mov [bp + 4], bl       ; return the value
     pop bx
     pop bp
-    ret 4
+    ret 2
 endp getByteField
 
 ; Input - object pointer, offset, value
@@ -424,10 +514,15 @@ proc getControllerPosition
     je .isPhysics
     cmp [byte ptr bx], AnimatedControllerId
     je .isAnimated
+    cmp [byte ptr bx], MouseId
+    je .isMouse
     mov ax, [bx + ControllerPosition]
     jmp .end
 .isPhysicsAnimated:
     mov ax, [bx + PhysicsAnimatedControllerPosition]
+    jmp .end
+.isMouse:
+    mov ax, [bx + MousePosition]
     jmp .end
 .isAnimated:
     mov ax, [bx + AnimatedControllerPosition]
@@ -455,10 +550,15 @@ proc setControllerPosition
     je .isPhysics
     cmp [byte ptr bx], AnimatedControllerId
     je .isAnimated
+    cmp [byte ptr bx], MouseId
+    je .isMouse
     mov [bx + ControllerPosition], ax
     jmp .end
 .isAnimated:
     mov [bx + AnimatedControllerPosition], ax
+    jmp .end
+.isMouse:
+    mov [bx + MousePosition], ax
     jmp .end
 .isPhysics:
     mov [bx + PhysicsControllerPosition], ax
@@ -481,10 +581,15 @@ proc getControllerImage
     je .isAnimated
     cmp [byte ptr bx], PhysicsAnimatedControllerId
     je .isAnimated
+    cmp [byte ptr bx], MouseId
+    je .isMouse
     mov ax, [bx + ControllerImage]
     jmp .end
 .isPhysics:
     mov ax, [bx + PhysicsControllerImage]
+    jmp .end
+.isMouse:
+    mov ax, [bx + MouseImage]
     jmp .end
 .isAnimated:
     push bx
@@ -510,10 +615,15 @@ proc getControllerHeight
     je .isPhysics
     cmp [byte ptr bx], AnimatedControllerId
     je .isAnimated
+    cmp [byte ptr bx], MouseId
+    je .isMouse
     mov ax, [bx + ControllerHeight]
     jmp .end
 .isAnimated:
     mov ax, [bx + AnimatedControllerHeight]
+    jmp .end
+.isMouse:
+    mov ax, [bx + MouseHeight]
     jmp .end
 .isPhysics:
     mov ax, [bx + PhysicsControllerHeight]
@@ -532,19 +642,24 @@ proc getControllerWidth
     push bx
     mov bx, [bp + 4] ; controller pointer
     cmp [byte ptr bx], PhysicsAnimatedControllerId
-    je .IsPhysics
+    je .isPhysics
     cmp [byte ptr bx], PhysicsControllerId
-    je .IsPhysics
+    je .isPhysics
     cmp [byte ptr bx], AnimatedControllerId
-    je .IsAnimated
+    je .isAnimated
+    cmp [byte ptr bx], MouseId
+    je .isMouse
     mov ax, [bx + ControllerWidth]
-    jmp .End
-.IsAnimated:
+    jmp .end
+.isAnimated:
     mov ax, [bx + AnimatedControllerWidth]
-    jmp .End
-.IsPhysics:
+    jmp .end
+.isMouse:
+    mov ax, [bx + MouseWidth]
+    jmp .end
+.isPhysics:
     mov ax, [bx + PhysicsControllerWidth]
-.End:
+.end:
     mov [bp + 4], ax
     pop bx
     pop ax
@@ -563,10 +678,15 @@ proc getControllerStorePlace
     je .isPhysics
     cmp [byte ptr bx], AnimatedControllerId
     je .isAnimated
+    cmp [byte ptr bx], MouseId
+    je .isMouse
     add bx, ControllerStore
     jmp .end
 .isAnimated:
     add bx, AnimatedControllerStore
+    jmp .end
+.isMouse:
+    add bx, MouseStore
     jmp .end
 .isPhysics:
     add bx, PhysicsControllerStore
@@ -605,34 +725,30 @@ proc updateDirection
     mov [word ptr si], 0
     mov [word ptr di], 0
     ; Check if 'A' key is pressed (scan code 1Eh)
-    in al, 60h       ; Read keyboard state from port 60h
-    cmp al, 1Eh
+    cmp [byte ptr KeyStateTable + 1Eh], 1
     je .setLeft
     ; Check if 'D' key is pressed (scan code 20h)
-    in al, 60h       ; Read keyboard state from port 60h
-    cmp al, 20h
+    cmp [byte ptr KeyStateTable + 20h], 1
     je .setRight
     jmp .checkY
 .setLeft:
-    mov [word ptr si], -1*4
+    mov [word ptr si], -1 * PlayerSpeed
     jmp .checkY
 .setRight:
-    mov [word ptr si], 1*4
+    mov [word ptr si], PlayerSpeed
 .checkY:
     ; Check if 'W' key is pressed (scan code 11h)
-    in al, 60h       ; Read keyboard state from port 60h
-    cmp al, 11h
+    cmp [byte ptr KeyStateTable + 11h], 1
     je .setUp
     ; Check if 'S' key is pressed (scan code 1Fh)
-    in al, 60h       ; Read keyboard state from port 60h
-    cmp al, 1Fh
+    cmp [byte ptr KeyStateTable + 1Fh], 1
     je .setDown
     jmp .end
 .setUp:
-    mov [word ptr di], -320*2
+    mov [word ptr di], -1 * PlayerSpeed
     jmp .end
 .setDown:
-    mov [word ptr di], 320*2
+    mov [word ptr di], PlayerSpeed
 .end:
     pop di
     pop si
@@ -647,7 +763,7 @@ proc clearScreen
     mov di, 64001
 .clearLoop:
     dec di
-    mov [byte ptr es:di], 1
+    mov [byte ptr es:di], 0
     jnz .clearLoop
     pop di
     ret
@@ -671,9 +787,9 @@ proc setPalette
 .setLoop:
 	mov al, [si]   ; red
 	out dx, al
-	mov al, [si+1] ; green
+	mov al, [si + 1] ; green
 	out dx, al
-	mov al, [si+2] ; blue
+	mov al, [si + 2] ; blue
 	out dx, al
 	add si, 3      ; move to next color
 	loop .setLoop
@@ -684,6 +800,43 @@ proc setPalette
     pop bp
 	ret 2
 endp setPalette
+
+; input - current pixel pos
+; output - (ah = 0/1 x border) (al = 0/1 y border)
+proc checkImageBorders
+    push bp
+    mov bp, sp
+    push ax
+    push cx
+    push dx
+    push bx
+
+    xor bx, bx
+    mov ax, [bp + 4]  ; current pos
+
+    mov cx, 320
+    xor dx, dx
+    idiv cx ; ax - y, dx - x
+    cmp dx, 319
+    je .setTrueX
+    cmp ax, 199
+    je .setTrueY
+
+    jmp .end
+.setTrueX:
+    mov bh, 1
+    jmp .end
+.setTrueY:
+    mov bl, 1
+.end:
+    mov [bp + 4], bx
+    pop bx
+    pop dx
+    pop cx
+    pop ax
+    pop bp
+    ret
+endp checkImageBorders
 
 ; input - image pointer, position (left top corner)
 ; prints the image at the specified location
@@ -700,9 +853,27 @@ proc printImage
     mov bx, [bp + 6] ; image pointer
     mov cx, [bx + ImageHeight]
     mov dx, [bx + ImageWidth]
-    add bx, 4 ; skip the header
-    mov si, 0 ; init current width counter
+    add bx, ImageData ; get to the data part
+    mov si, 0 ; reset width counter
 .printLoop:
+    push di
+    call checkImageBorders
+    pop ax
+
+    cmp al, 1 ; if hit bottom, exit
+    je .end
+    
+    cmp ah, 1 ; if hit sides, move to next row
+    jne .skipCheckX
+.disableRow:
+    ; set the counters to the next row
+    sub di, si
+    sub bx, si
+    add di, dx
+    add bx, dx
+    jmp .nextPixelRow
+.skipCheckX:
+
     mov al, [byte ptr bx] ; get the color
     cmp al, -1
     je .skipPixel ; skip if it's empty (-1)
@@ -713,11 +884,13 @@ proc printImage
     inc si ; inc the current width counter
     cmp si, dx ; if reached end of the row
     jne .printLoop
+.nextPixelRow:
     add di, 320
     sub di, dx ; point to the next column
-    xor si, si
+    xor si, si ; reset width counter
     dec cx
     jnz .printLoop
+.end:
     pop si
     pop dx
     pop cx
@@ -833,30 +1006,26 @@ proc moveController
     ret 4
 endp moveController
 
-; input - controller pointer, word init position, printManager pointer
-; init the controller to the set position (saves the background and moves to the location)
+; input - controller pointer, word init position
+; init the controller to the set position (saves the background, prints and moves to the location)
 proc initController
     push bp
     mov bp, sp
     push di
     push ax
-    push si
-    push bx
-    mov di, [bp + 8] ; controller pointer
-    mov ax, [bp + 6] ; set position
-    mov si, [bp + 4] ; printManager pointer
+    mov di, [bp + 6] ; controller pointer
+    mov ax, [bp + 4] ; set position
     push di
     push ax
     call setControllerPosition
-    push si
     push di
-    call uploadController ; save the background
-    pop bx
-    pop si
+    call saveController
+    push di
+    call printController
     pop ax
     pop di
     pop bp
-    ret 6
+    ret 4
 endp initController
 
 ; input - animated controller pointer
@@ -941,8 +1110,8 @@ proc updateAnimation
     ret 4
 endp updateAnimation
 
-; updates time
-proc updateTime
+; updates animation time
+proc updateAnimationTime
     push bp
     mov bp, sp
     push bx
@@ -955,7 +1124,7 @@ proc updateTime
     pop bx
     pop bp
     ret 2
-endp updateTime
+endp updateAnimationTime
 
 ; input - printManager pointer
 ; prints all the controllers
@@ -1013,7 +1182,7 @@ proc uploadController
     xor ax, ax
     mov al, [byte ptr bx + PrintManagerControllerAmount] ; amount of controllers
     inc [byte ptr bx + PrintManagerControllerAmount]     ; inc the amount of controllers
-    shl ax, 1
+    shl ax, 1 ; every pointer is a word
     add bx, ax
     mov [bx + PrintManagerFirstController], di  ; upload it
     pop ax
@@ -1184,18 +1353,44 @@ proc updateAxisVelocity
     ret 2
 endp updateAxisVelocity
 
+; input - physics controller
+; adds the velocity to the controllers using the subPixelAmount
+; const to enable sub-pixel movement, for example - 0.5 pixels/frame
 proc applyVelocity
     push bp
     mov bp, sp
     push bx
     push ax
+    push dx
+    push cx
+    push si
+
     mov bx, [bp + 4] ; controller
-    push bx
-    mov ax, [bx + PhysicsControllerPosition]   ; position
-    add ax, [bx + PhysicsControllerVelocityX]  ; velocityX
-    add ax, [bx + PhysicsControllerVelocityY]  ; velocityY
-    push ax
+    mov si, SubPixelAmount
+
+    mov ax, [bx + PhysicsControllerVelocityY]
+    cwd              ; Sign-extend ax into dx:ax
+    idiv si          ; div by subPixelAmount
+    
+    mov dx, ax
+    sal ax, 6  ; ax = y * 64
+    sal dx, 8  ; dx = y * 256
+    add ax, dx
+    mov cx, ax ; cx = y * 320
+
+    mov ax, [bx + PhysicsControllerVelocityX]
+    cwd              ; Sign-extend ax into dx:ax
+    idiv si          ; div by subPixelAmount
+
+    add ax, [bx + PhysicsControllerPosition]
+    add ax, cx
+    push bx ; controller
+    push ax ; new position (old + velocities)
     call moveController
+
+    pop si
+    pop cx
+    pop dx
     pop ax
     pop bx
     pop bp
@@ -1269,23 +1464,18 @@ endp move2d
 proc jump
     push bp
     mov bp, sp
-    push ax
     push bx
     mov bx, [bp + 4] ; controller
-    mov ah, 1
-    int 16h
-    jz .end
-    xor ah, ah
-    int 16h
-    cmp al, " "
-    jne .end
+    cmp [byte ptr KeyStateTable + 11h], 0
+    je .end
+
     push bx
     push PhysicsControllerVelocityY
-    push -50*320
+    push -1 * JumpHeight
     call setWordField
+
 .end:
     pop bx
-    pop ax
     pop bp
     ret 2
 endp jump
@@ -1384,6 +1574,8 @@ proc getControllerXEdges
     ret
 endp getControllerXEdges
 
+; return the difference in the Y axis between two objects
+; input - first controller, second controller
 proc isYCollision
    push bp
     mov bp, sp
@@ -1420,6 +1612,8 @@ proc isYCollision
     ret 2
 endp isYCollision
 
+; return the difference in the X axis between two objects
+; input - first controller, second controller
 proc isXCollision
    push bp
     mov bp, sp
@@ -1507,6 +1701,10 @@ proc areColliding
     ret 2
 endp areColliding
 
+; gets the edge points of 2 objects and return the distance between them,
+; and 0 if they don't collide
+; input - obj1 bigger, obj2 lower, obj1 bigger, obj lower
+; lower - (top/left), bigger - (bottom/right)
 proc isAxisCollision
     push bp
     mov bp, sp
@@ -1547,7 +1745,9 @@ proc isAxisCollision
     ret 6
 endp isAxisCollision
 
-proc createController
+; creates a basic controller starting from the given place
+; input - place to save, image
+proc createBasicController
     push bp
     mov bp, sp
     push bx
@@ -1567,7 +1767,7 @@ proc createController
     pop bx
     pop bp
     ret 4
-endp createController
+endp createBasicController
 
 ; called 1024 times a sec
 proc periodic
@@ -1578,10 +1778,10 @@ proc periodic
     push dx
     push ax
     mov bx, [bp + 4]
-    inc [bx]
-    cmp [bx], 1025
+    inc [word ptr bx]
+    cmp [word ptr bx], 1025
     jl .skipReset
-    mov [bx], 0
+    mov [word ptr bx], 0
 .skipReset:
     mov ax, [bx]
     mov cx, gameLoopSpeed
@@ -1599,24 +1799,49 @@ skipGameLoop:
     ret 2
 endp periodic
 
+; setups the keyboard handler
+; input - pointer to the old segment save, another for the offset
+proc setupKeyboardHandler
+    push bp
+    mov bp, sp
+    push ax
+    push es
+    xor ax, ax
+    mov es, ax ; set es to IVT
+    cli
+    ; Save the original ISR address
+    mov ax, [word ptr es:9*4]
+    mov [bp + 4], ax ; save old offset
+    mov ax, [word ptr es:9*4+2]
+    mov [bp + 6], ax ; save old segment
+    ; Set the new ISR address
+    mov [word ptr es:9*4], offset keyboardHandler
+    mov [word ptr es:9*4+2], seg keyboardHandler
+    sti
+    pop es
+    pop ax
+    pop bp
+    ret 4
+endp setupKeyboardHandler
+
 proc gameLoop
 
     push offset directionX
     push offset directionY
     call updateDirection
 
-    push offset time
-    call updateTime
-
-    push offset boxController
-    call jump
+    push offset animationTime
+    call updateAnimationTime
 
     push offset boxController
     push [directionX]
     call walk
 
     push offset boxController
-    push [word ptr time]
+    call jump
+
+    push offset boxController
+    push [word ptr animationTime]
     call updateAnimation
 
     push offset boxController
@@ -1625,6 +1850,10 @@ proc gameLoop
     push offset printManager
     push offset boxController
     call uploadController
+
+    push offset Mouse
+    push offset printManager
+    call updateMouse
 
     push offset printManager
     call printAllControllers
@@ -1635,6 +1864,11 @@ proc gameLoop
     pop ax ; amount to move
     cmp ax, 0
     je continueGameLoop
+
+    push offset boxController
+    push PhysicsControllerVelocityY
+    push 0
+    call setWordField
 
     push offset boxController
     call getControllerPosition
@@ -1656,6 +1890,18 @@ continueGameLoop:
     ret
 endp gameLoop
 
+proc endAndCleanUp
+    push offset previousIRQMask
+    call cleanUpClock
+
+    mov ah, 0
+    mov al, 2
+    int 10h
+    mov ax, 4C00h
+    int 21h
+    ret
+endp endAndCleanUp
+
 start:
     mov ax, @data
     mov ds, ax
@@ -1670,6 +1916,7 @@ start:
     call clearScreen
 
 ; *******************INIT**************
+; Note - here order is important, because they save their background here
 
     push offset backgroundImage
     push (320 * 36) + 96
@@ -1677,31 +1924,26 @@ start:
 
     push offset borderController
     push (100 * 320) + 120
-    push offset printManager
     call initController
 
     push offset boxController
     push (80 * 320) + 120
-    push offset printManager
     call initController
-
-    push offset printManager
-    call printAllControllers
+    
+    push offset Mouse
+    call initMouse
 
 ; **************************************
+
+    push offset oldKeyboardHandlerSegment
+    push offset oldKeyboardHandlerOffset
+    call setupKeyboardHandler
 
     push offset previousIRQMask
     call setUpClock
 
 keepAliveLoop:
     jmp keepAliveLoop
-
 exit:
-    push offset previousIRQMask
-    call cleanUpClock
-    mov ah, 0
-    mov al, 2
-    int 10h
-    mov ax, 4C00h
-    int 21h
+    call endAndCleanUp
 END start
