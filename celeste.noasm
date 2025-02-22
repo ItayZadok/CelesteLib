@@ -100,8 +100,17 @@ cursorImage dw 10, 11
 db 7 dup(40),-1,-1,-1,40,13,4 dup(0),13,40,-1,-1,40,5 dup(0),13,40,-1,-1,40,4 dup(0),40,40,26,-1,-1,40,4 dup(0),13,40,-1,-1,-1,40,0,0,40,13,0,13,40,-1,-1,40,13,13,40,40,13,0,13,40,-1,26,40,40,26,26,40
 db 13,0,13,40,-1,26,26,-1,-1,26,40,13,0,40,6 dup(-1),26,40,40,26,7 dup(-1),26,26,-1
 
+playerIdle dw 8, 8
+db 9 dup(-1),5 dup(35),-1,-1,7 dup(35),-1,35,35,4 dup(38),35,-1,35,38,8,38,38,8,35,-1,-1,5 dup(38),-1,-1,-1,4 dup(1),4 dup(-1),39,-1,-1,39,-1,-1,-1
+
 playerImage dw 16, 16
 db 68 dup(-1),7 dup(35),8 dup(-1),9 dup(35),7 dup(-1),4 dup(35),4 dup(38),35,7 dup(-1),35,35,35,38,8,38,38,8,35,8 dup(-1),35,35,5 dup(38),10 dup(-1),35,4 dup(1),12 dup(-1),39,-1,-1,39,86 dup(-1)
+
+playerRun1 dw 8, 8
+db 9 dup(-1),5 dup(35),-1,-1,7 dup(35),-1,35,35,4 dup(38),35,-1,35,38,8,38,38,8,35,-1,-1,5 dup(38),-1,-1,-1,4 dup(1),4 dup(-1),39,-1,-1,-1,39,-1,-1
+
+playerRun2 dw 8, 8
+db 9 dup(-1),5 dup(35),-1,-1,7 dup(35),-1,35,35,4 dup(38),35,-1,35,38,8,38,38,8,35,-1,-1,5 dup(38),-1,-1,39,4 dup(1),7 dup(-1),39,-1,-1,-1
 
 screenImageWrapper db SegmentWrapperId
 dw seg screenImageOriginal, offset screenImageOriginal
@@ -303,123 +312,109 @@ ends
 
 ; *********************************OFFSET CONSTANTS*********************************
 
-PhysicsControllerId            equ 5
-PhysicsControllerVelocityX     equ 1
-PhysicsControllerAccelerationX equ 3
-PhysicsControllerFrictionX     equ 5
-PhysicsControllerMaxVelocityX  equ 7
-PhysicsControllerVelocityY     equ 9
-PhysicsControllerAccelerationY equ 11
-PhysicsControllerFrictionY     equ 13
-PhysicsControllerMaxVelocityY  equ 15
-PhysicsControllerPosition      equ 17
-PhysicsControllerImage         equ 19
-PhysicsControllerWidth         equ 21
-PhysicsControllerHeight        equ 23
-PhysicsControllerStore         equ 25
+PhysicsComponentId            equ 4
 
-PhysicsAnimatedControllerId            equ 6
-PhysicsAnimatedControllerVelocityX     equ 1
-PhysicsAnimatedControllerAccelerationX equ 3
-PhysicsAnimatedControllerFrictionX     equ 5
-PhysicsAnimatedControllerMaxVelocityX  equ 7
-PhysicsAnimatedControllerVelocityY     equ 9
-PhysicsAnimatedControllerAccelerationY equ 11
-PhysicsAnimatedControllerFrictionY     equ 13
-PhysicsAnimatedControllerMaxVelocityY  equ 15
-PhysicsAnimatedControllerPosition      equ 17
-PhysicsAnimatedControllerSize          equ 19
-PhysicsAnimatedControllerWidth         equ 21
-PhysicsAnimatedControllerHeight        equ 23
-PhysicsAnimatedControllerStore         equ 25
+PhysicsComponentAxisX         equ 0
+PhysicsComponentVelocityX     equ 0
+PhysicsComponentAccelerationX equ 2
+PhysicsComponentFrictionX     equ 4
+PhysicsComponentMaxVelocityX  equ 6
 
-AnimatorCurrentAnimation equ 0
-AnimatorCurrentFrame     equ 1
-AnimatorAnimationAmount  equ 2
-AnimatorFirstAnimation   equ 3
+PhysicsComponentAxisY         equ 8
+PhysicsComponentVelocityY     equ 8
+PhysicsComponentAccelerationY equ 10
+PhysicsComponentFrictionY     equ 12
+PhysicsComponentMaxVelocityY  equ 14
 
-VelocityAxisVelocity     equ 0
-VelocityAxisAcceleration equ 2
-VelocityAxisFriction     equ 4
-VelocityAxisMaxVelocity  equ 6
+; ********************************************
 
-AnimationId         equ 3
+PhysicsComponentAxisVelocity     equ 0
+PhysicsComponentAxisAcceleration equ 2
+PhysicsComponentAxisFriction     equ 4
+PhysicsComponentAxisMaxVelocity  equ 6
+
+; ********************************************
+
+AnimatorComponentId                    equ 3
+AnimatorComponentCurrentAnimationIndex equ 0
+AnimatorComponentCurrentFrameIndex     equ 1
+AnimatorComponentAnimationAmount       equ 2
+AnimatorComponentData                  equ 3
+
+AnimationId         equ 2
 AnimationSize       equ 1
 AnimationSpeed      equ 2
-AnimationFirstFrame equ 3
+AnimationData       equ 3
 
-AnimatedControllerId           equ 2
-AnimatedControllerPosition     equ 1
-AnimatedControllerSize         equ 3
-AnimatedControllerWidth        equ 5
-AnimatedControllerHeight       equ 7
-AnimatedControllerStore        equ 9
+; ********************************************
 
-ControllerId       equ 1
-ControllerPosition equ 1
-ControllerImage    equ 3
-ControllerWidth    equ 5
-ControllerHeight   equ 7
-ControllerStore    equ 9
+RenderComponentId                  equ 1
+RenderComponentPosition            equ 0
+RenderComponentImage               equ 2
+RenderComponentPreviousPosition    equ 4
+RenderComponentWidth               equ 6
+RenderComponentHeight              equ 8
+RenderComponentBackground          equ 10
+
+; ********************************************
+
+ControllerMaxComponentAmount equ 0
+ControllerComponentData      equ 1
+
+ComponentId       equ 0
+ComponentLocation equ 1
 
 ImageWidth  equ 0
 ImageHeight equ 2
 ImageData   equ 4
 
-PrintManagerId equ 4
+PrintManagerId               equ 5
 PrintManagerControllerAmount equ 1
-PrintManagerFirstController  equ 2
+PrintManagerData             equ 2
 
-MouseId        equ 7
-MouseRightHeld equ 1
-MouseLefhtHeld equ 2
-MousePosition  equ 3
-MouseImage     equ 5
-MouseWidth     equ 7
-MouseHeight    equ 9
-MouseStore     equ 11
-
-SegmentWrapperId       equ 8
+SegmentWrapperId       equ 6
 SegmentWrapperSegment  equ 1
 SegmentWrapperOriginal equ 3
 
 ; *********************************CONTROLLERS START********************************
 
-borderController db ControllerId
-dw 0, offset borderImage, 128, 16
-db 128*16 dup(0)
-
-boxController db PhysicsAnimatedControllerId
-dw 0, 0, 1, 100  ; vx, ax, fx, mx
-dw 0, 5, 1, 100  ; vy, ay, fy, my
-dw 0, 64, 8, 8   ; pos, size, width, height
-db 64 dup(0),0,0,1
+testController db 10
+db PhysicsComponentId,  10*2+1
+db RenderComponentId,   10*2+1+(8*2)
+db AnimatorComponentId, 10*2+1+(8*2)+(5*2+8*8)
+dw 7 dup(0)
+dw 0, 0, 0, 100  ; vx, ax, fx, mx
+dw 0, 0, 0, 100  ; vy, ay, fy, my
+dw 0, offset boxImage1, 0, 8, 8
+db 8*8 dup(0)
+db 0, 0, 1 ; cur anim, cur frame, anim amount
 dw offset boxAnimation
+
+borderController db 10
+db RenderComponentId, 10*2+1
+dw 9 dup(0)
+dw 0, offset borderImage, 0, 128, 16
+db 128*16 dup(0)
 
 ; *********************************ANIMATIONS START********************************
 
-boxAnimation db AnimationId, 3, 10
-dw offset boxImage1,offset boxImage2,offset boxImage3
+boxAnimation db AnimationId, 3, 30
+dw offset boxImage1, offset boxImage2, offset boxImage3
 
 ; *********************************OBJECTS START********************************
 
-Mouse db MouseId, 0, 0
-dw 0, offset cursorImage, 10, 11
-db 10*11 dup(0)
-
 KeyStateTable db 256 dup(0) ; Table to store key states (0 = released, 1 = pressed)
 
-PlayerSpeed equ 16*3
+PlayerSpeed equ 16
 JumpHeight equ 16*4
 
 SubPixelAmount equ 16
 
 ; *********************************GENERAL START********************************
-
 directionX dw 0
 directionY dw 0
 
-animationTime db 0
+animationTime dw 0
 
 gameLoopSpeed equ 17 ; in ms (to calculate FPS -> 1024 / FPS)
 globalTime dw 0      ; in ms
@@ -485,7 +480,7 @@ proc updateMouse
     
     push si ; mouse controller
     push ax ; position
-    call moveController
+    ; call moveControllerByPosition
 
     push [bp + 4]
     push si
@@ -646,280 +641,137 @@ proc cleanUpClock
     ret 2
 endp cleanUpClock
 
-; Input - object pointer, offset
-; General-purpose getter for word-sized fields
-proc getWordField
-    push bp
-    mov bp, sp
-    push si
-    mov si, [bp + 6]       ; object pointer
-    add si, [bp + 4]       ; add offset
-    mov si, [si]
-    mov [bp + 6], si       ; return the value
-    pop si
-    pop bp
-    ret 2
-endp getWordField
+; ***********************GENERAL GETTERS*********************
 
-; Input - object pointer, offset, value
-; General-purpose setter for word-sized fields
-proc setWordField
-    push bp
-    mov bp, sp
-    push si
-    push ax
-    mov si, [bp + 8]   ; object pointer
-    add si, [bp + 6]   ; add offset
-    mov ax, [bp + 4]   ; value
-    mov [si], ax       ; set the value
-    pop ax
-    pop si
-    pop bp
-    ret 6
-endp setWordField
-
-; Input - object pointer, offset
-; General-purpose getter for byte-sized fields
-proc getByteField
+proc getControllerWordValue
     push bp
     mov bp, sp
     push bx
-    mov bx, [bp + 6]       ; object pointer
-    add bx, [bp + 4]       ; add offset
-    mov bl, [bx]
-    mov [bp + 4], bl       ; return the value
-    pop bx
-    pop bp
-    ret 2
-endp getByteField
-
-; Input - object pointer, offset, value
-; General-purpose setter for byte-sized fields
-proc setByteField
-    push bp
-    mov bp, sp
-    push si
-    push ax
-    mov si, [bp + 8]   ; object pointer
-    add si, [bp + 6]   ; add offset
-    mov al, [bp + 4]   ; value
-    mov [si], al       ; set the value
-    pop ax
-    pop si
-    pop bp
-    ret 6
-endp setByteField
-
-proc getControllerPosition
-    push bp
-    mov bp, sp
-    push ax
+    mov bx, [bp + 8] ; controller pointer
     push bx
-    mov bx, [bp + 4] ; controller pointer
-    cmp [byte ptr bx], PhysicsAnimatedControllerId
-    je .isPhysicsAnimated
-    cmp [byte ptr bx], PhysicsControllerId
-    je .isPhysics
-    cmp [byte ptr bx], AnimatedControllerId
-    je .isAnimated
-    cmp [byte ptr bx], MouseId
-    je .isMouse
-    mov ax, [bx + ControllerPosition]
-    jmp .end
-.isPhysicsAnimated:
-    mov ax, [bx + PhysicsAnimatedControllerPosition]
-    jmp .end
-.isMouse:
-    mov ax, [bx + MousePosition]
-    jmp .end
-.isAnimated:
-    mov ax, [bx + AnimatedControllerPosition]
-    jmp .end
-.isPhysics:
-    mov ax, [bx + PhysicsControllerPosition]
-.end:
-    mov [bp + 4], ax
+    push [bp + 6] ; componentId
+    call getControllerComponent
     pop bx
-    pop ax
-    pop bp
-    ret
-endp getControllerPosition
-
-proc setControllerPosition
-    push bp
-    mov bp, sp
-    push ax
-    push bx
-    mov bx, [bp + 6] ; controller pointer
-    mov ax, [bp + 4] ; position
-    cmp [byte ptr bx], PhysicsAnimatedControllerId
-    je .isPhysics
-    cmp [byte ptr bx], PhysicsControllerId
-    je .isPhysics
-    cmp [byte ptr bx], AnimatedControllerId
-    je .isAnimated
-    cmp [byte ptr bx], MouseId
-    je .isMouse
-    mov [bx + ControllerPosition], ax
-    jmp .end
-.isAnimated:
-    mov [bx + AnimatedControllerPosition], ax
-    jmp .end
-.isMouse:
-    mov [bx + MousePosition], ax
-    jmp .end
-.isPhysics:
-    mov [bx + PhysicsControllerPosition], ax
-.end:
+    add bx, [bp + 4] ; parameter
+    mov bx, [bx]
+    mov [bp + 8], bx
     pop bx
-    pop ax
     pop bp
     ret 4
-endp setControllerPosition
+endp getControllerWordValue
 
-proc getControllerImage
+proc getControllerWordOffset
+    push bp
+    mov bp, sp
+    push bx
+    mov bx, [bp + 8] ; controller pointer
+    push bx
+    push [bp + 6] ; componentId
+    call getControllerComponent
+    pop bx
+    add bx, [bp + 4] ; parameter
+    mov [bp + 8], bx
+    pop bx
+    pop bp
+    ret 4
+endp getControllerWordOffset
+
+proc getControllerByteValue
+    push bp
+    mov bp, sp
+    push bx
+    mov bx, [bp + 8] ; controller pointer
+    push bx
+    push [bp + 6] ; componentId
+    call getControllerComponent
+    pop bx
+    add bx, [bp + 4] ; parameter
+    mov bl, [bx]
+    mov [bp + 8], bl
+    pop bx
+    pop bp
+    ret 4
+endp getControllerByteValue
+
+; ***********************GENERAL SETTERS*********************
+
+proc setControllerWordValue
     push bp
     mov bp, sp
     push ax
     push bx
-    mov bx, [bp + 4] ; controller pointer
-    cmp [byte ptr bx], PhysicsControllerId
-    je .isPhysics
-    cmp [byte ptr bx], AnimatedControllerId
-    je .isAnimated
-    cmp [byte ptr bx], PhysicsAnimatedControllerId
-    je .isAnimated
-    cmp [byte ptr bx], MouseId
-    je .isMouse
-    mov ax, [bx + ControllerImage]
-    jmp .end
-.isPhysics:
-    mov ax, [bx + PhysicsControllerImage]
-    jmp .end
-.isMouse:
-    mov ax, [bx + MouseImage]
-    jmp .end
-.isAnimated:
+    mov bx, [bp + 10] ; controller pointer
     push bx
-    call getCurrentFrame
-    pop ax
-.end:
-    mov [bp + 4], ax
+    push [bp + 6] ; componentId
+    call getControllerComponent
+    pop bx
+    add bx, [bp + 4] ; parameter
+    mov ax, [bp + 8] ; value
+    mov [bx], ax
     pop bx
     pop ax
     pop bp
-    ret
-endp getControllerImage
+    ret 8
+endp setControllerWordValue
 
-proc getControllerHeight
+proc addControllerWordValue
     push bp
     mov bp, sp
     push ax
     push bx
-    mov bx, [bp + 4] ; controller pointer
-    cmp [byte ptr bx], PhysicsAnimatedControllerId
-    je .isPhysics
-    cmp [byte ptr bx], PhysicsControllerId
-    je .isPhysics
-    cmp [byte ptr bx], AnimatedControllerId
-    je .isAnimated
-    cmp [byte ptr bx], MouseId
-    je .isMouse
-    mov ax, [bx + ControllerHeight]
-    jmp .end
-.isAnimated:
-    mov ax, [bx + AnimatedControllerHeight]
-    jmp .end
-.isMouse:
-    mov ax, [bx + MouseHeight]
-    jmp .end
-.isPhysics:
-    mov ax, [bx + PhysicsControllerHeight]
-.end:
-    mov [bp + 4], ax
+    mov bx, [bp + 10] ; controller pointer
+    push bx
+    push [bp + 6] ; componentId
+    call getControllerComponent
+    pop bx
+    add bx, [bp + 4] ; parameter
+    mov ax, [bp + 8] ; addition
+    add [bx], ax
     pop bx
     pop ax
     pop bp
-    ret
-endp getControllerHeight
+    ret 8
+endp addControllerWordValue
 
-proc getControllerWidth
+proc setControllerByteValue
     push bp
     mov bp, sp
     push ax
     push bx
-    mov bx, [bp + 4] ; controller pointer
-    cmp [byte ptr bx], PhysicsAnimatedControllerId
-    je .isPhysics
-    cmp [byte ptr bx], PhysicsControllerId
-    je .isPhysics
-    cmp [byte ptr bx], AnimatedControllerId
-    je .isAnimated
-    cmp [byte ptr bx], MouseId
-    je .isMouse
-    mov ax, [bx + ControllerWidth]
-    jmp .end
-.isAnimated:
-    mov ax, [bx + AnimatedControllerWidth]
-    jmp .end
-.isMouse:
-    mov ax, [bx + MouseWidth]
-    jmp .end
-.isPhysics:
-    mov ax, [bx + PhysicsControllerWidth]
-.end:
-    mov [bp + 4], ax
+    mov bx, [bp + 10] ; controller pointer
+    push bx
+    push [bp + 6] ; componentId
+    call getControllerComponent
+    pop bx
+    add bx, [bp + 4] ; parameter
+    mov al, [bp + 8] ; value
+    mov [bx], al
     pop bx
     pop ax
     pop bp
-    ret
-endp getControllerWidth
+    ret 8
+endp setControllerByteValue
 
-proc getControllerStorePlace
+proc addControllerByteValue
     push bp
     mov bp, sp
-    push bx
-    mov bx, [bp + 4] ; controller pointer
-    cmp [byte ptr bx], PhysicsAnimatedControllerId
-    je .isPhysics
-    cmp [byte ptr bx], PhysicsControllerId
-    je .isPhysics
-    cmp [byte ptr bx], AnimatedControllerId
-    je .isAnimated
-    cmp [byte ptr bx], MouseId
-    je .isMouse
-    add bx, ControllerStore
-    jmp .end
-.isAnimated:
-    add bx, AnimatedControllerStore
-    jmp .end
-.isMouse:
-    add bx, MouseStore
-    jmp .end
-.isPhysics:
-    add bx, PhysicsControllerStore
-.end:
-    mov [bp + 4], bx
-    pop bx
-    pop bp
-    ret
-endp getControllerStorePlace
-
-; creates a short delay
-proc delay
     push ax
-    push cx
-    mov cx, 300  ; outer loop
-    mov ax, 1000 ; inner loop
-.outerLoop:
-.innerLoop:
-    dec ax
-    jnz .innerLoop
-    loop .outerLoop
-    pop cx
+    push bx
+    mov bx, [bp + 10] ; controller pointer
+    push bx
+    push [bp + 6] ; componentId
+    call getControllerComponent
+    pop bx
+    add bx, [bp + 4] ; parameter
+    mov al, [bp + 8] ; addition
+    add [bx], al
+    pop bx
     pop ax
-    ret
-endp delay
+    pop bp
+    ret 8
+endp addControllerByteValue
+
+; ****************************************
 
 ; input - word directionX pointer, word directionY pointer
 proc updateDirection
@@ -932,11 +784,9 @@ proc updateDirection
     mov di, [bp + 4]  ; directionY pointer
     mov [word ptr si], 0
     mov [word ptr di], 0
-    ; Check if 'A' key is pressed (scan code 1Eh)
-    cmp [byte ptr KeyStateTable + 1Eh], 1
+    cmp [byte ptr KeyStateTable + 1Eh], 1 ; Check if 'A' key is pressed (scan code 1Eh)
     je .setLeft
-    ; Check if 'D' key is pressed (scan code 20h)
-    cmp [byte ptr KeyStateTable + 20h], 1
+    cmp [byte ptr KeyStateTable + 20h], 1  ; Check if 'D' key is pressed (scan code 20h)
     je .setRight
     jmp .checkY
 .setLeft:
@@ -945,11 +795,9 @@ proc updateDirection
 .setRight:
     mov [word ptr si], PlayerSpeed
 .checkY:
-    ; Check if 'W' key is pressed (scan code 11h)
-    cmp [byte ptr KeyStateTable + 11h], 1
+    cmp [byte ptr KeyStateTable + 11h], 1 ; Check if 'W' key is pressed (scan code 11h)
     je .setUp
-    ; Check if 'S' key is pressed (scan code 1Fh)
-    cmp [byte ptr KeyStateTable + 1Fh], 1
+    cmp [byte ptr KeyStateTable + 1Fh], 1 ; Check if 'S' key is pressed (scan code 1Fh)
     je .setDown
     jmp .end
 .setUp:
@@ -1046,9 +894,7 @@ proc checkImageBorders
     ret
 endp checkImageBorders
 
-; input - image pointer, position (left top corner)
-; prints the image at the specified location
-proc printImage
+proc printImageBySize
     push bp
     mov bp, sp
     push di
@@ -1057,20 +903,17 @@ proc printImage
     push cx
     push dx
     push si
-    mov di, [bp + 4] ; screen position (left top)
-    mov bx, [bp + 6] ; image pointer
-    mov cx, [bx + ImageHeight]
-    mov dx, [bx + ImageWidth]
-    add bx, ImageData ; get to the data part
+    mov bx, [bp + 10] ; image pointer
+    mov cx, [bp + 8]  ; height
+    mov dx, [bp + 6]  ; width
+    mov di, [bp + 4]  ; screen position (left top)
     mov si, 0 ; reset width counter
 .printLoop:
     push di
     call checkImageBorders
     pop ax
-
     cmp al, 1 ; if hit bottom, exit
     je .end
-    
     cmp ah, 1 ; if hit sides, move to next row
     jne .skipCheckX
 .disableRow:
@@ -1081,7 +924,6 @@ proc printImage
     add bx, dx
     jmp .nextPixelRow
 .skipCheckX:
-
     mov al, [byte ptr bx] ; get the color
     cmp al, -1
     je .skipPixel ; skip if it's empty (-1)
@@ -1106,6 +948,27 @@ proc printImage
     pop ax
     pop di
     pop bp
+    ret 8
+endp printImageBySize
+
+; input - image pointer, position (left top corner)
+; prints the image at the specified location
+proc printImage
+    push bp
+    mov bp, sp
+    push ax
+    push bx
+    mov bx, [bp + 6] ; image pointer
+    mov ax, bx
+    add ax, ImageData
+    push ax ; image data (colors)
+    push [bx + ImageHeight]
+    push [bx + ImageWidth]
+    push [bp + 4] ; screen position (left top)
+    call printImageBySize
+    pop bx
+    pop ax
+    pop bp
     ret 4
 endp printImage
 
@@ -1115,18 +978,14 @@ proc printController
     push bp
     mov bp, sp
     push di
-    push ax
     mov di, [bp + 4] ; controller pointer
     push di
-    call getControllerPosition
-    pop ax ; position
-    push di
-    call getControllerImage
-    pop di ; image
-    push di
-    push ax
+    push RenderComponentId
+    call getControllerComponent
+    pop di ; component
+    push [word ptr di + RenderComponentImage]
+    push [word ptr di + RenderComponentPosition]
     call printImage
-    pop ax
     pop di
     pop bp
     ret 2
@@ -1138,24 +997,22 @@ proc saveController
     push bp
     mov bp, sp
     push di
-    push ax
     push bx
     push cx
     push dx
     push si
     mov di, [bp + 4]  ; controller
     push di
-    call getControllerStorePlace
-    pop bx     ; saving place
-    push di
-    call getControllerHeight
-    pop cx     ; height
-    push di
-    call getControllerWidth
-    pop dx     ; width
-    push di
-    call getControllerPosition
-    pop di     ; position
+    push RenderComponentId
+    call getControllerComponent
+    pop di ; component
+
+    mov bx, di
+    add bx, RenderComponentBackground
+
+    mov cx, [di + RenderComponentHeight]
+    mov dx, [di + RenderComponentWidth]
+    mov di, [di + RenderComponentPosition]
     mov si, 0  ; width counter
 .saveLoop:
     mov al, [es:di]
@@ -1174,45 +1031,37 @@ proc saveController
     pop dx
     pop cx
     pop bx
-    pop ax
     pop di
     pop bp
     ret 2
 endp saveController
 
-; input - controller pointer, word position value
-; prints the saved background and moves the controller to the new position (doesn't print it)
-proc moveController
+proc printBackground
     push bp
     mov bp, sp
     push di
-    push ax
-    push bx
     push dx
-    mov di, [bp + 6] ; controller pointer
-    mov bx, [bp + 4] ; position
-    ; print the saved data
+    mov di, [bp + 4] ; controller pointer
+
     push di
-    call getControllerPosition
-    pop ax
-    push di
-    call getControllerStorePlace
-    pop dx
-    sub dx, 4 ; to also get the width and height
+    push RenderComponentId
+    call getControllerComponent
+    pop di ; component
+
+    mov dx, di
+    add dx, RenderComponentWidth 
     push dx ; (width, height, color bytes)
-    push ax ; old position
+    push [word ptr di + RenderComponentPreviousPosition]
     call printImage
-    ; set the new position
-    push di
-    push bx
-    call setControllerPosition
+
+    mov dx, [di + RenderComponentPosition]
+    mov [di + RenderComponentPreviousPosition], dx
+    
     pop dx
-    pop bx
-    pop ax
     pop di
     pop bp
-    ret 4
-endp moveController
+    ret 2
+endp printBackground
 
 ; input - controller pointer, word init position
 ; init the controller to the set position (saves the background, prints and moves to the location)
@@ -1221,15 +1070,23 @@ proc initController
     mov bp, sp
     push di
     push ax
+    push bx
     mov di, [bp + 6] ; controller pointer
     mov ax, [bp + 4] ; set position
+
     push di
-    push ax
-    call setControllerPosition
+    push RenderComponentId
+    call getControllerComponent
+    pop bx ; component
+
+    mov [bx + RenderComponentPosition], ax
+    mov [bx + RenderComponentPreviousPosition], ax
+    
     push di
     call saveController
     push di
     call printController
+    pop bx
     pop ax
     pop di
     pop bp
@@ -1238,34 +1095,35 @@ endp initController
 
 ; input - animated controller pointer
 ; moves the current animation a frame (if last frame resets it)
-proc moveFrame
+proc moveToNextAnimationFrame
     push bp
     mov bp, sp
     push di
     push bx
     push ax
-    mov di, [bp + 4]          ; controller pointer
+    mov di, [bp + 4] ; controller pointer
     xor ax, ax
     push di
-    call getControllerAnimator
-    push di                   ; start of animating (current animation)
     call getCurrentAnimation
-    pop bx                          ; current animation
+    pop bx ; current animation
+    push di
+    push AnimatorComponentId
+    call getControllerComponent
+    pop di ; component
     mov bl, [bx + AnimationSize]    ; animation size
-    pop di ; - ?
-    mov al, [di + AnimatorCurrentFrame]          ; current frame number
+    mov al, [di + AnimatorComponentCurrentFrameIndex] ; current frame number
     inc al                                       ; next frame
     cmp al, bl
     jne .end
     mov al, 0
 .end:
-    mov [di + AnimatorCurrentFrame], al
+    mov [di + AnimatorComponentCurrentFrameIndex], al ; set the frame
     pop ax
     pop bx
     pop di
     pop bp
     ret 2
-endp moveFrame
+endp moveToNextAnimationFrame
 
 ; input - controller pointer, byte animation number
 ; sets the current animation by number (first is 0, second is 1...)
@@ -1278,42 +1136,86 @@ proc setAnimation
     mov al, [bp + 4] ; animation number
     mov di, [bp + 6] ; controller pointer
     push di
-    call getControllerAnimator
-    pop di
-    mov [byte ptr di + AnimatorCurrentAnimation], al  ; set current animation
-    mov [byte ptr di + AnimatorCurrentFrame], 0       ; set current frame 0
+    push AnimatorComponentId
+    call getControllerComponent
+    pop di ; animator component
+    mov [byte ptr di + AnimatorComponentCurrentAnimationIndex], al  ; set current animation
+    mov [byte ptr di + AnimatorComponentCurrentFrameIndex], 0       ; set current frame 0
     pop ax
     pop di
     pop bp
     ret 4
 endp setAnimation
 
+proc getFrameImage
+    push bp
+    mov bp, sp
+    push bx
+    push si
+
+    mov bx, [bp + 6] ; animation
+    mov si, [bp + 4] ; frame index
+
+    add bx, AnimationData ; first animation
+    add bx, si
+    add bx, si ; current animation (every anim is a word)
+
+    mov bx, [bx]
+    mov [bp + 6], bx
+
+    pop si
+    pop bx
+    pop bp
+    ret 2
+endp getFrameImage
+
 ; input - animated controller, current time (0-255)
 ; updates it's current animation
 proc updateAnimation
     push bp
     mov bp, sp
-    push dx
     push ax
-    push di
     push bx
-    xor ax, ax
-    mov di, [bp + 6]          ; controller pointer
-    mov al, [bp + 4]          ; current time
+    push di
+    push cx
+    mov di, [bp + 6] ; controller pointer
+    mov al, [bp + 4] ; current time
+
     push di
     call getCurrentAnimation
     pop bx
-    mov dh, [bx + AnimationSpeed]          ; animation speed
-    div dh ; ah - time % speed
+    
+    mov ch, [bx + AnimationSpeed] ; animation speed
+    div ch ; ah - time % speed
     cmp ah, 0
     jne .end
+
     push di
-    call moveFrame
-.end:
+    call moveToNextAnimationFrame
+
+    push di
+    push AnimatorComponentId
+    push AnimatorComponentCurrentFrameIndex
+    call getControllerByteValue
+    pop cx
+    mov ch, 0 ; cl = current frame index
+
+    push bx
+    push cx
+    call getFrameImage
     pop bx
+
+    push di
+    push bx
+    push RenderComponentId
+    push RenderComponentImage
+    call setControllerWordValue
+
+.end:
+    pop cx
     pop di
+    pop bx
     pop ax
-    pop dx
     pop bp
     ret 4
 endp updateAnimation
@@ -1326,7 +1228,7 @@ proc updateAnimationTime
     mov bx, [bp + 4]    ; time pointer
     cmp [byte ptr bx], 255
     jne .continue
-    mov [byte ptr bx], -1
+    mov [byte ptr bx], 0
 .continue:
     inc [byte ptr bx]
     pop bx
@@ -1340,11 +1242,21 @@ proc printAllControllers
     push bp
     mov bp, sp
     push bx
-    push di
     push cx
     push si
     mov si, [bp + 4] ; offset printManager
-    inc si           ; skip id
+    add si, PrintManagerControllerAmount
+    mov bx, si
+    mov cl, [byte ptr bx] ; amount of controllers
+.printBackgroundLoop:
+    cmp cl, 0
+    je .printBackgroundEnd
+    push [bx + 1]      ; controller pointer
+    call printBackground
+    add bx, 2
+    dec cl
+    jmp .printBackgroundLoop
+.printBackgroundEnd:
     mov bx, si
     mov cl, [byte ptr bx] ; amount of controllers
 .saveLoop:
@@ -1359,19 +1271,18 @@ proc printAllControllers
     mov bx, si
     mov cl, [byte ptr bx] ; amount of controllers
     mov [byte ptr bx], 0
-.printLoop:
+.printImageLoop:
     cmp cl, 0
-    je .printEnd
+    je .end
     push [bx + 1]      ;  controller pointer
     call printController
     mov [word ptr bx + 1], 0
     add bx, 2
     dec cl
-    jmp .printLoop
-.printEnd:
+    jmp .printImageLoop
+.end:
     pop si
     pop cx
-    pop di
     pop bx
     pop bp
     ret 2
@@ -1392,7 +1303,7 @@ proc uploadController
     inc [byte ptr bx + PrintManagerControllerAmount]     ; inc the amount of controllers
     shl ax, 1 ; every pointer is a word
     add bx, ax
-    mov [bx + PrintManagerFirstController], di  ; upload it
+    mov [bx + PrintManagerData], di  ; upload it
     pop ax
     pop di
     pop bx
@@ -1408,76 +1319,25 @@ proc getCurrentAnimation
     push di
     push bx
     mov di, [bp + 4] ; controller pointer
+
     push di
-    call getControllerAnimator
-    pop di
+    push AnimatorComponentId
+    call getControllerComponent
+    pop di ; component
+
     xor bx, bx
-    mov bl, [di + AnimatorCurrentAnimation]  ; current animation number
-    add di, AnimatorFirstAnimation           ; first animation pointer
-    shl bx, 1
-    add di, bx
-    mov di, [di]
-    mov [word ptr bp + 4], di
+    mov bl, [di + AnimatorComponentCurrentAnimationIndex]  ; current animation index
+    add di, AnimatorComponentData ; animation list
+    shl bx, 1                     ; each animation is a word         
+    add di, bx                    ; current animation
+    mov di, [di]                  ; get the pointer to anim and not the pointer to the pointer
+    mov [bp + 4], di
+
     pop bx
     pop di
     pop bp
     ret
 endp getCurrentAnimation
-
-; input - animated controller
-; returns the current animation frame
-proc getCurrentFrame
-    push bp
-    mov bp, sp
-    push di
-    push bx
-    push si
-    push ax
-    mov di, [bp + 4] ; controller pointer
-    push di
-    call getControllerAnimator
-    pop si
-    xor bx, bx
-    xor ax, ax
-    mov bl, [si + AnimatorFirstAnimation] ; current animation number
-    mov al, [si + AnimatorCurrentFrame]   ; current frame number
-    push di
-    call getCurrentAnimation
-    pop si ; current animation
-    add si, AnimationFirstFrame        ; first frame
-    shl al, 1        ; each frame is a word
-    add si, ax       ; current frame pointer
-    mov si, [si]     ; current frame
-    mov [bp + 4], si ; return it
-    pop ax
-    pop si
-    pop bx
-    pop di
-    pop bp
-    ret
-endp getCurrentFrame
-
-; input - animated controller
-; returns the start of the animating part of the controller
-proc getControllerAnimator
-    push bp
-    mov bp, sp
-    push di
-    mov di, [bp + 4] ; controller pointer
-    cmp [byte ptr di], PhysicsAnimatedControllerId
-    je .isPhysics
-    add di, [di + AnimatedControllerSize] ; add the size
-    add di, AnimatedControllerStore       ; add the storing place     
-    jmp .end   
-.isPhysics:
-    add di, [di + PhysicsAnimatedControllerSize]
-    add di, PhysicsAnimatedControllerStore
-.end:
-    mov [bp + 4], di ; send back
-    pop di
-    pop bp
-    ret
-endp getControllerAnimator
 
 ; input - velocity controller
 ; update its velocity (x and y)
@@ -1485,73 +1345,84 @@ proc updateVelocity
     push bp
     mov bp, sp
     push bx
+    push ax
     mov bx, [bp + 4] ; controller
-    add bx, PhysicsControllerVelocityX
+
     push bx
-    call updateAxisVelocity ; update velocity x
-    sub bx, PhysicsControllerVelocityX
-    add bx, PhysicsControllerVelocityY
-    push bx
-    call updateAxisVelocity ; update velocity y
+    push PhysicsComponentId
+    call getControllerComponent
+    pop bx ; component
+
+    mov ax, bx
+    add ax, PhysicsComponentAxisX
+    push ax
+    call updatePhysicsAxis      ; update x axis
+
+    mov ax, bx
+    add ax, PhysicsComponentAxisY
+    push ax
+    call updatePhysicsAxis      ; update y axis
+
+    pop ax
     pop bx
     pop bp
     ret 2
 endp updateVelocity
 
-; input - velocity axis pointer (start of each axis part)
-; updates it's velocity
-proc updateAxisVelocity
+; input - velocity axis (start of each axis part)
+; updates its velocity
+proc updatePhysicsAxis
     push bp
     mov bp, sp
     push bx
     push dx
     push si
     push cx
-    mov si, [bp + 4]                        ; velocity pointer
-    mov dx, [si + VelocityAxisFriction]     ; friction
-    mov bx, [si + VelocityAxisVelocity]    
-    mov cx, [si + VelocityAxisMaxVelocity]  ; max velocity
+    mov si, [bp + 4]                                ; physics axis
+    mov dx, [si + PhysicsComponentAxisFriction]     ; friction
+    mov bx, [si + PhysicsComponentAxisVelocity]     ; velocity
+    mov cx, [si + PhysicsComponentAxisMaxVelocity]  ; max velocity
     cmp bx, 0
     jl .positiveFriction ; if we go negative
     cmp bx, 0
     jg .negativeFriction ; if we go negative
 
-    mov bx, [si + VelocityAxisAcceleration] ; accerlation
-    add [si], bx                            ; add velocity acceleration
+    mov bx, [si + PhysicsComponentAxisAcceleration] ; accerlation
+    add [si], bx                                    ; add velocity acceleration
 
     jmp .end
 .negativeFriction:
     sub bx, dx ; check if the gravity is too much it will become positive, if so reset it
     cmp bx, 0
     jl .resetFriction
-    sub [si + VelocityAxisVelocity], dx
+    sub [si + PhysicsComponentAxisVelocity], dx
 
-    mov bx, [si + VelocityAxisAcceleration] ; accerlation
-    add [si], bx                            ; add velocity acceleration
+    mov bx, [si + PhysicsComponentAxisAcceleration] ; accerlation
+    add [si], bx                                    ; add velocity acceleration
 
     jmp .limitPositiveVelocity
 .positiveFriction:
     add bx, dx ; check if the gravity is too much it will become negative, if so reset it
     cmp bx, 0
     jg .resetFriction
-    add [si + VelocityAxisVelocity], dx
+    add [si + PhysicsComponentAxisVelocity], dx
     
-    mov bx, [si + VelocityAxisAcceleration] ; accerlation
-    add [si], bx                            ; add velocity acceleration
+    mov bx, [si + PhysicsComponentAxisAcceleration] ; accerlation
+    add [si], bx                                    ; add velocity acceleration
 
     jmp .limitNegativeVelocity
 .resetFriction:
-    mov [word ptr si + VelocityAxisVelocity], 0
+    mov [word ptr si + PhysicsComponentAxisVelocity], 0
     jmp .end
 .limitPositiveVelocity:
-    cmp [si + VelocityAxisVelocity], cx
+    cmp [si + PhysicsComponentAxisVelocity], cx
     jl .limitNegativeVelocity
-    mov [si + VelocityAxisVelocity], cx
+    mov [si + PhysicsComponentAxisVelocity], cx
 .limitNegativeVelocity:
     neg cx
-    cmp [si + VelocityAxisVelocity], cx
+    cmp [si + PhysicsComponentAxisVelocity], cx
     jg .end
-    mov [si + VelocityAxisVelocity], cx
+    mov [si + PhysicsComponentAxisVelocity], cx
 .end:
     pop cx
     pop si
@@ -1559,7 +1430,7 @@ proc updateAxisVelocity
     pop bx
     pop bp
     ret 2
-endp updateAxisVelocity
+endp updatePhysicsAxis
 
 ; input - physics controller
 ; adds the velocity to the controllers using the subPixelAmount
@@ -1576,25 +1447,34 @@ proc applyVelocity
     mov bx, [bp + 4] ; controller
     mov si, SubPixelAmount
 
-    mov ax, [bx + PhysicsControllerVelocityY]
+    push bx
+    push PhysicsComponentId
+    push PhysicsComponentVelocityY
+    call getControllerWordValue
+    pop ax           ; velocity y
     cwd              ; Sign-extend ax into dx:ax
     idiv si          ; div by subPixelAmount
-    
-    mov dx, ax
+    mov dx, ax       ; dx = new velocity Y
+
     sal ax, 6  ; ax = y * 64
     sal dx, 8  ; dx = y * 256
     add ax, dx
     mov cx, ax ; cx = y * 320
 
-    mov ax, [bx + PhysicsControllerVelocityX]
+    push bx
+    push PhysicsComponentId
+    push PhysicsComponentVelocityX
+    call getControllerWordValue
+    pop ax           ; velocity x
     cwd              ; Sign-extend ax into dx:ax
-    idiv si          ; div by subPixelAmount
+    idiv si          ; div by subPixelAmount, ax = new velocity X
 
-    add ax, [bx + PhysicsControllerPosition]
-    add ax, cx
+    add ax, cx ; add velocity Y
     push bx ; controller
-    push ax ; new position (old + velocities)
-    call moveController
+    push ax ; addition (velocity y + x)
+    push RenderComponentId
+    push RenderComponentPosition
+    call addControllerWordValue
 
     pop si
     pop cx
@@ -1629,9 +1509,10 @@ proc walk
     cmp ax, 0
     je .skipX
     push bx
-    push PhysicsControllerVelocityX
     push ax
-    call setWordField
+    push PhysicsComponentId
+    push PhysicsComponentVelocityX
+    call setControllerWordValue
 .skipX:
     pop bx
     pop ax
@@ -1648,20 +1529,19 @@ proc move2d
     mov bx, [bp + 8] ; controller
     mov ax, [bp + 6] ; direction X
     mov dx, [bp + 4] ; direction Y
-    cmp ax, 0
-    je .skipX
+
     push bx
-    push PhysicsControllerVelocityX
     push ax
-    call setWordField
-.skipX:
-    cmp dx, 0
-    je .skipY
+    push PhysicsComponentId
+    push PhysicsComponentVelocityX
+    call setControllerWordValue
+
     push bx
-    push PhysicsControllerVelocityY
     push dx
-    call setWordField
-.skipY:
+    push PhysicsComponentId
+    push PhysicsComponentVelocityY
+    call setControllerWordValue
+    
     pop dx
     pop bx
     pop ax
@@ -1674,14 +1554,13 @@ proc jump
     mov bp, sp
     push bx
     mov bx, [bp + 4] ; controller
-    cmp [byte ptr KeyStateTable + 11h], 0
+    cmp [byte ptr KeyStateTable + 39h], 0 ; space scan code
     je .end
-
     push bx
-    push PhysicsControllerVelocityY
     push -1 * JumpHeight
-    call setWordField
-
+    push PhysicsComponentId
+    push PhysicsComponentVelocityY
+    call setControllerWordValue
 .end:
     pop bx
     pop bp
@@ -1696,7 +1575,9 @@ proc getControllerY
     push dx
     mov bx, [bp + 4] ; first controller
     push bx
-    call getControllerPosition
+    push RenderComponentId
+    push RenderComponentPosition
+    call getControllerWordValue
     pop ax
     mov bx, 320
     xor dx, dx
@@ -1717,7 +1598,9 @@ proc getControllerX
     push dx
     mov bx, [bp + 4] ; first controller
     push bx
-    call getControllerPosition
+    push RenderComponentId
+    push RenderComponentPosition
+    call getControllerWordValue
     pop ax
     mov bx, 320
     xor dx, dx
@@ -1742,7 +1625,9 @@ proc getControllerYEdges
     call getControllerY
     pop ax ; top
     push bx
-    call getControllerHeight
+    push RenderComponentId
+    push RenderComponentHeight
+    call getControllerWordValue
     pop di
     mov dx, ax
     add dx, di       ; bottom
@@ -1768,7 +1653,9 @@ proc getControllerXEdges
     call getControllerX
     pop ax ; left
     push bx
-    call getControllerWidth
+    push RenderComponentId
+    push RenderComponentWidth
+    call getControllerWordValue
     pop di
     mov dx, ax
     add dx, di       ; right
@@ -1794,13 +1681,13 @@ proc isYCollision
     push dx
     mov si, [bp + 6] ; first controller
     mov bx, [bp + 4] ; second controller
+    push 0 ; garbage value
     push si
-    push si ; garbage value
     call getControllerYEdges
     pop ax
     pop dx
+    push 0 ; garbage value
     push bx
-    push bx ; garbage value
     call getControllerYEdges
     pop bx
     pop si
@@ -1832,13 +1719,13 @@ proc isXCollision
     push dx
     mov si, [bp + 6] ; first controller
     mov bx, [bp + 4] ; second controller
+    push 0 ; garbage value
     push si
-    push si ; garbage value
     call getControllerXEdges
     pop ax
     pop dx
+    push 0 ; garbage value
     push bx
-    push bx ; garbage value
     call getControllerXEdges
     pop bx
     pop si
@@ -1953,29 +1840,72 @@ proc isAxisCollision
     ret 6
 endp isAxisCollision
 
-; creates a basic controller starting from the given place
-; input - place to save, image
-proc createBasicController
+
+proc getControllerComponent
+    push bp
+    mov bp, sp
+    push ax
+    push bx
+    push si
+
+    mov bx, [bp + 6] ; controller
+    mov ax, [bp + 4] ; componentId
+
+    mov si, bx
+    add si, ControllerComponentData
+    dec si
+
+.componentLoop:
+    inc si
+    mov ah, [si] ; current component id
+    cmp al, ah
+    jne .componentLoop
+
+    xor ax, ax
+    mov al, [si + ComponentLocation]
+    add bx, ax
+
+    mov [bp + 6], bx
+    pop si
+    pop bx
+    pop ax
+    pop bp
+    ret 2
+endp getControllerComponent
+
+proc endAndCleanUp
+    push offset previousIRQMask
+    call cleanUpClock
+
+    mov ah, 0
+    mov al, 2
+    int 10h
+    mov ax, 4C00h
+    int 21h
+    ret
+endp endAndCleanUp
+
+; input - the segment wrapper
+; output - the original object
+; note - need to execute end, to return to the normal ds
+proc StartLoadFromOtherSegment
     push bp
     mov bp, sp
     push bx
-    push si
     push ax
-    mov bx, [bp + 6] ; place to build it
-    mov si, [bp + 4] ; image pointer
-    mov [byte ptr bx], ControllerId
-    mov [word ptr bx + ControllerPosition], 0
-    mov [word ptr bx + ControllerImage], si
-    mov ax, [si + ImageHeight]
-    mov [word ptr bx + ControllerHeight], ax
-    mov ax, [si + ImageWidth]
-    mov [word ptr bx + ControllerWidth], ax
-    pop ax
+    push si
+    mov bx, [bp + 4]
+    mov [bp + 6], ds
+    mov ax, [bx + SegmentWrapperSegment]
+    mov si, [bx + SegmentWrapperOriginal]
+    mov ds, ax
+    mov [bp + 4], si
     pop si
+    pop ax
     pop bx
     pop bp
-    ret 4
-endp createBasicController
+    ret
+endp StartLoadFromOtherSegment
 
 ; called 1024 times a sec
 proc periodic
@@ -1996,9 +1926,9 @@ proc periodic
     xor dx, dx
     div cx
     cmp dx, 0
-    jne skipGameLoop
+    jne .skipGameLoop
     call gameLoop
-skipGameLoop:
+.skipGameLoop:
     pop ax
     pop dx
     pop cx
@@ -2033,7 +1963,6 @@ proc setupKeyboardHandler
 endp setupKeyboardHandler
 
 proc gameLoop
-
     push offset directionX
     push offset directionY
     call updateDirection
@@ -2041,99 +1970,62 @@ proc gameLoop
     push offset animationTime
     call updateAnimationTime
 
-    push offset boxController
+    ; push offset testController
+    ; push [directionX]
+    ; call walk
+
+    ; push offset testController
+    ; call jump
+
+    push offset testController
     push [directionX]
-    call walk
+    push [directionY]
+    call move2d
 
-    push offset boxController
-    call jump
-
-    push offset boxController
-    push [word ptr animationTime]
+    push offset testController
+    push [animationTime]
     call updateAnimation
 
-    push offset boxController
+    push offset testController
     call updateAndApplyVelocity
 
-    push offset printManager
-    push offset boxController
-    call uploadController
-
-    push offset Mouse
-    push offset printManager
-    call updateMouse
-
-    push offset printManager
-    call printAllControllers
-
-    push offset boxController
+    push offset testController
     push offset borderController
-    call areColliding
-    pop ax ; amount to move
-    cmp ax, 0
-    je continueGameLoop
-
-    push offset boxController
-    push PhysicsControllerVelocityY
-    push 0
-    call setWordField
-
-    push offset boxController
-    call getControllerPosition
-    pop bx
-    add bx, ax
-    push offset boxController
-    push bx
-    call moveController
+    call handleCollision
 
     push offset printManager
-    push offset boxController
+    push offset testController
     call uploadController
 
     push offset printManager
     call printAllControllers
-
-continueGameLoop:
 
     ret
 endp gameLoop
 
-proc endAndCleanUp
-    push offset previousIRQMask
-    call cleanUpClock
-
-    mov ah, 0
-    mov al, 2
-    int 10h
-    mov ax, 4C00h
-    int 21h
-    ret
-endp endAndCleanUp
-
-; input - the segment wrapper
-; output - the original object
-; note - need to execute end, to return to the normal ds
-proc StartLoadFromOtherSegment
+proc handleCollision
     push bp
     mov bp, sp
     push bx
     push ax
-    push si
-    
-    mov bx, [bp + 4]
-    mov [bp + 6], ds
-    mov ax, [bx + SegmentWrapperSegment]
-    mov si, [bx + SegmentWrapperOriginal]
-    mov ds, ax
-
-    mov [bp + 4], si
-
-    pop si
+    mov bx, [bp + 6] ; controller
+    push bx
+    push [bp + 4] ; collider
+    call areColliding
+    pop ax ; amount to move
+    cmp ax, 0
+    je .end
+    push bx
+    push ax
+    push RenderComponentId
+    push RenderComponentPosition
+    call addControllerWordValue
+.end:
     pop ax
     pop bx
     pop bp
-    ret
-endp StartLoadFromOtherSegment
+    ret 4
+endp handleCollision
 
 start:
     mov ax, @data
@@ -2163,16 +2055,13 @@ start:
     push (320 * 36) + 96
     call printImage
 
+    push offset testController
+    push (320 * 10) + 10
+    call initController
+
     push offset borderController
     push (100 * 320) + 120
     call initController
-
-    push offset boxController
-    push (80 * 320) + 120
-    call initController
-    
-    push offset Mouse
-    call initMouse
 
 ; **************************************
 
