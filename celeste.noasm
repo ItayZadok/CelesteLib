@@ -5,16 +5,72 @@ STACK 100h
 DATASEG
 
 ; *********************************IMAGES *****************************************
-palette dw 2
-db 0,0,0,63,63,63
+palette dw 3
+db 0,0,0,63,63,63,63,63,63
 
-pillerRect db RectId
-dw 7, 30
+playerRect db RectId
+dw 5, 30
 db 1
 
 ballRect db RectId
 dw 3, 3
 db 1
+
+letter0 db ImageId
+dw 7, 15
+db -1,5 dup(2),-1,9 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1
+db 4 dup(2),-1,-1,-1,9 dup(2),-1,5 dup(2),-1
+
+letter1 db ImageId
+dw 7, 15
+db -1,-1,-1,2,2,5 dup(-1),2,2,4 dup(-1),2,2,2,4 dup(-1),2,2,2,5 dup(-1),2,2,5 dup(-1),2,2,5 dup(-1),2,2,5 dup(-1),2,2,5 dup(-1),2,2,5 dup(-1),2,2,5 dup(-1),2,2,5 dup(-1),2,2,5 dup(-1),2,2,5 dup(-1),2,2
+db 5 dup(-1),2,2,-1,-1
+
+letter2 db ImageId
+dw 7, 15
+db -1,5 dup(2),-1,9 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,2,2,4 dup(-1),2,2,2,4 dup(-1),2,2,4 dup(-1),2,2,2,4 dup(-1),2,2,4 dup(-1),2,2,2,4 dup(-1),2,2,4 dup(-1),2,2,2,4 dup(-1),2,2
+db 4 dup(-1),14 dup(2)
+
+letter3 db ImageId
+dw 7, 15
+db -1,5 dup(2),-1,9 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,2,2,5 dup(-1),2,2,-1,-1,-1,2,2,2,-1,-1,-1,2,2,2,5 dup(-1),2,2,2,6 dup(-1),4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1
+db 9 dup(2),-1,5 dup(2),-1
+
+letter4 db ImageId
+dw 8, 15
+db 4 dup(-1),2,2,5 dup(-1),2,2,6 dup(-1),2,2,6 dup(-1),2,2,5 dup(-1),2,2,6 dup(-1),2,2,5 dup(-1),2,2,-1,-1,2,2,-1,-1,2,2,-1,-1,2,2,-1,-1,2,2,-1,-1,2,2,-1,2,2,-1,-1,-1,2,2,-1,16 dup(2),5 dup(-1),2,2
+db 6 dup(-1),2,2,6 dup(-1),2,2,-1
+
+letter5 db ImageId
+dw 7, 15
+db 16 dup(2),5 dup(-1),2,2,5 dup(-1),2,2,5 dup(-1),6 dup(2),-1,7 dup(2),5 dup(-1),2,2,5 dup(-1),2,2,5 dup(-1),4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,9 dup(2),-1,5 dup(2),-1
+
+letter6 db ImageId
+dw 7, 15
+db -1,5 dup(2),-1,9 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,4 dup(2),5 dup(-1),2,2,5 dup(-1),6 dup(2),-1,9 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,9 dup(2),-1
+db 5 dup(2),-1
+
+letter7 db ImageId
+dw 7, 15
+db 16 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,2,2,4 dup(-1),2,2,5 dup(-1),2,2,5 dup(-1),2,2,5 dup(-1),2,2,4 dup(-1),2,2,5 dup(-1),2,2,5 dup(-1),2,2,5 dup(-1),2,2,5 dup(-1),2,2,4 dup(-1),2,2,5 dup(-1),2,2
+db -1,-1,-1
+
+letter8 db ImageId
+dw 7, 15
+db -1,5 dup(2),-1,9 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,2,2,-1,2,2,-1,2,2,-1,-1,5 dup(2),-1,-1,2,2,-1,2,2,-1,2,2,-1,-1,-1,4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,4 dup(2)
+db -1,-1,-1,9 dup(2),-1,5 dup(2),-1
+
+letter9 db ImageId
+dw 7, 15
+db -1,5 dup(2),-1,9 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,9 dup(2),-1,6 dup(2),5 dup(-1),2,2,5 dup(-1),4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,9 dup(2),-1
+db 5 dup(2),-1
+
+letterNeg db ImageId
+dw 8, 15
+db 56 dup(-1),16 dup(2),48 dup(-1)
+
+letterArray db ArrayId
+dw 10, 2, offset letter0, offset letter1, offset letter2, offset letter3, offset letter4, offset letter5, offset letter6, offset letter7, offset letter8, offset letter9
 
 leftPlayerController db 3
 db PhysicsComponentId
@@ -24,8 +80,8 @@ db 23
 dw 1 dup(0)
 dw 0, 0, 0, 100  ; vx, ax, fx, mx
 dw 0, 0, 20, 100  ; vy, ay, fy, my
-dw 0, offset pillerRect, 0, 0, 7, 30 ; pos, image, prev-pos, rotation, width, height
-db 7*30 dup(0) ; background save place
+dw 0, offset playerRect, 0, 0, 5, 30 ; pos, image, prev-pos, rotation, width, height
+db 5*30 dup(0) ; background save place
 
 rightPlayerController db 3
 db PhysicsComponentId
@@ -35,44 +91,55 @@ db 23
 dw 1 dup(0)
 dw 0, 0, 0, 100  ; vx, ax, fx, mx
 dw 0, 0, 20, 100  ; vy, ay, fy, my
-dw 0, offset pillerRect, 0, 0, 7, 30 ; pos, image, prev-pos, rotation, width, height
-db 7*30 dup(0) ; background save place
+dw 0, offset playerRect, 0, 0, 5, 30 ; pos, image, prev-pos, rotation, width, height
+db 5*30 dup(0) ; background save place
 
 ballController db 2
 db PhysicsComponentId
 db 5
 db RenderComponentId
 db 21
-dw -100, 0, 0, 3000  ; vx, ax, fx, mx
-dw 0, 0, 0, 3000  ; vy, ay, fy, my
+dw -64, 0, 0, 1000  ; vx, ax, fx, mx
+dw -64, 0, 0, 1000  ; vy, ay, fy, my
 dw 0, offset ballRect, 0, 0, 3, 3 ; pos, image, prev-pos, rotation, width, height
 db 3*3 dup(0) ; background save place
 
 borderUp db 1
 db RenderComponentId
 db 3
-dw 0, 0, 0, 0, 320, 10 ; pos, image, prev-pos, rotation, width, height
-db 320*10 dup(0) ; background save place
+dw 0, 0, 0, 0, 320, 1 ; pos, image, prev-pos, rotation, width, height
+db 320*1 dup(0) ; background save place
 
 borderLeft db 1
 db RenderComponentId
 db 3
-dw 0, 0, 0, 0, 10, 320 ; pos, image, prev-pos, rotation, width, height
-db 320*10 dup(0) ; background save place
+dw 0, 0, 0, 0, 1, 320 ; pos, image, prev-pos, rotation, width, height
+db 320*1 dup(0) ; background save place
 
 borderRight db 1
 db RenderComponentId
 db 3
-dw 310, 0, 0, 0, 10, 320 ; pos, image, prev-pos, rotation, width, height
-db 320*10 dup(0) ; background save place
+dw 319, 0, 0, 0, 1, 320 ; pos, image, prev-pos, rotation, width, height
+db 320*1 dup(0) ; background save place
 
 borderDown db 1
 db RenderComponentId
 db 3
-dw (190*320), 0, 0, 0, 320, 10 ; pos, image, prev-pos, rotation, width, height
-db 320*10 dup(0) ; background save place
+dw (199*320), 0, 0, 0, 320, 1 ; pos, image, prev-pos, rotation, width, height
+db 320*1 dup(0) ; background save place
+
+directionX dw 0
+directionY dw 0
+
+vector1 dw 0, 0
+vector2 dw 0, 0
+vector3 dw 0, 0
+vector4 dw 0, 0
+vector5 dw 0, 0
 
 ; *********************************OFFSET CONSTANTS*********************************
+
+VideoMemory equ 0A000h
 
 PhysicsComponentId            equ 4
 PhysicsComponentAxisX         equ 0
@@ -142,6 +209,9 @@ ControllerComponentData      equ 1
 ComponentId       equ 0
 ComponentLocation equ 1
 
+VectorX equ 0
+VectorY equ 2
+
 ImageId     equ 10
 ImageWidth  equ 1
 ImageHeight equ 3
@@ -173,12 +243,10 @@ SegmentWrapperOriginal equ 3
 
 KeyStateTable db 256 dup(0) ; Table to store key states (0 = released, 1 = pressed)
 
-DirectionMultiplier equ 16*3
+DirectionMultiplier equ 16*5
 JumpHeight equ 16*4
 
 SubPixelAmount equ 16
-
-TempPrint dw 16 dup(0)
 
 ; *********************************GENERAL START********************************
 
@@ -196,9 +264,9 @@ previousIRQMask db ?
 printManager db PrintManagerId, 0
 dw 50 dup(0)
 
-segment screenBuffer
-    screen db 64000 dup(0)
-ends
+; segment screenBuffer
+;     screen db 64000 dup(0)
+; ends
 
 ; **********YOUR SHIT*********** ;
 
@@ -591,7 +659,7 @@ proc clearScreen
     push di
     push ax
     push es
-    mov ax, 0A000h
+    mov ax, VideoMemory
     mov es, ax
     mov di, 64001
 .clearLoop:
@@ -680,8 +748,8 @@ proc printRect
     push bx
     mov bx, [bp + 6] ; rect pointer
     push [bx + RectColor]
-    push [bx + RectHeight]
     push [bx + RectWidth]
+    push [bx + RectHeight]
     push [bp + 4] ; screen position (left top)
     call printRectBySize
     pop bx
@@ -751,11 +819,11 @@ proc printRectBySize
     push dx
     push si
     push es
-    mov ax, screenBuffer
+    mov ax, VideoMemory
     mov es, ax
     mov bx, [bp + 10] ; color
-    mov cx, [bp + 8]  ; height
-    mov dx, [bp + 6]  ; width
+    mov dx, [bp + 8]  ; width
+    mov cx, [bp + 6]  ; height
     mov di, [bp + 4]  ; screen position (left top)
 
     push dx
@@ -808,7 +876,7 @@ proc printImageBySize
     push dx
     push si
     push es
-    mov ax, screenBuffer
+    mov ax, VideoMemory
     mov es, ax
     mov bx, [bp + 10] ; color array pointer
     mov cx, [bp + 8]  ; height
@@ -936,7 +1004,7 @@ proc saveController
     push si
     push ax
     push es
-    mov ax, screenBuffer
+    mov ax, VideoMemory
     mov es, ax
     mov di, [bp + 4]  ; controller
     push di
@@ -1177,35 +1245,35 @@ proc updateAnimationTime
     ret 2
 endp updateAnimationTime
 
-proc printScreenBuffer
-    push bp
-    mov bp, sp
-    push ds
-    push di
-    push ax
-    push es
-    mov ax, 0A000h
-    mov es, ax
-    mov ax, [bp + 4] ; buffer segment
-    mov ds, ax
+; proc printScreenBuffer
+;     push bp
+;     mov bp, sp
+;     push ds
+;     push di
+;     push ax
+;     push es
+;     mov ax, VideoMemory
+;     mov es, ax
+;     mov ax, [bp + 4] ; buffer segment
+;     mov ds, ax
 
-    mov di, 0
-.printLoop:
-    mov al, [di]
-    mov [byte ptr es:di], al
+;     mov di, 0
+; .printLoop:
+;     mov al, [di]
+;     mov [byte ptr es:di], al
 
-    inc di
-    cmp di, 64001
-    jnz .printLoop
+;     inc di
+;     cmp di, 64001
+;     jnz .printLoop
 
 
-    pop es
-    pop ax
-    pop di
-    pop ds
-    pop bp
-    ret 2
-endp printScreenBuffer
+;     pop es
+;     pop ax
+;     pop di
+;     pop ds
+;     pop bp
+;     ret 2
+; endp printScreenBuffer
 
 ; input - printManager pointer
 ; prints all the controllers
@@ -1403,6 +1471,27 @@ proc updatePhysicsAxis
     ret 2
 endp updatePhysicsAxis
 
+; input - value min max
+; returns the clamp of a value by: max(minimum, min(x, maximum))
+proc getClamp
+    push bp
+    mov bp, sp
+    push ax
+
+    push [bp + 6] ; min
+
+    push [bp + 8] ; value
+    push [bp + 4] ; max
+    call getMin
+    call getMax
+    pop ax
+    mov [bp + 8], ax
+
+    pop ax
+    pop bp
+    ret 4
+endp getClamp
+
 ; input - physics controller
 ; adds the velocity to the controllers using the subPixelAmount
 ; const to enable sub-pixel movement, for example - 0.5 pixels/frame
@@ -1411,45 +1500,66 @@ proc applyVelocity
     mov bp, sp
     push bx
     push ax
+    push di
     push dx
     push cx
-    push si
 
     mov bx, [bp + 4] ; controller
-    mov si, SubPixelAmount
 
     push bx
     push PhysicsComponentId
-    push PhysicsComponentVelocityY
-    call getControllerWordValue
-    pop ax           ; velocity y
-    cwd              ; Sign-extend ax into dx:ax
-    idiv si          ; div by subPixelAmount
-    mov dx, ax       ; dx = new velocity Y
-
-    sal ax, 6  ; ax = y * 64
-    sal dx, 8  ; dx = y * 256
-    add ax, dx
-    mov cx, ax ; cx = y * 320
+    call getControllerComponent
+    pop di ; physics component
 
     push bx
-    push PhysicsComponentId
-    push PhysicsComponentVelocityX
-    call getControllerWordValue
-    pop ax           ; velocity x
-    cwd              ; Sign-extend ax into dx:ax
-    idiv si          ; div by subPixelAmount, ax = new velocity X
-
-    add ax, cx ; add velocity Y
-    push bx ; controller
-    push ax ; addition (velocity y + x)
     push RenderComponentId
-    push RenderComponentPosition
-    call addControllerWordValue
+    call getControllerComponent
+    pop bx ; render component
 
-    pop si
+    push 0
+    push [bx + RenderComponentPosition]
+    call getXandY
+    pop cx ; x
+    pop dx ; y
+
+    push [di + PhysicsComponentVelocityY]
+    push SubPixelAmount
+    call divide
+    pop ax     ; y add
+    add dx, ax ; dx new y
+
+    push [di + PhysicsComponentVelocityX]
+    push SubPixelAmount
+    call divide
+    pop ax     ; x add
+    add cx, ax ; cx new x
+
+    mov ax, 320
+    sub ax, [bx + RenderComponentWidth]
+
+    push cx ; new x
+    push 0
+    push ax
+    call getClamp
+    pop cx
+
+    mov ax, 200
+    sub ax, [bx + RenderComponentHeight]
+
+    push dx ; new y
+    push 0
+    push ax
+    call getClamp
+    pop dx
+
+    push cx ; x
+    push dx ; y
+    call getPositionFromXandY ; new position
+    pop [bx + RenderComponentPosition]
+
     pop cx
     pop dx
+    pop di
     pop ax
     pop bx
     pop bp
@@ -1501,18 +1611,26 @@ proc move2d
     mov ax, [bp + 6] ; direction X
     mov dx, [bp + 4] ; direction Y
 
+    cmp ax, 0
+    je .skipX
+
     push bx
     push ax
     push PhysicsComponentId
     push PhysicsComponentVelocityX
     call setControllerWordValue
+.skipX:
+
+    cmp dx, 0
+    je .skipY
 
     push bx
     push dx
     push PhysicsComponentId
     push PhysicsComponentVelocityY
     call setControllerWordValue
-    
+.skipY:
+
     pop dx
     pop bx
     pop ax
@@ -1643,32 +1761,36 @@ endp getControllerXEdges
 ; return the difference in the Y axis between two objects
 ; input - first controller, second controller
 proc isYCollision
-   push bp
+    push bp
     mov bp, sp
     push ax
     push bx
     push si
     push di
     push dx
-    mov si, [bp + 6] ; first controller
-    mov bx, [bp + 4] ; second controller
+    mov si, [bp + 4] ; first controller
+    mov bx, [bp + 6] ; second controller
+
     push 0 ; garbage value
     push si
     call getControllerYEdges
     pop ax
     pop dx
+
     push 0 ; garbage value
     push bx
     call getControllerYEdges
     pop bx
     pop si
+
     push ax
     push dx
     push bx
     push si
-    call isAxisCollision
+    call isAxisCollisionSquare
     pop ax
     mov [bp + 6], ax
+
     pop dx
     pop di
     pop si
@@ -1681,32 +1803,36 @@ endp isYCollision
 ; return the difference in the X axis between two objects
 ; input - first controller, second controller
 proc isXCollision
-   push bp
+    push bp
     mov bp, sp
     push ax
     push bx
     push si
     push di
     push dx
-    mov si, [bp + 6] ; first controller
-    mov bx, [bp + 4] ; second controller
+    mov si, [bp + 4] ; first controller
+    mov bx, [bp + 6] ; second controller
+
     push 0 ; garbage value
     push si
     call getControllerXEdges
     pop ax
     pop dx
+
     push 0 ; garbage value
     push bx
     call getControllerXEdges
     pop bx
     pop si
+
     push ax
     push dx
     push bx
     push si
-    call isAxisCollision
+    call isAxisCollisionSquare
     pop ax
     mov [bp + 6], ax
+
     pop dx
     pop di
     pop si
@@ -1716,62 +1842,600 @@ proc isXCollision
     ret 2
 endp isXCollision
 
-proc areColliding
+proc getAbsValue
+    push bp
+    mov bp, sp
+    push ax
+    mov ax, [bp + 4]
+    cmp ax, 0    ; check if positive
+    jge .end     ; if greater than or equal to 0, jump to end
+    neg ax       ; negate to get the absolute value
+.end:
+    mov [bp + 4], ax
+    pop ax
+    pop bp
+    ret
+endp getAbsValue
+
+proc getXandY
+    push bp
+    mov bp, sp
+    push ax
+    push dx
+    push cx
+
+    mov ax, [bp + 4] ; position
+    mov cx, 320
+    xor dx, dx
+    idiv cx ; ax = y ; dx = x
+
+    mov [bp + 4], dx
+    mov [bp + 6], ax
+
+    pop cx
+    pop dx
+    pop ax
+    pop bp
+    ret
+endp getXandY
+
+proc isAxisCollisionPoint
+    push bp
+    mov bp, sp
+    push bx
+    push cx
+    push ax
+
+    mov bx, [bp + 8] ; controller x
+    mov cx, [bp + 6] ; controller width
+    mov ax, [bp + 4] ; point x
+
+    cmp ax, bx ; point x < controller x
+    jl .setFalse
+
+    add bx, cx       ; bx = squareX + squareWidth
+    cmp ax, bx       ; if pointY > squareY + squareHeight
+    jg .setFalse
+
+    mov ax, 1
+    jmp .end
+
+.setFalse:
+    mov ax, 0
+.end:
+    mov [bp + 8], ax
+
+    pop ax
+    pop cx
+    pop bx
+    pop bp
+    ret 4
+endp isAxisCollisionPoint
+
+proc doesPointCollideController
+    push bp
+    mov bp, sp
+    push bx
+    push si
+    push ax
+    push cx
+    push dx
+    push di
+
+    mov bx, [bp + 6] ; controller
+    mov si, [bp + 4] ; point
+
+    push bx
+    push RenderComponentId
+    call getControllerComponent
+    pop bx ; render component
+
+    cmp [bx + RenderComponentPosition], si
+    jg .setFalse
+
+    push 0
+    push si
+    call getXandY
+    pop ax ; point x
+    pop dx ; point y
+
+    push 0
+    push [bx + RenderComponentPosition]
+    call getXandY
+    pop cx ; controller x
+    pop si ; controller y
+
+    push cx                          ; controller x
+    push [bx + RenderComponentWidth] ; width
+    push ax                          ; point x
+    call isAxisCollisionPoint
+    pop ax                           ; if there's collision
+    cmp ax, 0
+    jz .setFalse
+
+    push si                           ; controller y
+    push [bx + RenderComponentHeight] ; height
+    push dx                           ; point y
+    call isAxisCollisionPoint
+    pop ax                            ; if there's collision
+    cmp ax, 0
+    jz .setFalse
+
+    mov ax, 1 ; if both tests passed
+    jmp .end
+
+.setFalse:
+    mov ax, 0
+.end:
+    mov [bp + 6], ax
+
+    pop di
+    pop dx
+    pop cx
+    pop ax
+    pop si
+    pop bx
+    pop bp
+    ret 2
+endp doesPointCollideController
+
+proc getPositionFromXandY
+    push bp
+    mov bp, sp
+    push ax
+    push dx
+    push cx
+    push bx
+
+    mov bx, [bp + 6] ; x
+    mov ax, [bp + 4] ; y
+
+    mov cx, 320
+    xor dx, dx
+    imul cx ; ax = y * 320
+    add ax, bx
+
+    mov [bp + 6], ax
+
+    pop bx
+    pop cx
+    pop dx
+    pop ax
+    pop bp
+    ret 2
+endp getPositionFromXandY
+
+proc getElements
+    push bp
+    mov bp, sp
+    push dx
+    push cx
+    push ax
+
+    push 0
+    push [bp + 6]
+    call getXandY
+    pop dx ; x
+    pop cx ; y
+
+    push 0
+    push [bp + 4]
+    call getXandY
+    pop ax ; x
+    sub dx, ax ; dx - diff x
+    pop ax ; y
+    sub cx, ax ; cx - diff y
+
+    push dx ; diff x
+    push cx ; diff y
+    call getMaxAbs
+    pop ax ; amount of steps
+
+    mov [bp + 4], dx ; diff x
+    mov [bp + 6], cx ; diff y
+    mov [bp + 8], ax ; amount of steps
+
+    pop ax
+    pop cx
+    pop dx
+    pop bp
+    ret
+endp getElements
+
+proc areControllersColliding
     push bp
     mov bp, sp
     push ax
     push bx
     push si
     push cx
+    push di
     push dx
-    mov si, [bp + 6] ; first controller
-    mov bx, [bp + 4] ; second controller
-    push bx
+
+    mov si, [bp + 6] ; controller
+    mov bx, [bp + 4] ; collider
+
     push si
-    call isXCollision
-    pop ax
-    push bx
-    push si
-    call isYCollision
-    pop dx
-    cmp dx, 0
-    je .setFalse
+    push RenderComponentId
+    call getControllerComponent
+    pop di
+
+    push 0
+    push [di + RenderComponentPosition]
+    push [di + RenderComponentPreviousPosition]
+    call getElements
+    pop dx ; diff x
+    pop cx ; diff y
+    pop ax ; amount of steps
+
     cmp ax, 0
-    je .setFalse
-    mov cx, ax
-    mov si, dx
-    test cx, cx
-    jns .xIsPositive
-    neg cx
-.xIsPositive:
-    test si, si
-    jns .yIsPositive
-    neg si
-.yIsPositive:
-    cmp cx, si
-    jb .end
-    mov ax, dx
-    mov dx, 320
-    imul dx
-    jmp .end
-.setFalse:
-    mov ax, 0
-.end:
-    mov [bp + 6], ax ; change to correctly collide
+    jne .skipFrameRaycast
+    push si
+    push bx
+    call areControllersCollidingThisFrame
     pop dx
+    jmp .end
+.skipFrameRaycast:
+
+    push dx ; diff x
+    push ax ; amount of steps
+    call divide
+    pop dx ; step x
+
+    push cx ; diff y
+    push ax ; amount of steps
+    call divide
+    push 320
+    call multiply
+    pop cx ; step y
+
+    add cx, dx ; diff (x + y)
+
+    push bx
+
+    mov bx, [di + RenderComponentPreviousPosition]
+    mov [di + RenderComponentPosition], bx
+
+    pop bx ; we start from previous position
+
+.startLoop:
+    add [di + RenderComponentPosition], cx ; add diff
+
+    push si
+    push bx
+    call areControllersCollidingThisFrame
+    pop dx
+
+    cmp dx, 0
+    jne .end
+
+    dec ax ; amount of steps
+    jnz .startLoop
+
+.end:
+    mov [bp + 6], dx
+    pop dx
+    pop di
     pop cx
     pop si
     pop bx
     pop ax
     pop bp
     ret 2
-endp areColliding
+endp areControllersColliding
+
+proc getMin
+    push bp
+    mov bp, sp
+    push bx
+    push dx
+
+    mov bx, [bp + 4] ; value1
+    mov dx, [bp + 6] ; value2
+
+    cmp bx, dx
+    jg .end
+    mov dx, bx
+.end:
+    mov [bp + 6], dx
+
+    pop dx
+    pop bx
+    pop bp
+    ret 2
+endp getMin
+
+proc getMax
+   push bp
+    mov bp, sp
+    push bx
+    push dx
+
+    mov bx, [bp + 4] ; value1
+    mov dx, [bp + 6] ; value2
+
+    cmp bx, dx
+    jl .end
+    mov dx, bx
+.end:
+    mov [bp + 6], dx
+
+    pop dx
+    pop bx
+    pop bp
+    ret 2
+endp getMax
+
+proc getMinAbs
+   push bp
+    mov bp, sp
+    push bx
+    push dx
+
+    mov bx, [bp + 4] ; value1
+    mov dx, [bp + 6] ; value2
+
+    push bx
+    call getAbsValue
+    pop bx
+    
+    push dx
+    call getAbsValue
+    pop dx
+
+    cmp bx, dx
+    jg .end
+    mov dx, bx
+.end:
+    mov [bp + 6], dx
+
+    pop dx
+    pop bx
+    pop bp
+    ret 2
+endp getMinAbs
+
+proc getMaxAbsIndex
+    push bp
+    mov bp, sp
+    push bx
+    push dx
+
+    mov bx, [bp + 4] ; value1
+    mov dx, [bp + 6] ; value2
+
+    push bx
+    call getAbsValue
+    pop bx
+    
+    push dx
+    call getAbsValue
+    pop dx
+
+    cmp bx, dx
+    jl .continue
+    mov dx, 1
+    jmp .end
+.continue:
+    mov dx, 0
+.end:
+    mov [bp + 6], dx
+
+    pop dx
+    pop bx
+    pop bp
+    ret 2
+endp getMaxAbsIndex
+
+proc getMinAbsIndex
+    push bp
+    mov bp, sp
+    push bx
+    push dx
+
+    mov bx, [bp + 4] ; value1
+    mov dx, [bp + 6] ; value2
+
+    push bx
+    call getAbsValue
+    pop bx
+    
+    push dx
+    call getAbsValue
+    pop dx
+
+    cmp bx, dx
+    jg .continue
+    mov dx, 1
+    jmp .end
+.continue:
+    mov dx, 0
+.end:
+    mov [bp + 6], dx
+
+    pop dx
+    pop bx
+    pop bp
+    ret 2
+endp getMinAbsIndex
+
+proc getMaxAbs
+    push bp
+    mov bp, sp
+    push bx
+    push dx
+
+    mov bx, [bp + 4] ; value1
+    mov dx, [bp + 6] ; value2
+
+    push bx
+    call getAbsValue
+    pop bx
+    
+    push dx
+    call getAbsValue
+    pop dx
+
+    cmp bx, dx
+    jl .end
+    mov dx, bx
+.end:
+    mov [bp + 6], dx
+
+    pop dx
+    pop bx
+    pop bp
+    ret 2
+endp getMaxAbs
+
+proc multiply
+    push bp
+    mov bp, sp
+    push ax
+    push dx
+    push cx
+
+    mov ax, [bp + 6]
+    mov cx, [bp + 4]
+
+    xor dx, dx
+    imul cx
+    mov [bp + 6], ax
+
+    pop cx
+    pop dx
+    pop ax
+    pop bp
+    ret 2
+endp multiply
+
+proc divide
+    push bp
+    mov bp, sp
+    push ax
+    push dx
+    push cx
+
+    mov ax, [bp + 6]
+    mov cx, [bp + 4]
+
+    xor dx, dx
+    cwd
+    idiv cx
+    mov [bp + 6], ax
+
+    pop cx
+    pop dx
+    pop ax
+    pop bp
+    ret 2
+endp divide
+
+proc getSign
+    push bp
+    mov bp, sp
+    push ax
+
+    cmp [bp + 4], 0
+    jnz .isNotZero
+    mov ax, 0
+    jmp .end
+.isNotZero:
+
+    cmp [bp + 4], 0
+    jg .isPositive
+
+    mov ax, -1
+    jmp .end
+.isPositive:
+    mov ax, 1
+
+.end:
+    mov [bp + 4], ax
+    pop ax
+    pop bp
+    ret
+endp getSign
+
+proc getEqual
+    push bp
+    mov bp, sp
+    push bx
+    mov bx, [bp + 4]
+    cmp bx, [bp + 6]
+    jne .notEqual
+    mov bx, 1
+    jmp .end
+.notEqual:
+    mov bx, 0
+.end:
+    mov [bp + 6], bx
+    pop bx
+    pop bp
+    ret 2
+endp getEqual
+
+proc areControllersCollidingThisFrame
+    push bp
+    mov bp, sp
+    push ax
+    push bx
+    push si
+    push dx
+    push di
+    mov ax, [bp + 6] ; first controller
+    mov dx, [bp + 4] ; collider
+    
+    push ax
+    push dx
+    call isXCollision
+    pop bx ; x collision
+
+    push ax
+    push dx
+    call isYCollision
+    pop si ; y collision
+
+    cmp bx, 0 ; doesn't collide in x
+    jz .setFalse
+    cmp si, 0 ; doesn't collide in y
+    jz .setFalse
+
+    ; TODO - solve both bx and si equal
+
+    push bx ; x
+    push si ; y
+    call getMinAbsIndex
+    pop ax
+
+    cmp ax, 0
+    jz .setX
+
+    mov ax, si
+    mov dx, 320
+    imul dx
+    jmp .end
+.setX:
+    mov ax, bx
+    jmp .end
+.setFalse:
+    mov ax, 0
+.end:
+    mov [bp + 6], ax ; change to correctly collide
+    pop di
+    pop dx
+    pop si
+    pop bx
+    pop ax
+    pop bp
+    ret 2
+endp areControllersCollidingThisFrame
 
 ; gets the edge points of 2 objects and return the distance between them,
 ; and 0 if they don't collide
 ; input - obj1 bigger, obj2 lower, obj1 bigger, obj lower
 ; lower - (top/left), bigger - (bottom/right)
-proc isAxisCollision
+proc isAxisCollisionSquare
     push bp
     mov bp, sp
     push cx
@@ -1792,7 +2456,7 @@ proc isAxisCollision
     jle .setFalse
 
     cmp ax, dx ; 1 is above 2
-    ja .set2
+    jge .set2
     sub ax, cx
     jmp .end
 .set2:
@@ -1809,8 +2473,7 @@ proc isAxisCollision
     pop cx
     pop bp
     ret 6
-endp isAxisCollision
-
+endp isAxisCollisionSquare
 
 proc getControllerComponent
     push bp
@@ -1938,48 +2601,47 @@ proc handleBounceCollision
     mov bp, sp
     push bx
     push ax
-    push dx
-    push si
+
     mov bx, [bp + 6] ; controller
-    push bx
-    push [bp + 4] ; collider
-    call areColliding
-    pop ax ; amount to move
 
     push bx
-    push PhysicsComponentId
-    call getControllerComponent
-    pop si
+    push [bp + 4] ; collider
+    call areControllersColliding
+    pop ax ; overlap
 
     cmp ax, 0
     je .end
-    cmp ax, 320
-    jb .skipResetY
-    cmp ax, -320
-    ja .skipResetY
 
-    mov dx, [si + PhysicsComponentVelocityY]
-    neg dx
-    add [si + PhysicsComponentVelocityY], dx
-    add [si + PhysicsComponentVelocityY], dx
-
-    jmp .skipResetX
-.skipResetY:
-
-    mov dx, [si + PhysicsComponentVelocityX]
-    neg dx
-    add [si + PhysicsComponentVelocityX], dx
-    add [si + PhysicsComponentVelocityX], dx
-
-.skipResetX:
+    ; Move object back by overlap
     push bx
     push ax
     push RenderComponentId
     push RenderComponentPosition
     call addControllerWordValue
+
+    push bx
+    push PhysicsComponentId
+    call getControllerComponent
+    pop bx ; bx = physics component
+
+    push ax
+    call getAbsValue
+    pop ax
+    cmp ax, 320
+    jl .bounceX
+
+.bounceY:
+    mov ax, [bx + PhysicsComponentVelocityY]
+    neg ax
+    mov [bx + PhysicsComponentVelocityY], ax
+    jmp .end
+
+.bounceX:
+    mov ax, [bx + PhysicsComponentVelocityX]
+    neg ax
+    mov [bx + PhysicsComponentVelocityX], ax
+
 .end:
-    pop si
-    pop dx
     pop ax
     pop bx
     pop bp
@@ -1992,34 +2654,44 @@ proc handleWallCollision
     push bx
     push ax
     mov bx, [bp + 6] ; controller
+
     push bx
     push [bp + 4] ; collider
-    call areColliding
+    call areControllersColliding
     pop ax ; amount to move
+
+    push bx
+    push ax
+    push RenderComponentId
+    push RenderComponentPosition
+    call addControllerWordValue
+
     cmp ax, 0
     je .end
+
+    push ax
+    call getAbsValue
+    pop ax
     cmp ax, 320
-    jb .skipResetY
-    cmp ax, -320
-    ja .skipResetY
+    jl .skipResetY
+
     push bx
     push 0
     push PhysicsComponentId
     push PhysicsComponentVelocityY
     call setControllerWordValue
     jmp .skipResetX
+
 .skipResetY:
+
     push bx
     push 0
     push PhysicsComponentId
     push PhysicsComponentVelocityX
     call setControllerWordValue
+
 .skipResetX:
-    push bx
-    push ax
-    push RenderComponentId
-    push RenderComponentPosition
-    call addControllerWordValue
+
 .end:
     pop ax
     pop bx
@@ -2393,40 +3065,50 @@ proc printNumber
     push dx
     push ax
     push cx
-    push bx
     push si
 
-    mov ax, [bp + 4] ; number
-    mov bx, offset TempPrint
+    mov ax, [bp + 4] ; number to print
     mov si, 10
     mov cx, 0
-.saveLoop:
-    xor dx, dx
-    idiv si
 
-    add dl, 30h
-    mov [bx], dl
-    inc bx
-    inc cx
-
+    ; check if negative
     cmp ax, 0
-    jne .saveLoop
+    jge .saveLoop    ; if positive or zero, proceed normally
 
-.printLoop:
-    dec bx
-    mov dl, [bx]
+    ; if negative, print '-' and make number positive for correct ASCII
+    push ax
+    mov dl, '-'
     mov ah, 2
     int 21h
+    pop ax
+
+    neg ax
+
+.saveLoop:
+    xor dx, dx
+    idiv si  ; ax / 10 -> quotient in ax, remainder in dx
+
+    add dl, '0'  ; Convert remainder to ASCII
+    push dx      ; Store digit on stack
+    inc cx       ; Count number of digits
+
+    test ax, ax
+    jnz .saveLoop
+
+.printLoop:
+    pop dx    ; get digit from stack
+    mov ah, 2
+    int 21h   ; print char
 
     dec cx
     jnz .printLoop
 
+    ; print space at the end
     mov dl, ' '
     mov ah, 2
     int 21h
     
     pop si
-    pop bx
     pop cx
     pop ax
     pop dx
@@ -2434,38 +3116,80 @@ proc printNumber
     ret 2
 endp printNumber
 
-proc handleRightPlayer
+proc printNumberNew
     push bp
     mov bp, sp
+    push dx
+    push ax
+    push cx
+    push si
     push bx
-    mov bx, [bp + 4] ; controller
 
-    cmp [byte ptr KeyStateTable + 17], 0
-    je .skipUp
+    mov ax, [bp + 4] ; number to print
+    mov si, 10
+    mov cx, 0
+    mov bx, 0
 
+    ; check if negative
+    cmp ax, 0
+    jge .saveLoop    ; if positive or zero, proceed normally
+
+    push 0
+    push 20
+    push 20
+    push bx 
+    call printRectBySize
+
+    ; if negative, print '-' and make number positive for correct ASCII
+    push offset letterNeg
     push bx
-    push -100
-    push PhysicsComponentId
-    push PhysicsComponentVelocityY
-    call setControllerWordValue
-.skipUp:
+    call printImage
+    add bx, 10
 
-    cmp [byte ptr KeyStateTable + 31], 0
-    je .skipDown
+    neg ax
 
+.saveLoop:
+    xor dx, dx
+    idiv si  ; ax / 10 -> quotient in ax, remainder in dx
+
+    push dx      ; Store digit on stack
+    inc cx       ; Count number of digits
+
+    test ax, ax
+    jnz .saveLoop
+
+.printLoop:
+    pop dx    ; get digit from stack
+
+    push 0
+    push 20
+    push 20
+    push bx 
+    call printRectBySize
+    
+    push offset letterArray
+    push dx
+    call getArrayElement
+    pop si
+
+    push si
     push bx
-    push 100
-    push PhysicsComponentId
-    push PhysicsComponentVelocityY
-    call setControllerWordValue
-.skipDown:
+    call printImage
 
+    add bx, 10
+    dec cx
+    jnz .printLoop
+    
     pop bx
+    pop si
+    pop cx
+    pop ax
+    pop dx
     pop bp
     ret 2
-endp handleRightPlayer
+endp printNumberNew
 
-proc handleLeftPlayer
+proc handleRightPlayer
     push bp
     mov bp, sp
     push bx
@@ -2494,9 +3218,41 @@ proc handleLeftPlayer
     pop bx
     pop bp
     ret 2
+endp handleRightPlayer
+
+proc handleLeftPlayer
+    push bp
+    mov bp, sp
+    push bx
+    mov bx, [bp + 4] ; controller
+
+    cmp [byte ptr KeyStateTable + 17], 0
+    je .skipUp
+
+    push bx
+    push -100
+    push PhysicsComponentId
+    push PhysicsComponentVelocityY
+    call setControllerWordValue
+.skipUp:
+
+    cmp [byte ptr KeyStateTable + 31], 0
+    je .skipDown
+
+    push bx
+    push 100
+    push PhysicsComponentId
+    push PhysicsComponentVelocityY
+    call setControllerWordValue
+.skipDown:
+
+    pop bx
+    pop bp
+    ret 2
 endp handleLeftPlayer
 
-proc printFilled
+; prints a controller's hitbox by a color
+proc printHitbox
     push bp
     mov bp, sp
     push bx
@@ -2507,9 +3263,9 @@ proc printFilled
     call getControllerComponent
     pop bx
     
-    push [bp + 4]
-    push [bx + RenderComponentHeight]
+    push [bp + 4] ; color
     push [bx + RenderComponentWidth]
+    push [bx + RenderComponentHeight]
     push [bx + RenderComponentPosition] ; screen position (left top)
     call printRectBySize
     
@@ -2517,7 +3273,7 @@ proc printFilled
     pop bp
     ret 4
     ret
-endp printFilled
+endp printHitbox
 
 proc endGameIfCollide
     push bp
@@ -2526,7 +3282,7 @@ proc endGameIfCollide
 
     push [bp + 6]
     push [bp + 4]
-    call areColliding
+    call areControllersColliding
     pop ax
 
     cmp ax, 0
@@ -2545,7 +3301,7 @@ proc printAllColors
     push ax
     push cx
     push es
-    mov ax, screenBuffer
+    mov ax, VideoMemory
     mov es, ax
 	mov di, 0
 .printLoop:
@@ -2592,75 +3348,89 @@ proc handleBallAcceleration
     ret
 endp handleBallAcceleration
 
+proc printPoint
+    push bp
+    mov bp, sp
+    push ax
+    push es
+    push di
+
+    mov ax, VideoMemory
+    mov es, ax
+
+    mov di, [bp + 6] ; pos
+    mov ax, [bp + 4] ; color
+
+    mov [byte ptr es:di], al
+
+    pop di
+    pop es
+    pop ax
+    pop bp
+    ret 4
+endp printPoint
+
 proc gameLoop
 
-;     push offset leftPlayerController
-;     call handleLeftPlayer
+    push offset leftPlayerController
+    call handleLeftPlayer
 
-;     push offset rightPlayerController
-;     call handleRightPlayer
+    push offset rightPlayerController
+    call handleRightPlayer
 
-;     push offset leftPlayerController
-;     call updateAndApplyVelocity
+    push offset leftPlayerController
+    call updateAndApplyVelocity
 
-    ; push offset rightPlayerController
-    ; call updateAndApplyVelocity
+    push offset rightPlayerController
+    call updateAndApplyVelocity
 
-;     cmp [globalTime], 100
-;     jne .skip
-;     call handleBallAcceleration
-; .skip:
+    cmp [globalTime], 100
+    jne .skip
+    call handleBallAcceleration
+.skip:
+
+    push offset ballController
+    push offset borderRight
+    call handleBounceCollision
+
+    push offset ballController
+    push offset borderLeft
+    call handleBounceCollision
+
+    push offset ballController
+    push offset borderDown
+    call handleBounceCollision
+
+    push offset ballController
+    push offset borderUp
+    call handleBounceCollision
+
+    ; push offset ballController
+    ; push offset borderLeft
+    ; call endGameIfCollide
+
+    ; push offset ballController
+    ; push offset borderRight
+    ; call endGameIfCollide
+
+    push offset ballController
+    push offset rightPlayerController
+    call handleBounceCollision
+
+    push offset ballController
+    push offset leftPlayerController
+    call handleBounceCollision
 
     push offset ballController
     call updateAndApplyVelocity
-
-;     push offset rightPlayerController
-;     push offset borderUp
-;     call handleWallCollision
-
-;     push offset leftPlayerController
-;     push offset borderUp
-;     call handleWallCollision
-
-;     push offset rightPlayerController
-;     push offset borderDown
-;     call handleWallCollision
-
-    ; push offset leftPlayerController
-    ; push offset borderDown
-    ; call handleWallCollision
-
-;     push offset ballController
-;     push offset borderDown
-;     call handleBounceCollision
-
-;     push offset ballController
-;     push offset borderUp
-;     call handleBounceCollision
-    
-;     push offset ballController
-;     push offset borderLeft
-;     call endGameIfCollide
-
-;     push offset ballController
-;     push offset borderRight
-;     call endGameIfCollide
-
-;     push offset ballController
-;     push offset rightPlayerController
-;     call handleBounceCollision
-
-;     push offset ballController
-;     push offset leftPlayerController
-;     call handleBounceCollision
 
     push offset printManager
     push offset leftPlayerController
     call uploadController
 
-;     push offset printManager
-;     push offset rightPlayerController
-;     call uploadController
+    push offset printManager
+    push offset rightPlayerController
+    call uploadController
 
     push offset printManager
     push offset ballController
@@ -2668,9 +3438,6 @@ proc gameLoop
 
     push offset printManager
     call printAllControllers
-
-    push screenBuffer
-    call printScreenBuffer
 
     ret
 endp gameLoop
@@ -2688,18 +3455,20 @@ start:
     xor cx, cx
     xor di, di
 
+    call clearScreen
+
     push offset palette
     call setPalette
 
 ; *******************INIT***************
 ; Note - here order is important, because they save their background here
 
-    ; push offset rightPlayerController
-    ; push (320 * 80) + 305
-    ; call initController
+    push offset rightPlayerController
+    push (320 * 80) + 315
+    call initController
 
     push offset leftPlayerController
-    push (320 * 80) + 10
+    push (320 * 80)
     call initController
 
     push offset ballController
