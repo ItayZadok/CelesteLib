@@ -133,17 +133,11 @@ directionY dw 0
 
 vector1 dw 0, 0
 vector2 dw 0, 0
-vector3 dw 0, 0
-vector4 dw 0, 0
-vector5 dw 0, 0
-
-diffX dw 0
-diffY dw 0
-temp1 dw 0
 
 ; *********************************OFFSET CONSTANTS*********************************
 
 VideoMemory equ 0A000h
+RaycastPrecision equ 128
 
 PhysicsComponentId            equ 4
 PhysicsComponentAxisX         equ 0
@@ -2009,7 +2003,7 @@ proc getPositionFromXandY
     ret 2
 endp getPositionFromXandY
 
-proc getElements
+proc getStepElements
     push bp
     mov bp, sp
     push dx
@@ -2017,33 +2011,33 @@ proc getElements
     push ax
 
     push 0
-    push [bp + 6]
+    push [bp + 6] ; current position
     call getXandY
-    pop dx ; x
-    pop cx ; y
+    pop dx ; cur x
+    pop cx ; cur y
 
     push 0
     push [bp + 4]
-    call getXandY
-    pop ax ; x
-    sub dx, ax ; dx - diff x
-    pop ax ; y
-    sub cx, ax ; cx - diff y
+    call getXandY ; previous position
+    pop ax ; prev x
+    sub dx, ax ; dx -> diff x
+    pop ax ; prev y
+    sub cx, ax ; cx -> diff y
 
     push dx
     push cx
     call getMaxAbs
-    pop ax ; amount of steps
+    pop ax ; ax -> amount of steps
 
     push dx
-    push 128
+    push RaycastPrecision
     call multiply
-    pop dx
+    pop dx ; dx -> diff x * 128
 
     push cx
-    push 128
+    push RaycastPrecision
     call multiply
-    pop cx
+    pop cx ; cx -> diff x * 128
 
     mov [bp + 4], dx ; diff x
     mov [bp + 6], cx ; diff y
@@ -2054,7 +2048,73 @@ proc getElements
     pop dx
     pop bp
     ret
-endp getElements
+endp getStepElements
+
+proc createVector2
+    push bp
+    mov bp, sp
+    push bx
+    push ax
+
+    mov bx, [bp + 8] ; TODO - malloc
+
+    mov ax, [bp + 6]
+    mov [bx], ax
+
+    mov ax, [bp + 4]
+    mov [bx + 2], ax
+
+    mov [bp + 8], bx
+
+    pop ax
+    pop bx
+    pop bp
+    ret 4
+endp createVector2
+
+proc getVectorElement
+    push bp
+    mov bp, sp
+    push bx
+    push ax
+
+    mov bx, [bp + 6] ; vector
+    mov ax, [bp + 4] ; index
+
+    sal ax, 1
+    add bx, ax
+
+    mov bx, [bx]
+    mov [bp + 6], bx
+
+    pop ax
+    pop bx
+    pop bp
+    ret 2
+endp getVectorElement
+
+proc setVectorElement
+    push bp
+    mov bp, sp
+    push bx
+    push ax
+    push dx
+
+    mov bx, [bp + 8] ; vector
+    mov ax, [bp + 6] ; index
+    mov dx, [bp + 4] ; value
+
+    sal ax, 1
+    add bx, ax
+
+    mov [bx], dx
+
+    pop dx
+    pop ax
+    pop bx
+    pop bp
+    ret 6
+endp setVectorElement
 
 proc areControllersColliding
     push bp
@@ -2066,101 +2126,120 @@ proc areControllersColliding
     push di
     push dx
 
-    mov si, [bp + 6] ; controller
-    mov bx, [bp + 4] ; collider
+    push offset vector1
+    push [bp + 6] ; controller
+    push [bp + 4] ; collider
+    call createVector2
+    pop bx ; bx -> vector (controller, collider)
 
-    push si
+    push [bx + VectorX] ; controller
     push RenderComponentId
     call getControllerComponent
-    pop di
+    pop di ; di -> render component
 
-    push [di + RenderComponentPosition]
+    push [di + RenderComponentPosition] ; save original position
 
     push 0
     push [di + RenderComponentPosition]
     push [di + RenderComponentPreviousPosition]
-    call getElements
-    pop [diffX] ; diff x
-    pop [diffY] ; diff y
-    pop [temp1] ; amount of steps
+    call getStepElements
+    pop cx ; diffX
+    pop dx ; diffY
+    pop ax ; ax -> amount of steps
 
-    cmp [temp1], 0
-    jne .skipFrameRaycast
+    push offset vector2
+    push cx ; diffX
+    push dx ; diffY
+    call createVector2
+    pop si  ; si -> vector (diffX, diffY)
 
-    push si
-    push bx
+    ; if no movement, don't raycast
+    cmp ax, 0
+    jne .startRaycast
+
+    push [bx + VectorX] ; controller
+    push [bx + VectorY] ; collider
     call areControllersCollidingThisFrame
-    pop ax
-    jmp .end
-.skipFrameRaycast:
+    pop ax ; collision overlap
+    jmp .cleanup
 
-    push [diffX] ; diff x
-    push [temp1] ; amount of steps
-    call divide
-    pop [diffX] ; step x
-
-    push [diffY] ; diff y
-    push [temp1] ; amount of steps
-    call divide
-    pop [diffY] ; step y
-
-    mov ax, [di + RenderComponentPreviousPosition]
-    mov [di + RenderComponentPosition], ax
-    ; we start from previous position
-
-.startLoop:
-
-    push bx
-
-    add cx, [diffX] ; sum x
-    add dx, [diffY] ; sum y
-
-    push cx
-    push 128
-    call divideModulo
-    pop bx ; add x
-    pop cx ; new sum x
-
-    push dx
-    push 128
-    call divideModulo
-    pop ax ; add y
-    pop dx ; new sum y
-
-    push bx
+.startRaycast:
+    ; stepX = diffX / steps
+    push [si + VectorX]
     push ax
+    call divide
+    pop [si + VectorX] ; store stepX
+
+    ; stepY = diffY / steps
+    push [si + VectorY]
+    push ax
+    call divide
+    pop [si + VectorY] ; store stepY
+
+    ; start raycast from previous position
+    mov cx, [di + RenderComponentPreviousPosition]
+    mov [di + RenderComponentPosition], cx
+
+    xor cx, cx ; reset sumX
+    xor dx, dx ; reset sumY
+
+.raycastLoop:
+    push bx ; store bx
+    push ax ; store ax
+
+    add cx, [si + VectorX] ; sumX += step X
+    add dx, [si + VectorY] ; sumY += step Y
+
+    push cx ; sumX
+    push RaycastPrecision
+    call divideModulo
+    pop bx  ; addX
+    pop cx  ; updated sumX
+
+    push dx ; sumY
+    push RaycastPrecision
+    call divideModulo
+    pop ax  ; addY
+    pop dx  ; updated sumY
+
+    push bx ; addX
+    push ax ; addY
     call getPositionFromXandY
-    pop ax
+    pop ax  ; step size (320 * y) + x
 
-    add [di + RenderComponentPosition], ax
+    add [di + RenderComponentPosition], ax ; apply the step
 
+    pop ax ; restore ax
     pop bx ; restore bx
 
-    push si
-    push bx
+    push ax ; store ax (steps left)
+
+    ; check collision at current position
+    push [bx + VectorX] ; controller
+    push [bx + VectorY] ; collider
     call areControllersCollidingThisFrame
-    pop ax
+    pop ax ; ax -> collision overlap
 
     cmp ax, 0
-    jne .end
+    je .didntCollide
 
-    dec [temp1]
-    jnz .startLoop
+    pop dx ; restore ax (steps left)
+    jmp .cleanup
+
+.didntCollide:
+    pop ax ; restore ax (steps left)
+    dec ax
+    jnz .raycastLoop
     mov ax, 0
 
-.end:
-
-    pop bx ; original position
-
-    cmp ax, 0
-    jne .skip
-
+.cleanup:
+    pop bx ; get original position
+    cmp ax, 0 ; if no collision detect, restore the position
+    jne .didCollide
     mov [di + RenderComponentPosition], bx
 
-.skip:
-
-    add [di + RenderComponentPosition], ax
-    mov [bp + 6], ax
+.didCollide:
+    mov [bp + 6], ax ; return the collision overlap
     pop dx
     pop di
     pop cx
@@ -2675,6 +2754,12 @@ proc handleBounceCollision
     je .end
 
     push bx
+    push ax
+    push RenderComponentId
+    push RenderComponentPosition
+    call addControllerWordValue
+
+    push bx
     push PhysicsComponentId
     call getControllerComponent
     pop bx ; bx = physics component
@@ -2717,6 +2802,12 @@ proc handleWallCollision
 
     cmp ax, 0
     je .skipResetX
+
+    push bx
+    push ax
+    push RenderComponentId
+    push RenderComponentPosition
+    call addControllerWordValue
 
     push ax
     call getAbsValue
@@ -3292,8 +3383,8 @@ proc handleLeftPlayer
     ret 2
 endp handleLeftPlayer
 
-; prints a controller's hitbox by a color
-proc printHitbox
+; prints a controller's outline by a color
+proc printOutline
     push bp
     mov bp, sp
     push bx
@@ -3314,7 +3405,7 @@ proc printHitbox
     pop bp
     ret 4
     ret
-endp printHitbox
+endp printOutline
 
 proc endGameIfCollide
     push bp
@@ -3500,19 +3591,19 @@ start:
 
     push offset borderUp
     push 20
-    call printHitbox
+    call printOutline
 
     push offset borderDown
     push 20
-    call printHitbox
+    call printOutline
 
     push offset borderRight
     push 20
-    call printHitbox
+    call printOutline
 
     push offset borderLeft
     push 20
-    call printHitbox
+    call printOutline
 
     push offset rightPlayerController
     push (320 * 80) + 315
