@@ -5,72 +5,17 @@ STACK 100h
 DATASEG
 
 ; *********************************IMAGES *****************************************
-palette dw 3
-db 0,0,0,63,63,63,63,63,63
+palette dw 4
+db 0,0,0,14,14,14,63,63,63,36,37,37
 
-playerRect db RectId
-dw 5, 30
-db 1
+cursorImage db ImageId
+dw 10, 11
+db 7 dup(2),-1,-1,-1,2,1,4 dup(0),1,2,-1,-1,2,5 dup(0),1,2,-1,-1,2,4 dup(0),2,2,3,-1,-1,2,4 dup(0),1,2,-1,-1,-1,2,0,0,2,1,0,1,2,-1,-1,2,1,1,2,2,1,0,1,2,-1,3,2,2,3,3,2,1,0,1,2,-1,3,3,-1,-1,3,2,1,0,2
+db 6 dup(-1),3,2,2,3,7 dup(-1),3,3,-1
 
 ballRect db RectId
 dw 3, 3
-db 1
-
-letter0 db ImageId
-dw 7, 15
-db -1,5 dup(2),-1,9 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1
-db 4 dup(2),-1,-1,-1,9 dup(2),-1,5 dup(2),-1
-
-letter1 db ImageId
-dw 7, 15
-db -1,-1,-1,2,2,5 dup(-1),2,2,4 dup(-1),2,2,2,4 dup(-1),2,2,2,5 dup(-1),2,2,5 dup(-1),2,2,5 dup(-1),2,2,5 dup(-1),2,2,5 dup(-1),2,2,5 dup(-1),2,2,5 dup(-1),2,2,5 dup(-1),2,2,5 dup(-1),2,2,5 dup(-1),2,2
-db 5 dup(-1),2,2,-1,-1
-
-letter2 db ImageId
-dw 7, 15
-db -1,5 dup(2),-1,9 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,2,2,4 dup(-1),2,2,2,4 dup(-1),2,2,4 dup(-1),2,2,2,4 dup(-1),2,2,4 dup(-1),2,2,2,4 dup(-1),2,2,4 dup(-1),2,2,2,4 dup(-1),2,2
-db 4 dup(-1),14 dup(2)
-
-letter3 db ImageId
-dw 7, 15
-db -1,5 dup(2),-1,9 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,2,2,5 dup(-1),2,2,-1,-1,-1,2,2,2,-1,-1,-1,2,2,2,5 dup(-1),2,2,2,6 dup(-1),4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1
-db 9 dup(2),-1,5 dup(2),-1
-
-letter4 db ImageId
-dw 8, 15
-db 4 dup(-1),2,2,5 dup(-1),2,2,6 dup(-1),2,2,6 dup(-1),2,2,5 dup(-1),2,2,6 dup(-1),2,2,5 dup(-1),2,2,-1,-1,2,2,-1,-1,2,2,-1,-1,2,2,-1,-1,2,2,-1,-1,2,2,-1,2,2,-1,-1,-1,2,2,-1,16 dup(2),5 dup(-1),2,2
-db 6 dup(-1),2,2,6 dup(-1),2,2,-1
-
-letter5 db ImageId
-dw 7, 15
-db 16 dup(2),5 dup(-1),2,2,5 dup(-1),2,2,5 dup(-1),6 dup(2),-1,7 dup(2),5 dup(-1),2,2,5 dup(-1),2,2,5 dup(-1),4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,9 dup(2),-1,5 dup(2),-1
-
-letter6 db ImageId
-dw 7, 15
-db -1,5 dup(2),-1,9 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,4 dup(2),5 dup(-1),2,2,5 dup(-1),6 dup(2),-1,9 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,9 dup(2),-1
-db 5 dup(2),-1
-
-letter7 db ImageId
-dw 7, 15
-db 16 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,2,2,4 dup(-1),2,2,5 dup(-1),2,2,5 dup(-1),2,2,5 dup(-1),2,2,4 dup(-1),2,2,5 dup(-1),2,2,5 dup(-1),2,2,5 dup(-1),2,2,5 dup(-1),2,2,4 dup(-1),2,2,5 dup(-1),2,2
-db -1,-1,-1
-
-letter8 db ImageId
-dw 7, 15
-db -1,5 dup(2),-1,9 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,2,2,-1,2,2,-1,2,2,-1,-1,5 dup(2),-1,-1,2,2,-1,2,2,-1,2,2,-1,-1,-1,4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,4 dup(2)
-db -1,-1,-1,9 dup(2),-1,5 dup(2),-1
-
-letter9 db ImageId
-dw 7, 15
-db -1,5 dup(2),-1,9 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,9 dup(2),-1,6 dup(2),5 dup(-1),2,2,5 dup(-1),4 dup(2),-1,-1,-1,4 dup(2),-1,-1,-1,9 dup(2),-1
-db 5 dup(2),-1
-
-letterNeg db ImageId
-dw 8, 15
-db 56 dup(-1),16 dup(2),48 dup(-1)
-
-letterArray db ArrayId
-dw 10, 2, offset letter0, offset letter1, offset letter2, offset letter3, offset letter4, offset letter5, offset letter6, offset letter7, offset letter8, offset letter9
+db 2
 
 leftPlayerController db 3
 db PhysicsComponentId
@@ -80,18 +25,7 @@ db 23
 dw 1 dup(0)
 dw 0, 0, 0, 100  ; vx, ax, fx, mx
 dw 0, 0, 20, 100  ; vy, ay, fy, my
-dw 0, offset playerRect, 0, 0, 5, 30 ; pos, image, prev-pos, rotation, width, height
-db 5*30 dup(0) ; background save place
-
-rightPlayerController db 3
-db PhysicsComponentId
-db 7
-db RenderComponentId
-db 23
-dw 1 dup(0)
-dw 0, 0, 0, 100  ; vx, ax, fx, mx
-dw 0, 0, 20, 100  ; vy, ay, fy, my
-dw 0, offset playerRect, 0, 0, 5, 30 ; pos, image, prev-pos, rotation, width, height
+dw 0, offset playerRect, seg playerRect, 0, 0, 5, 30 ; pos, image, prev-pos, rotation, width, height
 db 5*30 dup(0) ; background save place
 
 ballController db 2
@@ -101,32 +35,41 @@ db RenderComponentId
 db 21
 dw -16*4, 0, 0, 3000  ; vx, ax, fx, mx
 dw -16*4, 0, 0, 3000  ; vy, ay, fy, my
-dw 0, offset ballRect, 0, 0, 3, 3 ; pos, image, prev-pos, rotation, width, height
+dw 0, offset ballRect, seg ballRect, 0, 0, 3, 3 ; pos, image, prev-pos, rotation, width, height
 db 3*3 dup(0) ; background save place
 
 borderUp db 1
 db RenderComponentId
 db 3
-dw 0, 0, 0, 0, 320, 1 ; pos, image, prev-pos, rotation, width, height
+dw 0, 0, 0, 0, 0, 320, 1 ; pos, image, prev-pos, rotation, width, height
 db 320*1 dup(0) ; background save place
 
 borderLeft db 1
 db RenderComponentId
 db 3
-dw 0, 0, 0, 0, 1, 320 ; pos, image, prev-pos, rotation, width, height
+dw 0, 0, 0, 0, 0, 1, 320 ; pos, image, prev-pos, rotation, width, height
 db 320*1 dup(0) ; background save place
 
 borderRight db 1
 db RenderComponentId
 db 3
-dw 319, 0, 0, 0, 1, 320 ; pos, image, prev-pos, rotation, width, height
+dw 319, 0, 0, 0, 0, 1, 320 ; pos, image, prev-pos, rotation, width, height
 db 320*1 dup(0) ; background save place
 
 borderDown db 1
 db RenderComponentId
 db 3
-dw ((199)*320), 0, 0, 0, 320, 1 ; pos, image, prev-pos, rotation, width, height
+dw 199*320, 0, 0, 0, 0, 320, 1 ; pos, image, prev-pos, rotation, width, height
 db 320*1 dup(0) ; background save place
+
+mouseController db 2
+db RenderComponentId
+db 5
+db MouseComponentId
+db 129
+dw (320*20)+315, offset cursorImage, seg cursorImage, 0, 0, 10, 11 ; pos, image, prev-pos, rotation, width, height
+db 10*11 dup(0) ; background save place
+db 0, 0 ; left click, right click
 
 directionX dw 0
 directionY dw 0
@@ -138,6 +81,8 @@ vector2 dw 0, 0
 
 VideoMemory equ 0A000h
 RaycastPrecision equ 128
+ScreenWidth equ 320
+ScreenHeight equ 200
 
 PhysicsComponentId            equ 4
 PhysicsComponentAxisX         equ 0
@@ -186,18 +131,21 @@ Array2DData             equ 7
 
 RenderComponentId                  equ 1
 RenderComponentPosition            equ 0
-RenderComponentImage               equ 2
-RenderComponentPreviousPosition    equ 4
-RenderComponentRotation            equ 6
-RenderComponentWidth               equ 8
-RenderComponentHeight              equ 10
-RenderComponentBackground          equ 12
+RenderComponentImageOffset         equ 2
+RenderComponentImageSegment        equ 4
+RenderComponentPreviousPosition    equ 6
+RenderComponentRotation            equ 8
+RenderComponentWidth               equ 10
+RenderComponentHeight              equ 12
+RenderComponentBackground          equ 14
 
 ; ********************************************
 
-MouseComponentId equ 7
-MouseComponentLeftClick  equ 0
-MouseComponentRightClick equ 1
+MouseComponentId           equ 7
+MouseComponentLeftPressed  equ 0
+MouseComponentRightPressed equ 1
+MouseComponentLeftClicked  equ 2
+MouseComponentRightClicked equ 3
 
 ; ********************************************
 
@@ -210,7 +158,7 @@ ComponentLocation equ 1
 VectorX equ 0
 VectorY equ 2
 
-ImageId     equ 10
+ImageId     equ 11
 ImageWidth  equ 1
 ImageHeight equ 3
 ImageData   equ 5
@@ -227,9 +175,19 @@ PrintManagerId               equ 5
 PrintManagerControllerAmount equ 1
 PrintManagerData             equ 2
 
-SegmentWrapperId       equ 6
+SegmentWrapperId       equ -1
 SegmentWrapperSegment  equ 1
 SegmentWrapperOriginal equ 3
+
+MallocManagerId                equ 12
+MallocManagerAllocationAmount  equ 1
+
+playerRect db RectId
+dw 5, 30
+db 2
+
+rightPlayerController db SegmentWrapperId
+dw mallocSegment, offset segmentedRightPlayerController
 
 ; *********************************CONTROLLERS START********************************
 
@@ -266,6 +224,23 @@ dw 50 dup(0)
 ;     screen db 64000 dup(0)
 ; ends
 
+segment mallocSegment
+
+; mallocManager db MallocManagerId
+
+segmentedRightPlayerController db 3
+db PhysicsComponentId
+db 7
+db RenderComponentId
+db 23
+dw 1 dup(0)
+dw 0, 0, 0, 100  ; vx, ax, fx, mx
+dw 0, 0, 20, 100  ; vy, ay, fy, my
+dw 0, offset playerRect, seg playerRect, 0, 0, 5, 30 ; pos, image, prev-pos, rotation, width, height
+db 5*30 dup(0) ; background save place
+
+ends
+
 ; **********YOUR SHIT*********** ;
 
 CODESEG
@@ -277,8 +252,10 @@ proc initMouse
     push ax
     mov ax, 0 ; init Mouse
     int 33h
-    push [bp + 4] ; mouse pointer
-    push (100 * 320) + 160
+    mov ax, 2 ; disable default mouse icon
+    int 33h
+    push [bp + 4]                  ; mouse pointer
+    push (100 * ScreenWidth) + 160 ; init to the middle of the screen
     call initController
     pop ax
     pop bp
@@ -290,49 +267,76 @@ proc updateMouse
     mov bp, sp
     push bx
     push ax
-    push si
     push dx
     push cx
     push di
+    push ds
 
-    mov si, [bp + 6] ; Mouse pointer
+    push 0
+    push [bp + 4] ; controller
+    call resolvePointer
+    pop di ; controller
+    pop ds ; update the segment
 
-    mov ax, 3 ; get mouse position cx - x, dx - y
-    int 33h
+    ; --- Get mouse position and buttons ---
+    mov ax, 3
+    int 33h           ; cx -> x, dx -> y, bx -> button status
+    shr cx, 1         ; convert x from 0–639 to 0–319
 
-    shr cx, 1 ; 0-639 -> 0-319
-    cmp cx, 319 
-    jne .skipFixX
-    dec cx
-.skipFixX:
+    ; --- Store updated position ---
+    push cx           ; x
+    push dx           ; y
+    call toPosition
+    pop ax            ; ax -> position
 
-    cmp dx, 199 
-    jne .skipFixY
-    dec dx
-.skipFixY:
+    push di           ; controller
+    push ax           ; position
+    push RenderComponentId
+    push RenderComponentPosition
+    call setControllerWordValue
 
-    mov ax, dx ;  compute screen position
-    xor dx, dx
-    mov di, 320
-    mul di
-    add ax, cx
-    
-    push si ; mouse controller
-    push ax ; position
-    ; call moveControllerByPosition
+    ; --- Access Mouse component from controller ---
+    push di
+    push MouseComponentId
+    call getControllerComponent
+    pop di            ; di = mouse component pointer
 
-    push [bp + 4]
-    push si
-    call uploadController
+    ; --- Extract button states ---
+    mov al, bl
+    and al, 1         ; al -> left button (bit 0)
 
+    mov ah, bl
+    shr ah, 1
+    and ah, 1         ; ah -> right button (bit 1)
+
+    ; === Detect Left Click ===
+    mov bh, al                                ; current left
+    mov bl, [di + MouseComponentLeftPressed]  ; previous left
+    not bl
+    and bl, bh
+    and bl, 1
+    mov [di + MouseComponentLeftClicked], bl
+
+    ; === Detect Right Click ===
+    mov bh, ah
+    mov bl, [di + MouseComponentRightPressed]
+    not bl
+    and bl, bh
+    and bl, 1
+    mov [di + MouseComponentRightClicked], bl
+
+    ; --- Save current button states ---
+    mov [di + MouseComponentLeftPressed], al
+    mov [di + MouseComponentRightPressed], ah
+
+    pop ds
     pop di
     pop cx
     pop dx
-    pop si
     pop ax
     pop bx
     pop bp
-    ret 4
+    ret 2
 endp updateMouse
 
 proc keyboardHandler far              
@@ -486,14 +490,25 @@ proc getControllerWordValue
     push bp
     mov bp, sp
     push bx
-    mov bx, [bp + 8] ; controller pointer
+    push ds
+
+    push 0
+    push [bp + 8]  ; controller
+    call resolvePointer
+    pop bx ; controller
+    pop ds ; update the segment
+
     push bx
     push [bp + 6] ; componentId
     call getControllerComponent
     pop bx
+
     add bx, [bp + 4] ; parameter
     mov bx, [bx]
+
     mov [bp + 8], bx
+
+    pop ds
     pop bx
     pop bp
     ret 4
@@ -519,14 +534,25 @@ proc getControllerByteValue
     push bp
     mov bp, sp
     push bx
-    mov bx, [bp + 8] ; controller pointer
+    push ds
+
+    push 0
+    push [bp + 8]  ; controller
+    call resolvePointer
+    pop bx ; controller
+    pop ds ; update the segment
+
     push bx
     push [bp + 6] ; componentId
     call getControllerComponent
     pop bx
+
     add bx, [bp + 4] ; parameter
     mov bl, [bx]
-    mov [bp + 8], bl
+    mov bh, 0
+    mov [bp + 8], bx
+
+    pop ds
     pop bx
     pop bp
     ret 4
@@ -539,14 +565,24 @@ proc setControllerWordValue
     mov bp, sp
     push ax
     push bx
-    mov bx, [bp + 10] ; controller pointer
+    push ds
+
+    push 0
+    push [bp + 10]  ; controller
+    call resolvePointer
+    pop bx ; controller
+    pop ds ; update the segment
+
     push bx
     push [bp + 6] ; componentId
     call getControllerComponent
     pop bx
+
     add bx, [bp + 4] ; parameter
     mov ax, [bp + 8] ; value
     mov [bx], ax
+
+    pop ds
     pop bx
     pop ax
     pop bp
@@ -558,14 +594,24 @@ proc addControllerWordValue
     mov bp, sp
     push ax
     push bx
-    mov bx, [bp + 10] ; controller pointer
+    push ds
+
+    push 0
+    push [bp + 10]  ; controller
+    call resolvePointer
+    pop bx ; controller
+    pop ds ; update the segment
+
     push bx
     push [bp + 6] ; componentId
     call getControllerComponent
     pop bx
+
     add bx, [bp + 4] ; parameter
     mov ax, [bp + 8] ; addition
     add [bx], ax
+
+    pop ds
     pop bx
     pop ax
     pop bp
@@ -577,6 +623,7 @@ proc setControllerByteValue
     mov bp, sp
     push ax
     push bx
+    
     mov bx, [bp + 10] ; controller pointer
     push bx
     push [bp + 6] ; componentId
@@ -585,6 +632,7 @@ proc setControllerByteValue
     add bx, [bp + 4] ; parameter
     mov al, [bp + 8] ; value
     mov [bx], al
+
     pop bx
     pop ax
     pop bp
@@ -659,10 +707,10 @@ proc clearScreen
     push es
     mov ax, VideoMemory
     mov es, ax
-    mov di, 64001
+    mov di, ScreenHeight * ScreenWidth
 .clearLoop:
-    dec di
     mov [byte ptr es:di], 0
+    dec di
     jnz .clearLoop
     pop es
     pop ax
@@ -703,43 +751,6 @@ proc setPalette
 	ret 2
 endp setPalette
 
-; input - current pixel pos
-; output - (ah = 0/1 x border) (al = 0/1 y border)
-proc checkImageBorders
-    push bp
-    mov bp, sp
-    push ax
-    push cx
-    push dx
-    push bx
-
-    xor bx, bx
-    mov ax, [bp + 4]  ; current pos
-
-    mov cx, 320
-    xor dx, dx
-    idiv cx ; ax - y, dx - x
-    cmp dx, 319
-    je .setTrueX
-    cmp ax, 199
-    je .setTrueY
-
-    jmp .end
-.setTrueX:
-    mov bh, 1
-    jmp .end
-.setTrueY:
-    mov bl, 1
-.end:
-    mov [bp + 4], bx
-    pop bx
-    pop dx
-    pop cx
-    pop ax
-    pop bp
-    ret
-endp checkImageBorders
-
 proc printRect
     push bp
     mov bp, sp
@@ -756,7 +767,7 @@ proc printRect
     ret
 endp printRect
 
-proc checkBoundaries
+proc clampSizeToScreenBounds
     push bp
     mov bp, sp
     push ax
@@ -767,36 +778,43 @@ proc checkBoundaries
 
     mov bx, [bp + 8] ; width
     mov si, [bp + 6] ; height
-    mov ax, [bp + 4] ; position
 
-    mov cx, 320
-    xor dx, dx
-    idiv cx ; ax = y ; dx = x
+    push 0
+    push [bp + 4] ; position
+    call toXandY
+    pop dx ; dx -> x
+    pop ax ; ax -> y
 
-    cmp ax, 200
-    jl .skip
-    mov cx, -1
-.skip:
+    ; if position is out of bounds skip draw
+    cmp ax, ScreenHeight
+    jge .skipDraw
+    cmp dx, ScreenWidth
+    jge .skipDraw
 
+    ; Clamp width to screen bounds if necessary
     add dx, bx
-    cmp dx, 320
-    jl .skipWidthFix
+    cmp dx, ScreenWidth
+    jl .checkHeight
 
-    sub dx, 320
-    sub bx, dx
+    sub dx, ScreenWidth
+    sub bx, dx ; bx -> new width
 
-.skipWidthFix:
+.checkHeight:
+    ; Clamp height to screen bounds if necessary
     add ax, si
-    cmp ax, 200
+    cmp ax, ScreenHeight
     jl .end
 
-    sub ax, 200
-    sub si, ax
+    sub ax, ScreenHeight
+    sub si, ax ; si -> new height
 
+    jmp .end
+.skipDraw:
+    mov cx, -1
 .end:
-    mov [bp + 8], cx
-    mov [bp + 6], bx
-    mov [bp + 4], si
+    mov [bp + 4], bx ; new width
+    mov [bp + 6], si ; new height
+    mov [bp + 8], cx ; flag (-1 = skip)
 
     pop si
     pop cx
@@ -805,7 +823,7 @@ proc checkBoundaries
     pop ax
     pop bp
     ret
-endp checkBoundaries
+endp clampSizeToScreenBounds
 
 proc printRectBySize
     push bp
@@ -817,41 +835,49 @@ proc printRectBySize
     push dx
     push si
     push es
-    mov ax, VideoMemory
+    mov ax, VideoMemory ; set the print location
     mov es, ax
+    
     mov bx, [bp + 10] ; color
     mov dx, [bp + 8]  ; width
     mov cx, [bp + 6]  ; height
-    mov di, [bp + 4]  ; screen position (left top)
+    mov di, [bp + 4]  ; screen start position
 
+    cmp bl, -1 ; skip draw if color is transparent
+    je .end
+
+    ; Adjust size to screen boundaries
     push dx
     push cx
     push di
-    call checkBoundaries
-    pop cx
-    pop dx
-    pop ax
+    call clampSizeToScreenBounds
+    pop dx  ; adjusted width
+    pop cx  ; adjusted height
+    pop ax  ; skip draw flag
 
     cmp ax, -1
-    je .end
+    je .end ; skip draw if completely out of bounds
 
-    mov si, 0 ; reset width counter
-    cmp bl, -1
-    je .end
+    ; di = current screen position
+    ; dx = width
+    ; bx = color
+    ; cx = height counter
+    ; si = x counter within current row
+
+    mov si, 0
 .printLoop:
-    je .skipPixel ; skip if it's empty (-1)
-    mov [byte ptr es:di], bl
+    mov [byte ptr es:di], bl ; draw pixel
 .skipPixel:
-    inc di ; move to the next pixel from screen
-    inc si ; inc the current width counter
-    cmp si, dx ; if reached end of the row
+    inc di         ; next screen pixel
+    inc si
+    cmp si, dx     ; if row not done, continue
     jne .printLoop
-.nextRow:
-    add di, 320
-    sub di, dx ; point to the next column
-    xor si, si ; reset width counter
+; move to next row
+    add di, ScreenWidth
+    sub di, dx     ; move to next row
+    xor si, si     ; reset x counter
     dec cx
-    jnz .printLoop
+    jnz .printLoop ; repeat for next row
 .end:
     pop es
     pop si
@@ -875,41 +901,54 @@ proc printImageBySize
     push si
     push es
     mov ax, VideoMemory
-    mov es, ax
-    mov bx, [bp + 10] ; color array pointer
-    mov cx, [bp + 8]  ; height
-    mov dx, [bp + 6]  ; width
-    mov di, [bp + 4]  ; screen position (left top)
+    mov es, ax ; set the print location
 
+    mov bx, [bp + 10] ; image color array
+    mov dx, [bp + 8]  ; image width
+    mov cx, [bp + 6]  ; image height
+    mov di, [bp + 4]  ; screen start position
+
+    ; Adjust size to screen boundaries
     push dx
     push cx
     push di
-    call checkBoundaries
-    pop cx
-    pop dx
-    pop ax
+    call clampSizeToScreenBounds
+    pop dx  ; adjusted width
+    pop cx  ; adjusted height
+    pop ax  ; skip draw flag
 
     cmp ax, -1
-    je .end
+    je .end ; skip drawing if completely out of bounds
 
-    mov si, 0 ; reset width counter
+    ; di = current screen position
+    ; bx = points the current color in image array
+    ; dx = image width
+    ; cx = image height counter
+    ; si = x counter within current row
+
+    xor si, si
 .printLoop:
-    mov al, [byte ptr bx] ; get the color
+    mov al, [byte ptr bx]    ; get color
     cmp al, -1
-    je .skipPixel ; skip if it's empty (-1)
-    mov [byte ptr es:di], al
+    je .skipPixel            ; skip if transparent pixel (-1)
+    mov [byte ptr es:di], al ; draw pixel
 .skipPixel:
-    inc di ; move to the next pixel from screen
-    inc bx ; move to the next pixel from image
-    inc si ; inc the current width counter
-    cmp si, dx ; if reached end of the row
-    jne .printLoop
-.nextRow:
-    add di, 320
-    sub di, dx ; point to the next column
-    xor si, si ; reset width counter
+    inc di                   ; next screen pixel
+    inc bx                   ; next image pixel
+    inc si
+    cmp si, dx
+    jne .printLoop           ; if row not done, continue
+; move to next row
+    add di, ScreenWidth
+    sub di, dx               ; move to next row
+
+    mov ax, [bp + 8]         ; move to next color row
+    sub ax, dx               ; add (original width - new width)
+    add bx, ax
+
+    xor si, si               ; reset x counter
     dec cx
-    jnz .printLoop
+    jnz .printLoop           ; repeat for next row
 .end:
     pop es
     pop si
@@ -930,13 +969,15 @@ proc printImage
     push ax
     push bx
     mov bx, [bp + 6] ; image pointer
+
     mov ax, bx
     add ax, ImageData
     push ax ; image data (colors)
-    push [bx + ImageHeight]
     push [bx + ImageWidth]
+    push [bx + ImageHeight]
     push [bp + 4] ; screen position (left top)
     call printImageBySize
+
     pop bx
     pop ax
     pop bp
@@ -950,40 +991,57 @@ proc printController
     mov bp, sp
     push di
     push bx
-    mov di, [bp + 4] ; controller pointer
-    push di
+    push ax
+    push ds
+    push es
+
+    push 0
+    push [bp + 4] ; controller
+    call resolvePointer
+    pop bx ; controller
+    pop ds ; update the segment
+
+    push bx ; controller
     push RenderComponentId
     call getControllerComponent
     pop di ; component
 
-    mov bx, [di + RenderComponentImage]
-    mov bl, [bx]
+    mov ax, ds
+    mov es, ax ; component may need a different segment than image
 
-    cmp bl, RectId
+    mov bx, [es:di + RenderComponentImageOffset]
+    mov ds, [es:di + RenderComponentImageSegment]
+
+    mov al, [bx] ; image type
+
+    cmp al, RectId
     jz .isRect
-    cmp bl, ImageId
+    cmp al, ImageId
     jz .isImage
-    cmp bl, ArrayId
+    cmp al, ArrayId
     jz .isArray
 
     jmp .end
 .isRect:
-    push [word ptr di + RenderComponentImage]
-    push [word ptr di + RenderComponentPosition]
+    push bx ; image
+    push [es:di + RenderComponentPosition]
     call printRect
     jmp .end
 .isArray:
-    push [word ptr di + RenderComponentImage]
-    push [word ptr di + RenderComponentRotation]
+    push bx ; image
+    push [es:di + RenderComponentRotation]
     call getArrayElement
-    push [word ptr di + RenderComponentPosition]
+    push [es:di + RenderComponentPosition]
     call printImage
     jmp .end
 .isImage:
-    push [word ptr di + RenderComponentImage]
-    push [word ptr di + RenderComponentPosition]
+    push bx ; image
+    push [es:di + RenderComponentPosition]
     call printImage
 .end:
+    pop es
+    pop ds
+    pop ax
     pop bx
     pop di
     pop bp
@@ -1002,34 +1060,45 @@ proc saveController
     push si
     push ax
     push es
-    mov ax, VideoMemory
+    push ds
+    
+    mov ax, VideoMemory ; set the input location
     mov es, ax
-    mov di, [bp + 4]  ; controller
-    push di
+
+    push 0
+    push [bp + 4]  ; controller
+    call resolvePointer
+    pop bx ; controller
+    pop ds ; update the segment
+    
+    push bx ; controller
     push RenderComponentId
     call getControllerComponent
     pop di ; component
 
     mov bx, di
-    add bx, RenderComponentBackground
+    add bx, RenderComponentBackground ; bx -> background saving place
 
     mov cx, [di + RenderComponentHeight]
     mov dx, [di + RenderComponentWidth]
     mov di, [di + RenderComponentPosition]
+
     mov si, 0  ; width counter
 .saveLoop:
-    mov al, [es:di]
-    mov [bx], al
+    mov al, [es:di] ; get color from screen
+    mov [bx], al    ; save the color to the background array
     inc di
     inc bx
     inc si
     cmp si, dx ; if reached end of the row
     jne .saveLoop
-    add di, 320
+    add di, ScreenWidth
     sub di, dx ; point to the next column
     xor si, si
     dec cx
     jnz .saveLoop
+
+    pop ds
     pop es
     pop ax
     pop si
@@ -1046,7 +1115,13 @@ proc printBackground
     mov bp, sp
     push di
     push dx
-    mov di, [bp + 4] ; controller pointer
+    push ds
+    
+    push 0
+    push [bp + 4] ; controller
+    call resolvePointer
+    pop di ; controller
+    pop ds ; update the segment
 
     push di
     push RenderComponentId
@@ -1056,14 +1131,15 @@ proc printBackground
     mov dx, di
     add dx, RenderComponentBackground
     push dx ; to give its location, and not its value
-    push [di + RenderComponentHeight]
     push [di + RenderComponentWidth]
+    push [di + RenderComponentHeight]
     push [di + RenderComponentPreviousPosition]
     call printImageBySize
 
     mov dx, [di + RenderComponentPosition]
     mov [di + RenderComponentPreviousPosition], dx
 
+    pop ds
     pop dx
     pop di
     pop bp
@@ -1078,8 +1154,16 @@ proc initController
     push di
     push ax
     push bx
+    push ds
+
     mov di, [bp + 6] ; controller pointer
     mov ax, [bp + 4] ; set position
+
+    push 0
+    push di ; controller
+    call resolvePointer
+    pop di ; controller
+    pop ds ; update the segment
 
     push di
     push RenderComponentId
@@ -1093,6 +1177,8 @@ proc initController
     call saveController
     push di
     call printController
+
+    pop ds
     pop bx
     pop ax
     pop di
@@ -1117,9 +1203,9 @@ proc moveToNextAnimationFrame
     push AnimatorComponentId
     call getControllerComponent
     pop di ; component
-    mov bl, [bx + AnimationSize]    ; animation size
+    mov bl, [bx + AnimationSize]                      ; animation size
     mov al, [di + AnimatorComponentCurrentFrameIndex] ; current frame number
-    inc al                                       ; next frame
+    inc al                                            ; next frame
     cmp al, bl
     jne .end
     mov al, 0
@@ -1215,7 +1301,7 @@ proc updateAnimation
     push di
     push bx
     push RenderComponentId
-    push RenderComponentImage
+    push RenderComponentImageOffset
     call setControllerWordValue
 
 .end:
@@ -1490,6 +1576,45 @@ proc getClamp
     ret 4
 endp getClamp
 
+
+; width height x y
+proc getClampedPosition
+    push bp
+    mov bp, sp
+    push ax
+    push cx
+    push dx
+
+    mov ax, ScreenWidth
+    sub ax, [bp + 10] ; width
+
+    push [bp + 6]     ; x
+    push 0
+    push ax
+    call getClamp
+    pop cx
+
+    mov ax, ScreenHeight
+    sub ax, [bp + 8] ; height
+
+    push [bp + 4]    ; y
+    push 0
+    push ax
+    call getClamp
+    pop dx
+
+    push cx ; x
+    push dx ; y
+    call toPosition ; new position
+    pop [bp + 10]
+
+    pop dx
+    pop cx
+    pop ax
+    pop bp
+    ret 6
+endp getClampedPosition
+
 ; input - physics controller
 ; adds the velocity to the controllers using the subPixelAmount
 ; const to enable sub-pixel movement, for example - 0.5 pixels/frame
@@ -1516,7 +1641,7 @@ proc applyVelocity
 
     push 0
     push [bx + RenderComponentPosition]
-    call getXandY
+    call toXandY
     pop cx ; x
     pop dx ; y
 
@@ -1532,27 +1657,11 @@ proc applyVelocity
     pop ax     ; x add
     add cx, ax ; cx new x
 
-    mov ax, 320
-    sub ax, [bx + RenderComponentWidth]
-
-    push cx ; new x
-    push 0
-    push ax
-    call getClamp
-    pop cx
-
-    mov ax, 200
-    sub ax, [bx + RenderComponentHeight]
-
-    push dx ; new y
-    push 0
-    push ax
-    call getClamp
-    pop dx
-
+    push [bx + RenderComponentWidth]
+    push [bx + RenderComponentHeight]
     push cx ; x
     push dx ; y
-    call getPositionFromXandY ; new position
+    call getClampedPosition
     pop [bx + RenderComponentPosition]
 
     pop cx
@@ -1568,11 +1677,20 @@ proc updateAndApplyVelocity
     push bp
     mov bp, sp
     push bx
-    mov bx, [bp + 4] ; controller
+    push ds
+
+    push 0
+    push [bp + 4] ; controller
+    call resolvePointer
+    pop bx ; controller
+    pop ds ; update the segment
+
     push bx
     call updateVelocity
     push bx
     call applyVelocity
+
+    pop ds
     pop bx
     pop bp
     ret 2
@@ -1666,7 +1784,7 @@ proc getControllerY
     push RenderComponentPosition
     call getControllerWordValue
     pop ax
-    mov bx, 320
+    mov bx, ScreenWidth
     xor dx, dx
     div bx
     mov [bp + 4], ax ; y
@@ -1689,7 +1807,7 @@ proc getControllerX
     push RenderComponentPosition
     call getControllerWordValue
     pop ax
-    mov bx, 320
+    mov bx, ScreenWidth
     xor dx, dx
     div bx
     mov [bp + 4], dx ; x
@@ -1855,7 +1973,7 @@ proc getAbsValue
     ret
 endp getAbsValue
 
-proc getXandY
+proc toXandY
     push bp
     mov bp, sp
     push ax
@@ -1863,7 +1981,7 @@ proc getXandY
     push cx
 
     mov ax, [bp + 4] ; position
-    mov cx, 320
+    mov cx, ScreenWidth
     xor dx, dx
     idiv cx ; ax = y ; dx = x
 
@@ -1875,7 +1993,7 @@ proc getXandY
     pop ax
     pop bp
     ret
-endp getXandY
+endp toXandY
 
 proc isAxisCollisionPoint
     push bp
@@ -1919,9 +2037,16 @@ proc doesPointCollideController
     push cx
     push dx
     push di
+    push ds
 
     mov bx, [bp + 6] ; controller
     mov si, [bp + 4] ; point
+
+    push 0
+    push bx  ; controller
+    call resolvePointer
+    pop bx ; controller
+    pop ds ; update the segment
 
     push bx
     push RenderComponentId
@@ -1933,13 +2058,13 @@ proc doesPointCollideController
 
     push 0
     push si
-    call getXandY
+    call toXandY
     pop ax ; point x
     pop dx ; point y
 
     push 0
     push [bx + RenderComponentPosition]
-    call getXandY
+    call toXandY
     pop cx ; controller x
     pop si ; controller y
 
@@ -1967,6 +2092,7 @@ proc doesPointCollideController
 .end:
     mov [bp + 6], ax
 
+    pop ds
     pop di
     pop dx
     pop cx
@@ -1977,7 +2103,7 @@ proc doesPointCollideController
     ret 2
 endp doesPointCollideController
 
-proc getPositionFromXandY
+proc toPosition
     push bp
     mov bp, sp
     push ax
@@ -1988,9 +2114,9 @@ proc getPositionFromXandY
     mov bx, [bp + 6] ; x
     mov ax, [bp + 4] ; y
 
-    mov cx, 320
+    mov cx, ScreenWidth
     xor dx, dx
-    imul cx ; ax = y * 320
+    imul cx ; ax = y * ScreenWidth
     add ax, bx
 
     mov [bp + 6], ax
@@ -2001,7 +2127,7 @@ proc getPositionFromXandY
     pop ax
     pop bp
     ret 2
-endp getPositionFromXandY
+endp toPosition
 
 proc getStepElements
     push bp
@@ -2012,13 +2138,13 @@ proc getStepElements
 
     push 0
     push [bp + 6] ; current position
-    call getXandY
+    call toXandY
     pop dx ; cur x
     pop cx ; cur y
 
     push 0
     push [bp + 4]
-    call getXandY ; previous position
+    call toXandY ; previous position
     pop ax ; prev x
     sub dx, ax ; dx -> diff x
     pop ax ; prev y
@@ -2204,8 +2330,8 @@ proc areControllersColliding
 
     push bx ; addX
     push ax ; addY
-    call getPositionFromXandY
-    pop ax  ; step size (320 * y) + x
+    call toPosition
+    pop ax  ; step size (ScreenWidth * y) + x
 
     add [di + RenderComponentPosition], ax ; apply the step
 
@@ -2553,7 +2679,7 @@ proc areControllersCollidingThisFrame
     jz .setX
 
     mov ax, si
-    mov dx, 320
+    mov dx, ScreenWidth
     imul dx
     jmp .end
 .setX:
@@ -2661,26 +2787,29 @@ proc endAndCleanUp
 endp endAndCleanUp
 
 ; input - the segment wrapper
-; output - the original object
-; note - need to execute end, to return to the normal ds
-proc StartLoadFromOtherSegment
+; output - the original object, its segment
+proc resolvePointer
     push bp
     mov bp, sp
     push bx
     push ax
-    push si
-    mov bx, [bp + 4]
-    mov [bp + 6], ds
+    mov bx, [bp + 4] ; pointer
+    mov ax, ds
+
+    cmp [byte ptr bx], SegmentWrapperId ; check id
+    jne .end ; if not a segment wrapper
+
     mov ax, [bx + SegmentWrapperSegment]
-    mov si, [bx + SegmentWrapperOriginal]
-    mov ds, ax
-    mov [bp + 4], si
-    pop si
+    mov bx, [bx + SegmentWrapperOriginal]
+
+.end:
+    mov [bp + 4], bx
+    mov [bp + 6], ax 
     pop ax
     pop bx
     pop bp
     ret
-endp StartLoadFromOtherSegment
+endp resolvePointer
 
 ; called 1024 times a sec
 proc periodic
@@ -2767,7 +2896,7 @@ proc handleBounceCollision
     push ax
     call getAbsValue
     pop ax
-    cmp ax, 320
+    cmp ax, ScreenWidth
     jl .bounceX
 
 .bounceY:
@@ -2812,7 +2941,7 @@ proc handleWallCollision
     push ax
     call getAbsValue
     pop ax
-    cmp ax, 320
+    cmp ax, ScreenWidth
     jl .skipResetY
 
     push bx
@@ -2836,6 +2965,8 @@ proc handleWallCollision
     pop bp
     ret 4
 endp handleWallCollision
+
+; Array Procs
 
 proc getArrayElement
     push bp
@@ -3223,7 +3354,7 @@ proc printNumber
     neg ax
 
 .saveLoop:
-    xor dx, dx
+    cwd
     idiv si  ; ax / 10 -> quotient in ax, remainder in dx
 
     add dl, '0'  ; Convert remainder to ASCII
@@ -3253,73 +3384,6 @@ proc printNumber
     pop bp
     ret 2
 endp printNumber
-
-proc printNumberNew
-    push bp
-    mov bp, sp
-    push dx
-    push ax
-    push cx
-    push si
-    push bx
-
-    mov ax, [bp + 4] ; number to print
-    mov si, 10
-    mov cx, 0
-    mov bx, 0
-
-    push 0
-    push 200
-    push 20
-    push bx 
-    call printRectBySize
-
-    ; check if negative
-    cmp ax, 0
-    jge .saveLoop    ; if positive or zero, proceed normally
-
-    ; if negative, print '-' and make number positive for correct ASCII
-    push offset letterNeg
-    push bx
-    call printImage
-    add bx, 10
-
-    neg ax
-
-.saveLoop:
-    xor dx, dx
-    idiv si  ; ax / 10 -> quotient in ax, remainder in dx
-
-    push dx      ; Store digit on stack
-    inc cx       ; Count number of digits
-
-    test ax, ax
-    jnz .saveLoop
-
-.printLoop:
-    pop dx    ; get digit from stack
-
-    push offset letterArray
-    push dx
-    call getArrayElement
-    pop si
-
-    push si
-    push bx
-    call printImage
-
-    add bx, 10
-    dec cx
-    jnz .printLoop
-    
-    pop bx
-    pop si
-    pop cx
-    pop ax
-    pop dx
-    pop bp
-    ret 2
-endp printNumberNew
 
 proc handleRightPlayer
     push bp
@@ -3502,6 +3566,44 @@ proc printPoint
     ret 4
 endp printPoint
 
+proc isClicking
+    push bp
+    mov bp, sp
+    push si
+    push bx
+
+    mov bx, [bp + 6] ; mouse controller
+    mov si, [bp + 4] ; button controller
+
+    push bx
+    push MouseComponentId
+    push MouseComponentLeftClicked
+    call getControllerByteValue
+    pop ax
+
+    cmp al, 0
+    je .end ; if did not click
+
+    push bx
+    push RenderComponentId
+    push RenderComponentPosition
+    call getControllerWordValue
+    pop ax
+
+    push si ; button
+    push ax ; mouse position
+    call doesPointCollideController
+    pop ax  ; result (1/0)
+
+.end:
+    mov [bp + 6], ax
+
+    pop bx
+    pop si
+    pop bp
+    ret 2
+endp isClicking
+
 proc gameLoop
 
     push offset leftPlayerController
@@ -3535,13 +3637,16 @@ proc gameLoop
     push offset borderUp
     call handleBounceCollision
 
-    push offset ballController
-    push offset borderLeft
-    call endGameIfCollide
+    ; push offset ballController
+    ; push offset borderLeft
+    ; call endGameIfCollide
 
-    push offset ballController
-    push offset borderRight
-    call endGameIfCollide
+    ; push offset ballController
+    ; push offset borderRight
+    ; call endGameIfCollide
+
+    push offset mouseController
+    call updateMouse
 
     push offset printManager
     push offset ballController
@@ -3553,6 +3658,10 @@ proc gameLoop
 
     push offset printManager
     push offset rightPlayerController
+    call uploadController
+
+    push offset printManager
+    push offset mouseController
     call uploadController
 
     push offset printManager
@@ -3606,16 +3715,19 @@ start:
     call printOutline
 
     push offset rightPlayerController
-    push (320 * 80) + 315
+    push (ScreenWidth * 80) + 315
     call initController
 
     push offset leftPlayerController
-    push (320 * 80)
+    push (ScreenWidth * 80)
     call initController
 
     push offset ballController
-    push (320 * 125) + 160
+    push (ScreenWidth * 125) + 160
     call initController
+
+    push offset mouseController
+    call initMouse
 
     push offset oldKeyboardHandlerSegment
     push offset oldKeyboardHandlerOffset
