@@ -19,36 +19,41 @@ db 5
 
 ballController db 2
 db PhysicsComponentId
-db 5
+dw offset ballControllerPhysicsComponent, seg ballControllerPhysicsComponent
 db RenderComponentId
-db 21
-dw 16*4, 0, 0, 3000  ; vx, ax, fx, mx
-dw 16*4, 0, 0, 3000  ; vy, ay, fy, my
-dw 0, offset ballRect, seg ballRect, 0, 0, 3, 3 ; pos, image, prev-pos, rotation, width, height
-db 3*3 dup(0) ; background save place
+dw offset ballControllerRenderComponent, seg ballControllerRenderComponent
+
+ballControllerPhysicsComponent dw 16*4, 0, 0, 3000  ; vx, ax, fx, mx
+                               dw 16*4, 0, 0, 3000  ; vy, ay, fy, my
+ballControllerRenderComponent dw 0, offset ballRect, seg ballRect, 0, 0, 3, 3 ; pos, image, prev-pos, rotation, width, height
+                              db 3*3 dup(0) ; background save place
 
 borderUp db 1
 db RenderComponentId
-db 3
-dw 0, 0, 0, 0, 0, 320, 1 ; pos, image, prev-pos, rotation, width, height
+dw offset borderUpRenderComponent, seg borderUpRenderComponent
+
+borderUpRenderComponent dw 0, 0, 0, 0, 0, 320, 1 ; pos, image, prev-pos, rotation, width, height
 db 320*1 dup(0) ; background save place
 
 borderLeft db 1
 db RenderComponentId
-db 3
-dw 0, 0, 0, 0, 0, 1, 320 ; pos, image, prev-pos, rotation, width, height
+dw offset borderLeftRenderComponent, seg borderLeftRenderComponent
+
+borderLeftRenderComponent dw 0, 0, 0, 0, 0, 1, 320 ; pos, image, prev-pos, rotation, width, height
 db 320*1 dup(0) ; background save place
 
 borderRight db 1
 db RenderComponentId
-db 3
-dw 319, 0, 0, 0, 0, 1, 320 ; pos, image, prev-pos, rotation, width, height
+dw offset borderRightRenderComponent, seg borderRightRenderComponent
+
+borderRightRenderComponent dw 319, 0, 0, 0, 0, 1, 320 ; pos, image, prev-pos, rotation, width, height
 db 320*1 dup(0) ; background save place
 
 borderDown db 1
 db RenderComponentId
-db 3
-dw 199*320, 0, 0, 0, 0, 320, 1 ; pos, image, prev-pos, rotation, width, height
+dw offset borderDownRenderComponent, seg borderDownRenderComponent
+
+borderDownRenderComponent dw 199*320, 0, 0, 0, 0, 320, 1 ; pos, image, prev-pos, rotation, width, height
 db 320*1 dup(0) ; background save place
 
 directionX dw 0
@@ -130,8 +135,10 @@ MouseComponentRightClicked equ 3
 ControllerMaxComponentAmount equ 0
 ControllerComponentData      equ 1
 
-ComponentId       equ 0
-ComponentLocation equ 1
+ComponentId            equ 0
+ComponentOffset        equ 1
+ComponentSegment       equ 3
+ComponentNextComponent equ 5
 
 VectorX equ 0
 VectorY equ 2
@@ -164,13 +171,15 @@ MallocManagerBytesAllocations  equ 7
 
 rightPlayerController db 3
 db PhysicsComponentId
-db 7
+dw offset rightPlayerControllerPhysicsComponent, seg rightPlayerControllerPhysicsComponent
 db RenderComponentId
-db 23
+dw offset rightPlayerControllerRenderComponent, seg rightPlayerControllerRenderComponent
 dw 1 dup(0)
-dw 0, 0, 0, 100  ; vx, ax, fx, mx
+
+rightPlayerControllerPhysicsComponent dw 0, 0, 0, 100  ; vx, ax, fx, mx
 dw 0, 0, 20, 100  ; vy, ay, fy, my
-dw 0, offset playerRect, seg playerRect, 0, 0, 5, 30 ; pos, image, prev-pos, rotation, width, height
+
+rightPlayerControllerRenderComponent dw 0, offset playerRect, seg playerRect, 0, 0, 5, 30 ; pos, image, prev-pos, rotation, width, height
 db 5*30 dup(0) ; background save place
 
 ; *********************************CONTROLLERS START********************************
@@ -212,31 +221,33 @@ dw 50 dup(0)
 playerRect db RectId
 dw 5, 30
 db 5
+segment mallocSegment
 
 mallocManager db MallocManagerId
 dw mallocSegment, 65535, 0
 
 leftPlayerController db 3
 db PhysicsComponentId
-db 7
+dw offset leftPlayerControllerPhysicsComponent, seg leftPlayerControllerPhysicsComponent
 db RenderComponentId
-db 23
+dw offset leftPlayerControllerRenderComponent, seg leftPlayerControllerRenderComponent
 dw 1 dup(0)
-dw 0, 0, 0, 100  ; vx, ax, fx, mx
+
+leftPlayerControllerPhysicsComponent dw 0, 0, 0, 100  ; vx, ax, fx, mx
 dw 0, 0, 20, 100  ; vy, ay, fy, my
-dw 0, offset playerRect, seg playerRect, 0, 0, 5, 30 ; pos, image, prev-pos, rotation, width, height
+
+leftPlayerControllerRenderComponent dw 0, offset playerRect, seg playerRect, 0, 0, 5, 30 ; pos, image, prev-pos, rotation, width, height
 db 5*30 dup(0) ; background save place
 
 mouseController db 2
 db MouseComponentId
-db 5
+dw offset mouseControllerMouse, seg mouseControllerMouse
 db RenderComponentId
-db 9
-db 0, 0, 0, 0; left pressed, right pressed, left clicked, right clicked
-dw 0, offset cursorImage, seg cursorImage, 0, 0, 10, 11 ; pos, image pointer, prev-pos, rotation, width, height
-db 10*11 dup(0) ; background save place
+dw offset mouseControllerRender, seg mouseControllerRender
 
-segment mallocSegment
+mouseControllerMouse db 0, 0, 0, 0; left pressed, right pressed, left clicked, right clicked
+mouseControllerRender dw 0, offset cursorImage, seg cursorImage, 0, 0, 10, 11 ; pos, image pointer, prev-pos, rotation, width, height
+db 10*11 dup(0) ; background save place
 
 ends
 
@@ -472,10 +483,12 @@ proc initMouse
     int 33h
     mov ax, 2 ; disable default mouse icon
     int 33h
+
     push [bp + 6]                  ; mouse segment
     push [bp + 4]                  ; mouse pointer
     push (100 * ScreenWidth) + 160 ; init to the middle of the screen
     call initController
+
     pop ax
     pop bp
     ret 4
@@ -517,7 +530,8 @@ proc updateMouse
     push ds   ; segment
     push MouseComponentId
     call getControllerComponent
-    pop di    ; di = mouse component pointer
+    pop di    ; di -> mouse component pointer
+    pop ds    ; component segment
 
     ; --- Extract button states ---
     mov al, bl
@@ -718,6 +732,7 @@ proc getControllerWordValue
     push [bp + 6] ; componentId
     call getControllerComponent
     pop bx
+    pop ds ; component segment
 
     add bx, [bp + 4] ; parameter
     mov bx, [bx]
@@ -743,7 +758,8 @@ proc getControllerByteValue
     push ds
     push [bp + 6] ; componentId
     call getControllerComponent
-    pop bx
+    pop bx ; component
+    pop ds ; component segment
 
     add bx, [bp + 4] ; parameter
     mov bl, [bx]
@@ -772,7 +788,8 @@ proc setControllerWordValue
     push ds
     push [bp + 6] ; componentId
     call getControllerComponent
-    pop bx
+    pop bx ; component
+    pop ds ; component segment
 
     add bx, [bp + 4] ; parameter
     mov ax, [bp + 8] ; value
@@ -799,7 +816,8 @@ proc addControllerWordValue
     push ds
     push [bp + 6] ; componentId
     call getControllerComponent
-    pop bx
+    pop bx ; component
+    pop ds ; component segment
 
     add bx, [bp + 4] ; parameter
     mov ax, [bp + 8] ; addition
@@ -1171,9 +1189,10 @@ proc printController
     push RenderComponentId
     call getControllerComponent
     pop di ; component
+    pop es ; component segment
 
-    mov bx, [es:di + RenderComponentImageOffset]
-    mov ds, [es:di + RenderComponentImageSegment]
+    mov bx, [es:di + RenderComponentImageOffset]  ; image offset
+    mov ds, [es:di + RenderComponentImageSegment] ; image segment
 
     mov al, [bx] ; image type
 
@@ -1240,6 +1259,7 @@ proc saveController
     push RenderComponentId
     call getControllerComponent
     pop di ; component
+    pop ds ; component segment
 
     mov bx, di
     add bx, RenderComponentBackground ; bx -> background saving place
@@ -1290,6 +1310,7 @@ proc printBackground
     push RenderComponentId
     call getControllerComponent
     pop di ; component
+    pop ds ; component segment
 
     mov dx, di
     add dx, RenderComponentBackground
@@ -1328,7 +1349,8 @@ proc initController
     push ds
     push RenderComponentId
     call getControllerComponent
-    pop bx ; component
+    pop bx ; component offset
+    pop ds ; component segment
 
     mov [bx + RenderComponentPosition], ax
     mov [bx + RenderComponentPreviousPosition], ax
@@ -1665,6 +1687,7 @@ proc updateVelocity
     push PhysicsComponentId
     call getControllerComponent
     pop bx ; component
+    pop si ; component segment
 
     mov ax, bx
     add ax, PhysicsComponentAxisX
@@ -1826,21 +1849,24 @@ proc applyVelocity
     push dx
     push cx
     push ds
+    push es
 
     mov bx, [bp + 6] ; controller
-    mov ds, [bp + 4] ; segment
+    mov ds, [bp + 4] ; controller segment
 
-    push bx
-    push ds
+    push bx ; controller offset
+    push ds ; controller segment
     push PhysicsComponentId
     call getControllerComponent
     pop di ; physics component
+    pop es ; es -> physics component segment
 
-    push bx
-    push ds
+    push bx ; controller offset
+    push ds ; controller segment
     push RenderComponentId
     call getControllerComponent
     pop bx ; render component
+    pop ds ; render component segment
 
     push 0
     push [bx + RenderComponentPosition]
@@ -1848,13 +1874,13 @@ proc applyVelocity
     pop cx ; x
     pop dx ; y
 
-    push [di + PhysicsComponentVelocityY]
+    push [es:di + PhysicsComponentVelocityY]
     push SubPixelAmount
     call divide
     pop ax     ; y add
     add dx, ax ; dx new y
 
-    push [di + PhysicsComponentVelocityX]
+    push [es:di + PhysicsComponentVelocityX]
     push SubPixelAmount
     call divide
     pop ax     ; x add
@@ -1867,6 +1893,7 @@ proc applyVelocity
     call getClampedPosition
     pop [bx + RenderComponentPosition]
 
+    pop es
     pop ds
     pop cx
     pop dx
@@ -2268,6 +2295,7 @@ proc doesPointCollideController
     push RenderComponentId
     call getControllerComponent
     pop bx ; render component
+    pop ds ; component segment
 
     cmp [bx + RenderComponentPosition], si
     jg .setFalse
@@ -2474,6 +2502,7 @@ proc areControllersColliding
     push RenderComponentId
     call getControllerComponent
     pop di ; di -> render component
+    pop ds ; component segment
 
     mov ds, [bp + 8]  ; controller segment
     push [di + RenderComponentPosition] ; save original position
@@ -2560,7 +2589,7 @@ proc areControllersColliding
     ; push [bp + 10]
     ; push [bp + 8]
     ; push 20
-    ; call printRectByColor ; to visualize
+    ; call printControllerByColor ; to visualize
 
     cmp ax, 0
     je .didntCollide
@@ -2991,30 +3020,30 @@ proc getControllerComponent
 
     mov bx, [bp + 8] ; controller
     mov ds, [bp + 6] ; segment
-    mov ax, [bp + 4] ; componentId
+    mov ax, [bp + 4] ; al -> target componentId
 
-    mov si, bx
-    add si, ControllerComponentData
-    dec si
+    add bx, ControllerComponentData
+    sub bx, ComponentNextComponent
 
 .componentLoop:
-    inc si
-    mov ah, [si] ; current component id
+    add bx, ComponentNextComponent
+    mov ah, [bx + ComponentId] ; current component id
+
     cmp al, ah
     jne .componentLoop
 
-    xor ax, ax
-    mov al, [si + ComponentLocation]
-    add bx, ax
+    mov ax, [bx + ComponentOffset]
+    mov bx, [bx + ComponentSegment]
 
-    mov [bp + 8], bx
+    mov [bp + 6], ax ; offset
+    mov [bp + 8], bx ; segment
 
     pop ds
     pop si
     pop bx
     pop ax
     pop bp
-    ret 4
+    ret 2
 endp getControllerComponent
 
 proc endAndCleanUp
@@ -3113,6 +3142,7 @@ proc handleBounceCollision
     push PhysicsComponentId
     call getControllerComponent
     pop bx ; bx -> physics component
+    pop ds ; component segment
 
     push ax
     call getAbsValue
@@ -3719,7 +3749,7 @@ proc handleLeftPlayer
 endp handleLeftPlayer
 
 ; prints a controller's outline by a color
-proc printRectByColor
+proc printControllerByColor
     push bp
     mov bp, sp
     push bx
@@ -3731,7 +3761,8 @@ proc printRectByColor
     push ds
     push RenderComponentId
     call getControllerComponent
-    pop bx
+    pop bx ; component
+    pop ds ; component segment
 
     push [bp + 4] ; color
     push [bx + RenderComponentWidth]
@@ -3743,7 +3774,7 @@ proc printRectByColor
     pop bx
     pop bp
     ret 6
-endp printRectByColor
+endp printControllerByColor
 
 proc endGameIfCollide
     push bp
@@ -3879,6 +3910,23 @@ proc isClicking
     ret 6
 endp isClicking
 
+proc executeProcIfTrue
+    push bp
+    mov bp, sp
+    push ds
+
+    cmp [bp + 8], 0 ; if not true
+    je .end
+
+    mov ds, [bp + 4] ; proc segment
+    call [bp + 6]    ; call the proc
+
+.end:
+    pop ds
+    pop bp
+    ret 6
+endp executeProcIfTrue
+
 proc updateRandomSeed
     push bp
     mov bp, sp
@@ -4012,22 +4060,22 @@ start:
     push offset borderUp
     push seg borderUp
     push 20
-    call printRectByColor
+    call printControllerByColor
 
     push offset borderDown
     push seg borderDown
     push 20
-    call printRectByColor
+    call printControllerByColor
 
     push offset borderRight
     push seg borderRight
     push 20
-    call printRectByColor
+    call printControllerByColor
 
     push offset borderLeft
     push seg borderLeft
     push 20
-    call printRectByColor
+    call printControllerByColor
 
     push offset rightPlayerController
     push seg rightPlayerController
