@@ -1,7 +1,8 @@
 import os
+import wave
+
 import numpy as np
 from PIL import Image
-import wave
 from sklearn.cluster import MiniBatchKMeans
 
 CHUNK_MS = 50  # The size of each chunk for FFT in milliseconds
@@ -143,11 +144,15 @@ def build_palette(images_dir, file):
             reduced_palette = quantize_colors(image)
             colors.update(reduced_palette)
 
-    palette = list(colors)[:255]
-    palette.append((0, 0, 0))
-    palette.sort()
+    color_list = list(colors)
 
-    file.write("palette ")
+    if len(color_list) > 1:
+        kmeans = MiniBatchKMeans(n_clusters=min(256, len(color_list)), random_state=0, batch_size=128).fit(color_list)
+        color_list = [tuple(map(int, color)) for color in kmeans.cluster_centers_]
+
+    palette = color_list[:256]
+
+    file.write(f"palette dw {len(palette)}\n")
     palette_data = []
     for rgb in palette:
         palette_data.extend(rgb_to_63(rgb))
@@ -189,12 +194,10 @@ class RenderComponent(Component):
     def ask_questions(self):
         width = int(input("Enter width: "))
         height = int(input("Enter height: "))
-        memory_cost = 6 * 2 + width * height
-        output = [
-            f"dw 0, offset IMAGE, 0, 0, {width}, {height} ; pos, image, prev-pos, rotation, width, height",
-            f"db {width}*{height} dup(0) ; background save place"
-        ]
-        return memory_cost, output
+        return [(
+                f"dw 0, 0, offset IMAGE, seg IMAGE, 0, 0, 0, {width}, {height} ; x, y, image pointer, prev x, prev y, rotation, width, height\n"
+                + f"db {width}*{height} dup(0) ; background save place"
+        )]
 
 
 class PhysicsComponent(Component):
@@ -202,12 +205,20 @@ class PhysicsComponent(Component):
         super().__init__("Physics")
 
     def ask_questions(self):
-        memory_cost = 8 * 2
-        output = [
-            "dw 0, 0, 0, 0  ; vx, ax, fx, mx",
-            "dw 0, 0, 0, 0  ; vy, ay, fy, my"
-        ]
-        return memory_cost, output
+        return [(
+                "dw 0, 0, 0, MAX_X  ; vx, ax, fx, mx\n" +
+                "dw 0, 0, 0, MAX_Y  ; vy, ay, fy, my"
+        )]
+
+
+class MouseComponent(Component):
+    def __init__(self):
+        super().__init__("Mouse")
+
+    def ask_questions(self):
+        return [(
+            f"db 0, 0, 0, 0; left pressed, right pressed, left clicked, right clicked"
+        )]
 
 
 class AnimatorComponent(Component):
@@ -217,19 +228,18 @@ class AnimatorComponent(Component):
     def ask_questions(self):
         animation_amount = int(input("Enter amount of Animations: "))
         max_animation_amount = max(10, animation_amount)
-        memory_cost = 3 + max_animation_amount * 2
-        output = [
-            f"db 0, 0, {animation_amount} ; cur anim, cur frame, anim amount",
-            "dw " + " offset ANIMATION" * animation_amount,
-            f"dw {max_animation_amount - animation_amount} dup(0)"
-        ]
-        return memory_cost, output
+        return [(
+                f"db 0, 0, {animation_amount} ; cur anim, cur frame, anim amount\n"
+                + "dw " + "offset ANIMATION, seg ANIMATION " * animation_amount
+                + f"\ndw {max_animation_amount - animation_amount} dup(0)"
+        )]
 
 
 COMPONENT_TYPES = {
     "Render": RenderComponent,
     "Physics": PhysicsComponent,
-    "Animator": AnimatorComponent
+    "Animator": AnimatorComponent,
+    "Mouse": MouseComponent
 }
 
 
@@ -239,7 +249,6 @@ def create_controller():
     max_amount = int(max_amount) if max_amount.isdigit() else 10
 
     components = []
-    memory_offset = max_amount * 2 + 1  # Start after controller header
 
     while True:
         comp_name = input(f"Enter component name {COMPONENT_TYPES.keys()} or press Enter to finish: ")
@@ -247,23 +256,25 @@ def create_controller():
             break
 
         if comp_name in COMPONENT_TYPES:
+
             component = COMPONENT_TYPES[comp_name]()
-            memory_cost, output = component.ask_questions()
-            components.append((component, memory_offset, output))
-            memory_offset += memory_cost
+            output = component.ask_questions()
+            components.append((component, output))
             print("Component added!")
         else:
             print("Invalid component type. Try again.")
 
     output_lines = [f"{name} db {max_amount}"]
-    for component, offset, _ in components:
-        output_lines.append(f"db {component.name}ComponentId\ndb {offset}")
+    for component, output in components:
+        output_lines.append(f"db {component.name}ComponentId"
+                            f"\ndw offset {name + component.name}, seg {name + component.name}")
 
     padding = max_amount - len(components)
     if padding > 0:
-        output_lines.append(f"dw {padding} dup(0)")
+        output_lines.append(f"db {padding * 5} dup(0)")
 
-    for _, _, component_output in components:
+    for component, component_output in components:
+        component_output[0] = name + component.name + " " + component_output[0]
         output_lines.extend(component_output)
 
     print("\n".join(output_lines))
@@ -325,7 +336,7 @@ def handle_stacked_sprites(spriteName="stackedSprite", num_rotations=16, height=
         # Save stacked image
         name = f"{spriteName}Rotation{i}"
         array_data.append(name)
-        output_path = os.path.join(image_output_dir, name+'.png')
+        output_path = os.path.join(image_output_dir, name + '.png')
         canvas.save(output_path)
 
     with open(image_output_file, "w") as file:
@@ -346,6 +357,12 @@ def handle_sounds():
 
 
 def main():
+    # handle_images()
+    # handle_sounds()
+    # handle_stacked_sprites('car')
+
+    create_controller()
+
 
 if __name__ == "__main__":
     main()
