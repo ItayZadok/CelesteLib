@@ -729,7 +729,7 @@ collisionLayer dw 50 dup(0)
 animationLayer dw 50 dup(0)
 renderLayer dw 50 dup(0)
 
-pageManager db 0, 3; current page, amount of pages
+pageManager db 0, 2; current page, amount of pages
 dw initStartPage, periodicStartPage, -1
 dw initGamePage, periodicGamePage, resetGamePageScores
 dw initInstructionPage, periodicInstructionPage, -1
@@ -1628,28 +1628,28 @@ proc setPalette
     push si
     push cx
     push dx
-    push ds
+    push es
 
 	mov si, [bp + 6] ; palette offset
-	mov ds, [bp + 4] ; palette segment
+	mov es, [bp + 4] ; palette segment
 
-	mov cx, [ds:si + PaletteLength]
+	mov cx, [es:si + PaletteLength]
     add si, PaletteData
 	mov dx, PALETTE_PORT
 	mov al, 0
 	out dx, al ; copy starting color to port 3C8h
 	inc dx     ; copy palette itself to port 3C9h
 .setLoop:
-	mov al, [ds:si]   ; red
+	mov al, [es:si]   ; red
 	out dx, al
-	mov al, [ds:si + 1] ; green
+	mov al, [es:si + 1] ; green
 	out dx, al
-	mov al, [ds:si + 2] ; blue
+	mov al, [es:si + 2] ; blue
 	out dx, al
 	add si, 3      ; move to next color
 	loop .setLoop
 
-    pop ds
+    pop es
     pop dx
     pop cx
     pop si
@@ -2091,17 +2091,30 @@ endp printBackground
 proc initAndPrintController
     push bp
     mov bp, sp
+    push ax
+    push bx
+    push dx
+    push cx
 
-    push [bp + 10]
-    push [bp + 8]
-    push [bp + 6]
-    push [bp + 4]
+    mov ax, [bp + 10]
+    mov bx, [bp + 8]
+    mov dx, [bp + 6]
+    mov cx, [bp + 4]
+
+    push ax
+    push bx
+    push dx
+    push cx
     call initController
 
-    push [bp + 10]
-    push [bp + 8]
+    push ax
+    push bx
     call printController
 
+    pop cx
+    pop dx
+    pop bx
+    pop ax
     pop bp
     ret 8
 endp initAndPrintController
@@ -5918,14 +5931,14 @@ proc switchPage
     push bx
     push si
     push ax
-    push ds
+    push es
 
     mov si, [bp + 8] ; pageManager offset
-    mov ds, [bp + 6] ; pageManager segment
+    mov es, [bp + 6] ; pageManager segment
 
     xor bh, bh
     mov bl, [bp + 4] ; page index
-    mov [ds:si + PageManagerCurrentScreen], bl
+    mov [es:si + PageManagerCurrentScreen], bl
 
     mov al, bl
     add bl, al
@@ -5935,11 +5948,11 @@ proc switchPage
     add bl, al
 
     add si, bx
-    mov si, [ds:si + PageManagerData]
-    pop ds
+    mov si, [es:si + PageManagerData]
 
     call si ; init
 
+    pop es
     pop ax
     pop si
     pop bx
@@ -5953,27 +5966,28 @@ proc updateCurrentPage
     push bx
     push ax
     push si
-    push ds
+    push es
 
     mov si, [bp + 6] ; pageManager offset
-    mov ds, [bp + 4] ; pageManager segment
+    mov es, [bp + 4] ; pageManager segment
 
-    xor bh, bh
-    mov bl, [ds:si + PageManagerCurrentScreen]
-
-    mov al, bl
-    add bl, al
-    add bl, al
-    add bl, al
-    add bl, al
-    add bl, al
+    xor bx, bx
+    xor ah, ah
+    mov al, [es:si + PageManagerCurrentScreen]
+    
+    add bx, ax
+    add bx, ax
+    add bx, ax
+    add bx, ax
+    add bx, ax
+    add bx, ax
 
     add si, bx
-    mov si, [ds:si + PageManagerData + 2]
-    pop ds
-    
-    call si ; periodic
+    mov si, [es:si + PageManagerData + 2]
 
+    call si
+
+    pop es
     pop si
     pop ax
     pop bx
@@ -6169,9 +6183,9 @@ endp didControllerCollide
 
 proc gameLoop
 
-    ; push offset pageManager
-    ; push seg pageManager
-    ; call updateCurrentPage
+    push offset pageManager
+    push seg pageManager
+    call updateCurrentPage
 
     ret
 endp gameLoop
@@ -6239,7 +6253,11 @@ proc periodicGamePage
     push [scoreLeft]
     call setLabelByNumber
 
-    call initGamePage
+    push offset pageManager
+    push seg pageManager
+    push GAME_PAGE
+    call switchPage
+    jmp .end
 
 .didntCollideLeft:
 
@@ -6270,7 +6288,11 @@ proc periodicGamePage
     push [scoreRight]
     call setLabelByNumber
 
-    call initGamePage
+    push offset pageManager
+    push seg pageManager
+    push GAME_PAGE
+    call switchPage
+    jmp .end
 
 .didntCollideRight:
 
@@ -6673,6 +6695,7 @@ start:
     mov ax, 2  ; disable default mouse icon
     int 33h
 
+
     xor ax, ax
     xor dx, dx
     xor bx, bx
@@ -6681,14 +6704,13 @@ start:
     xor di, di
 
 ; *******************INIT***************
-
     push offset palette
     push seg palette
     call setPalette
 
     push offset pageManager
     push seg pageManager
-    push INSTRUCTION_PAGE
+    push START_PAGE
     call switchPage
 
 ; ***************************************
