@@ -577,7 +577,7 @@ db 247
 
 leftScoreLabel db LabelId
 dw offset font, seg font
-db 1, 1, '0'
+db 2, 1, '0'
 db 5 dup (0)
 
 leftInstructionLabel db LabelId
@@ -602,7 +602,7 @@ db 2, 23, 'click to start the game'
 
 rightScoreLabel db LabelId
 dw offset font, seg font
-db 1, 1, '0'
+db 2, 1, '0'
 db 5 dup (0)
 
 playerRect db RectId
@@ -624,8 +624,8 @@ db 4*26*5 dup(0) ; background save place
 startButton db 1
 db RenderComponentId
 dw offset startButtonRender, seg startButtonRender
-startButtonRender dw 0, 0, offset startButtonLabel, seg startButtonLabel, 0, 0, 0, 4*25, 5 ; x, y, image pointer, prev x, prev y, rotation, width, height
-db 4*25*5 dup(0) ; background save place
+startButtonRender dw 0, 0, offset startButtonLabel, seg startButtonLabel, 0, 0, 0, 4*25*2, 5*2 ; x, y, image pointer, prev x, prev y, rotation, width, height
+db 4*25*5*4 dup(0) ; background save place
 
 rightScoreController db 1
 db RenderComponentId
@@ -742,9 +742,9 @@ PageManagerData  equ 2
 
 VIDEO_MEMORY equ 0A000h
 PALETTE_PORT equ 3C8h
-R_SCAN_CODE equ 13h
+R_SCAN_CODE  equ 13h
 RaycastPrecision equ 128
-ScreenWidth equ 320
+ScreenWidth  equ 320
 ScreenHeight equ 200
 BLACK_COLOR equ 0
 WHITE_COLOR equ 1
@@ -1630,8 +1630,8 @@ proc setPalette
     push dx
     push es
 
-	mov si, [bp + 6] ; palette offset
-	mov es, [bp + 4] ; palette segment
+	mov si, [bp + 6] ; si -> palette offset
+	mov es, [bp + 4] ; es -> palette segment
 
 	mov cx, [es:si + PaletteLength]
     add si, PaletteData
@@ -1640,7 +1640,7 @@ proc setPalette
 	out dx, al ; copy starting color to port 3C8h
 	inc dx     ; copy palette itself to port 3C9h
 .setLoop:
-	mov al, [es:si]   ; red
+	mov al, [es:si]     ; red
 	out dx, al
 	mov al, [es:si + 1] ; green
 	out dx, al
@@ -2967,9 +2967,9 @@ proc getControllerXandY
     pop di ; component
     pop ds ; component segment
 
-    mov ax, [di + RenderComponentPositionX]
+    mov ax, [ds:di + RenderComponentPositionX]
     mov [bp + 4], ax ; x
-    mov ax, [di + RenderComponentPositionY]
+    mov ax, [ds:di + RenderComponentPositionY]
     mov [bp + 6], ax ; y
 
     pop ax
@@ -2997,11 +2997,11 @@ proc doesPointCollideController
     pop bx ; bx -> render component
     pop ds ; ds -> component segment
 
-    mov cx, [bx + RenderComponentPositionX] ; cx -> controller x
-    mov si, [bx + RenderComponentPositionY] ; si -> controller y
+    mov cx, [ds:bx + RenderComponentPositionX] ; cx -> controller x
+    mov si, [ds:bx + RenderComponentPositionY] ; si -> controller y
     
     push cx                             ; controller left x
-    add cx, [bx + RenderComponentWidth]
+    add cx, [ds:bx + RenderComponentWidth]
     push cx                             ; controller right x
     push [bp + 4]                       ; point x
     call isInRange
@@ -3011,7 +3011,7 @@ proc doesPointCollideController
     jz .setFalse
 
     push si                              ; controller top y
-    add si, [bx + RenderComponentHeight]
+    add si, [ds:bx + RenderComponentHeight]
     push si                              ; controller bottom y
     push [bp + 6]                        ; point y
     call isInRange
@@ -3568,12 +3568,12 @@ proc multiply
     push dx
     push cx
 
-    mov ax, [bp + 6]
-    mov cx, [bp + 4]
+    mov ax, [bp + 6] ; ax -> num1
+    mov cx, [bp + 4] ; cx -> num2
 
     xor dx, dx
     imul cx
-    mov [bp + 6], ax
+    mov [bp + 6], ax ; return num1 * num2
 
     pop cx
     pop dx
@@ -3789,8 +3789,8 @@ proc getControllerComponent
     push si
     push ds
 
-    mov bx, [bp + 8] ; controller
-    mov ds, [bp + 6] ; segment
+    mov bx, [bp + 8] ; bx -> controller
+    mov ds, [bp + 6] ; ds -> segment
     mov ax, [bp + 4] ; al -> target componentId
 
     add bx, ControllerComponentData
@@ -4597,13 +4597,15 @@ proc printChar
     mov bp, sp
     push dx
     push ax
-    mov dl, [bp + 4]
-    add dl, 30h
+
+    mov dl, [bp + 4] ; dl -> char ascii
+    add dl, 30h      ; dl -> dl + 30h (convert to correct number ascii)
     mov ah, 2
     int 21h
-    mov dl, ' '
+    mov dl, ' ' ; print space
     mov ah, 2
-    int 21h
+    int 21h     ; print the char
+
     pop ax
     pop dx
     pop bp
@@ -4618,11 +4620,10 @@ proc printNumber
     push cx
     push si
 
-    mov ax, [bp + 4] ; number to print
-    mov si, 10
-    mov cx, 0
+    mov ax, [bp + 4] ; ax -> number to print
+    mov si, 10       ; si -> 0
+    mov cx, 0        ; cx -> digit counter
 
-    ; check if negative
     cmp ax, 0
     jge .saveLoop    ; if positive or zero, proceed normally
 
@@ -4639,12 +4640,12 @@ proc printNumber
     cwd
     idiv si  ; ax / 10 -> quotient in ax, remainder in dx
 
-    add dl, '0'  ; Convert remainder to ASCII
-    push dx      ; Store digit on stack
+    add dl, '0'  ; Convert remainder to correct number ASCII
+    push dx      ; Store digit on stack (to not print in reversed)
     inc cx       ; Count number of digits
 
     test ax, ax
-    jnz .saveLoop
+    jnz .saveLoop ; if ax = 0 stop
 
 .printLoop:
     pop dx    ; get digit from stack
@@ -4863,7 +4864,7 @@ proc isClicking
     call getControllerByteValue
     pop ax
 
-    cmp al, 0
+    cmp ax, 0
     jz .end ; if did not click
 
     push [bp + 6] ; button controller
@@ -6403,14 +6404,6 @@ proc setRandomBallVelocity
 endp setRandomBallVelocity
 
 proc initGamePage
-    push ax
-    push bx
-    push dx
-    push cx
-    push si
-    push di
-    push es
-    push ds
 
     call clearScreen
 
@@ -6534,14 +6527,6 @@ proc initGamePage
     push 1
     call printControllerByColor
 
-    pop ds
-    pop es
-    pop di
-    pop si
-    pop cx
-    pop dx
-    pop bx
-    pop ax
     ret
 endp initGamePage
 
@@ -6578,6 +6563,7 @@ proc periodicStartPage
     push seg instructionButton
     call isClicking
     pop ax
+
     cmp ax, 0
     jz .didntClickInstruction
 
@@ -6601,7 +6587,7 @@ proc initStartPage
 
     push offset startButton
     push seg startButton
-    push ScreenWidth / 2 - 23*2
+    push ScreenWidth / 2 - 80
     push ScreenHeight / 2 - 50
     call initAndPrintController
 
@@ -6685,16 +6671,37 @@ proc periodicInstructionPage
     ret
 endp periodicInstructionPage
 
-start:
-    mov ax, @data
-    mov ds, ax ; set ds to data
-    mov ax, 13h
-    int 10h    ; activate screen
+proc enableMouse
+    push ax
+    push bx
+
     mov ax, 0  ; init Mouse
     int 33h
     mov ax, 2  ; disable default mouse icon
     int 33h
 
+    pop bx
+    pop ax
+    ret
+endp enableMouse
+
+proc activateGraphicScreen
+    push ax
+    push dx
+
+    mov ax, 13h
+    int 10h    ; activate screen
+
+    pop dx
+    pop ax
+    ret
+endp activateGraphicScreen
+
+start:
+    mov ax, @data
+    mov ds, ax ; set ds to data
+    call activateGraphicScreen
+    call enableMouse
 
     xor ax, ax
     xor dx, dx
@@ -6702,7 +6709,7 @@ start:
     xor si, si
     xor cx, cx
     xor di, di
-
+    
 ; *******************INIT***************
     push offset palette
     push seg palette
