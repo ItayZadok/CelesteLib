@@ -1,0 +1,215 @@
+DATASEG
+
+SCREEN_WIDTH  equ 320
+SCREEN_HEIGHT equ 200
+VIDEO_MEMORY equ 0A000h
+
+PRINT_LOCATION equ frameBuffer
+
+CODESEG
+
+
+proc RGBFromScreen
+    push bp
+    mov bp, sp
+    push di
+    push es
+    push ax
+    push bx
+
+    mov ax, PRINT_LOCATION
+    mov es, ax
+
+    push [bp + 4] ; point x 
+    push [bp + 6] ; point y
+    call toScreenPos
+    pop di ; di -> position
+
+    mov al, [es:di] ; al -> color index
+    mov dx, 3C7h
+    out dx, al
+    mov dx, 3C9h
+
+    mov ah, 0
+
+    in al, dx
+    mov [bp + 4], al ; r
+
+    in al, dx
+    mov [bp + 6], al ; g
+
+    in al, dx
+    mov [bp + 8], al ; b
+
+    pop bx
+    pop ax
+    pop es
+    pop di
+    pop bp
+    ret
+endp RGBFromScreen
+
+
+proc activateGraphicScreen
+    push ax
+    push dx
+
+    mov ax, 13h
+    int 10h
+
+    pop dx
+    pop ax
+    ret
+endp activateGraphicScreen
+
+
+proc clearScreen
+    push di
+    push ax
+    push es
+
+    mov ax, PRINT_LOCATION
+    mov es, ax
+
+    mov di, SCREEN_WIDTH * SCREEN_HEIGHT
+    inc di
+.clearLoop:
+    dec di
+    mov [byte ptr es:di], COLOR_BLACK
+    jnz .clearLoop
+
+    pop es
+    pop ax
+    pop di
+    ret
+endp clearScreen
+
+
+proc toScreenPos
+    push bp
+    mov bp, sp
+    push ax
+    push dx
+    push cx
+    push bx
+
+    mov bx, [bp + 6] ; x
+    mov ax, [bp + 4] ; y
+
+    mov cx, SCREEN_WIDTH
+    xor dx, dx
+    imul cx ; ax = y * SCREEN_WIDTH
+    add ax, bx
+
+    mov [bp + 6], ax
+
+    pop bx
+    pop cx
+    pop dx
+    pop ax
+    pop bp
+    ret 2
+endp toScreenPos
+
+proc printAllColors
+    push bp
+    mov bp, sp
+    push ax
+    push es
+    push di
+    mov ax, PRINT_LOCATION
+    mov es, ax
+	mov di, 0
+.printLoop:
+    mov [es:di], di
+    inc di
+	cmp di, 256
+    jne .printLoop
+    pop di
+    pop es
+    pop ax
+    pop bp
+	ret
+endp printAllColors
+
+proc printPixel
+    push bp
+    mov bp, sp
+    push ax
+    push es
+    push di
+
+    mov ax, PRINT_LOCATION
+    mov es, ax
+
+    mov di, [bp + 6] ; position
+    mov ax, [bp + 4] ; color
+
+    mov [byte ptr es:di], al
+
+    pop di
+    pop es
+    pop ax
+    pop bp
+    ret 4
+endp printPixel
+
+
+; ********************************* SCREEN HELPERS *********************************
+proc getClampedXandY
+    push bp
+    mov bp, sp
+    push ax
+    push cx
+    push dx
+
+    mov ax, SCREEN_WIDTH
+    sub ax, [bp + 10] ; width
+
+    push [bp + 6] ; x
+    push 0
+    push ax
+    call clamp
+    pop cx
+
+    mov ax, SCREEN_HEIGHT
+    sub ax, [bp + 8] ; height
+
+    push [bp + 4] ; y
+    push 0
+    push ax
+    call clamp
+    pop dx
+
+    mov [bp + 8], cx ; x
+    mov [bp + 10], dx ; y
+
+    pop dx
+    pop cx
+    pop ax
+    pop bp
+    ret 4
+endp getClampedXandY
+
+
+proc toXandY
+    push bp
+    mov bp, sp
+    push ax
+    push dx
+    push cx
+
+    mov ax, [bp + 4] ; position
+    mov cx, SCREEN_WIDTH
+    xor dx, dx
+    div cx ; ax = y ; dx = x
+
+    mov [bp + 4], dx
+    mov [bp + 6], ax
+
+    pop cx
+    pop dx
+    pop ax
+    pop bp
+    ret
+endp toXandY

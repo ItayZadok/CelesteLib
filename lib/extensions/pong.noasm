@@ -1,0 +1,130 @@
+DATASEG
+
+CODESEG
+
+
+proc verticalMover
+    push bp
+    mov bp, sp
+    push bx
+    push ax
+    push si
+    push di
+    push cx
+    
+    mov bx, [bp + 12] ; bx -> controller offset
+    mov ax, [bp + 10] ; ax -> controller segment
+    mov cx, [bp + 8]  ; cx -> speed
+    mov di, [bp + 6]  ; di -> up scan code
+    mov si, [bp + 4]  ; si -> down scan code
+
+    push si
+    call isKeyHeld
+    pop  si
+    cmp si, 0
+    jz .didntPressDown
+    
+    push bx ; controller offset
+    push ax ; controller segment
+    push cx
+    push PhysicsComponentId
+    push PhysicsComponentVelocityY
+    call setControllerWordValue
+.didntPressDown:
+
+    push di
+    call isKeyHeld
+    pop  di
+    cmp di, 0
+    jz .didntPressUp
+    
+    neg cx
+
+    push bx ; controller offset
+    push ax ; controller segment
+    push cx
+    push PhysicsComponentId
+    push PhysicsComponentVelocityY
+    call setControllerWordValue
+.didntPressUp:
+
+    pop cx
+    pop di
+    pop si
+    pop ax
+    pop bx
+    pop bp
+    ret 10
+endp verticalMover
+
+
+proc handleBounceCollisionLayer
+    push bp
+    mov bp, sp
+    push bx
+    push ax
+    push dx
+    push ds
+
+    push [bp + 6]
+    push [bp + 4]
+    push [bp + 10]
+    push [bp + 8]
+    call sortCollisionLayerByDistance
+
+    push [bp + 10] ; controller
+    push [bp + 8]  ; controller segment
+    push [bp + 6]  ; collider
+    push [bp + 4]  ; collider segment
+    call areControllerCollidingLayer
+    pop ax ; ax -> x overlap
+    pop dx ; dx -> y overlap
+    pop bx ; bx -> collision flag (1/0)
+
+    cmp bx, 0
+    je .end ; if didn't collide
+
+    push [bp + 10] ; controller
+    push [bp + 8]  ; segment
+    push ax ; x overlap
+    push dx ; y overlap
+    call addToPosition
+
+    cmp dx, 0
+    jge .skipGrounded
+    call setGrounded
+.skipGrounded:
+
+    push [bp + 10] ; controller offset
+    push [bp + 8]  ; controller segment
+    push PhysicsComponentId
+    call getControllerComponent
+    pop bx ; bx -> physics component
+    pop ds ; ds -> component segment
+
+    push dx
+    call getAbsValue
+    pop dx
+    cmp dx, 1
+    jl .bounceX
+
+.bounceY:
+    mov ax, [ds:bx + PhysicsComponentVelocityY]
+    neg ax
+    mov [ds:bx + PhysicsComponentVelocityY], ax
+    jmp .end
+
+.bounceX:
+    mov ax, [ds:bx + PhysicsComponentVelocityX]
+    neg ax
+    mov [ds:bx + PhysicsComponentVelocityX], ax
+
+.end:
+
+    pop ds
+    pop dx
+    pop ax
+    pop bx
+    pop bp
+    ret 8
+endp handleBounceCollisionLayer

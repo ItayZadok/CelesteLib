@@ -1,0 +1,247 @@
+DATASEG
+
+SCAN_CODE_ESC         equ 01h
+SCAN_CODE_1           equ 02h
+SCAN_CODE_2           equ 03h
+SCAN_CODE_3           equ 04h
+SCAN_CODE_4           equ 05h
+SCAN_CODE_5           equ 06h
+SCAN_CODE_6           equ 07h
+SCAN_CODE_7           equ 08h
+SCAN_CODE_8           equ 09h
+SCAN_CODE_9           equ 0Ah
+SCAN_CODE_0           equ 0Bh
+SCAN_CODE_MINUS       equ 0Ch
+SCAN_CODE_EQUAL       equ 0Dh
+SCAN_CODE_BACKSPACE   equ 0Eh
+SCAN_CODE_TAB         equ 0Fh
+SCAN_CODE_Q           equ 10h
+SCAN_CODE_W           equ 11h
+SCAN_CODE_E           equ 12h
+SCAN_CODE_R           equ 13h
+SCAN_CODE_T           equ 14h
+SCAN_CODE_Y           equ 15h
+SCAN_CODE_U           equ 16h
+SCAN_CODE_I           equ 17h
+SCAN_CODE_O           equ 18h
+SCAN_CODE_P           equ 19h
+SCAN_CODE_LBRACKET    equ 1Ah
+SCAN_CODE_RBRACKET    equ 1Bh
+SCAN_CODE_ENTER       equ 1Ch
+SCAN_CODE_CTRL        equ 1Dh
+SCAN_CODE_A           equ 1Eh
+SCAN_CODE_S           equ 1Fh
+SCAN_CODE_D           equ 20h
+SCAN_CODE_F           equ 21h
+SCAN_CODE_G           equ 22h
+SCAN_CODE_H           equ 23h
+SCAN_CODE_J           equ 24h
+SCAN_CODE_K           equ 25h
+SCAN_CODE_L           equ 26h
+SCAN_CODE_SEMICOLON   equ 27h
+SCAN_CODE_APOSTROPHE  equ 28h
+SCAN_CODE_GRAVE       equ 29h
+SCAN_CODE_LSHIFT      equ 2Ah
+SCAN_CODE_BACKSLASH   equ 2Bh
+SCAN_CODE_Z           equ 2Ch
+SCAN_CODE_X           equ 2Dh
+SCAN_CODE_C           equ 2Eh
+SCAN_CODE_V           equ 2Fh
+SCAN_CODE_B           equ 30h
+SCAN_CODE_N           equ 31h
+SCAN_CODE_M           equ 32h
+SCAN_CODE_COMMA       equ 33h
+SCAN_CODE_PERIOD      equ 34h
+SCAN_CODE_SLASH       equ 35h
+SCAN_CODE_RSHIFT      equ 36h
+SCAN_CODE_NUMPAD_STAR equ 37h
+SCAN_CODE_ALT         equ 38h
+SCAN_CODE_SPACE       equ 39h
+SCAN_CODE_CAPSLOCK    equ 3Ah
+SCAN_CODE_F1          equ 3Bh
+SCAN_CODE_F2          equ 3Ch
+SCAN_CODE_F3          equ 3Dh
+SCAN_CODE_F4          equ 3Eh
+SCAN_CODE_F5          equ 3Fh
+SCAN_CODE_F6          equ 40h
+SCAN_CODE_F7          equ 41h
+SCAN_CODE_F8          equ 42h
+SCAN_CODE_F9          equ 43h
+SCAN_CODE_F10         equ 44h
+SCAN_CODE_NUMLOCK     equ 45h
+SCAN_CODE_SCROLLLOCK  equ 46h
+SCAN_CODE_ARROW_UP    equ 48h
+SCAN_CODE_ARROW_DOWN  equ 50h
+SCAN_CODE_ARROW_LEFT  equ 4Bh
+SCAN_CODE_ARROW_RIGHT equ 4Dh
+
+KeyStateTable db 256 dup(0) ; Table to store key states
+PreviousKeyStateTable db 256 dup(0) ; Table to store the last frame key states
+
+CODESEG
+
+proc keyboardHandler far              
+	push ax
+	push bx
+    push cx
+    push dx
+	push di
+	push si
+    push es
+
+    mov ax, seg KeyStateTable
+    mov es, ax ; move to the correct segment
+
+	; read keyboard scan code
+    in al, 60h
+
+	; update keyboard state
+    xor bh, bh
+    mov bl, al
+    and bl, 7Fh     ; bl = scan code
+	
+	; save to the keyboard array
+    push cx
+	mov cx, 7
+    shr al, cl ; al = 0 if held, 1 if released
+	pop cx
+    xor al, 1  ; al = current state (1 if held, 0 if released)
+    
+    mov [es:KeyStateTable + bx], al ; set the key state to the array
+	
+	; send EOI to XT keyboard
+    in  al, 61h
+    mov ah, al
+    or  al, 80h
+    out 61h, al
+    mov al, ah
+    out 61h, al
+
+	; send EOI to master PIC
+    mov al, 20h
+    out 20h, al
+	
+    pop es
+    pop si
+    pop di
+    pop dx
+    pop cx
+    pop bx
+    pop ax
+    iret
+endp keyboardHandler
+
+; setups the keyboard handler
+proc setupKeyboardHandler
+    push bp
+    mov bp, sp
+    push ax
+    push es
+    xor ax, ax
+    mov es, ax ; set es to IVT
+    cli
+    ; Set the new ISR address
+    mov [word ptr es:9*4], offset keyboardHandler
+    mov [word ptr es:9*4+2], seg keyboardHandler
+    sti
+    pop es
+    pop ax
+    pop bp
+    ret
+endp setupKeyboardHandler
+
+proc updateKeyboard
+    push ax
+    push ds
+    push es
+    push bx
+    push si
+    push cx
+
+    mov bx, offset KeyStateTable ; bx -> cur offset
+    mov ax, seg KeyStateTable
+    mov ds, ax ; ds -> cur seg
+
+    mov si, offset PreviousKeyStateTable ; si -> prev offset
+    mov ax, seg PreviousKeyStateTable
+    mov es, ax ; es -> prev seg
+
+    mov cx, 256 ; ah -> counter
+
+.updateLoop:
+    mov al, [ds:bx] ; al -> cur
+    mov [es:si], al ; set the prev to the current
+
+    inc bx
+    inc si
+    dec cx
+    jnz .updateLoop
+
+    pop cx
+    pop si
+    pop bx
+    pop es
+    pop ds
+    pop ax
+    ret
+endp updateKeyboard
+
+proc keyClicked
+    push bp
+    mov bp, sp
+    push es
+    push bx
+    push ax
+    push si
+    push cx
+    
+    mov si, [bp + 4] ; key scan code
+
+    mov bx, offset KeyStateTable
+    add bx, si
+    mov ax, seg KeyStateTable
+    mov es, ax
+    mov ch, [es:bx] ; ch -> current state
+
+    mov bx, offset PreviousKeyStateTable
+    add bx, si
+    mov ax, seg PreviousKeyStateTable
+    mov es, ax
+    mov cl, [es:bx] ; cl -> prev state
+
+    not cl
+    and cl, ch
+    and cl, 1
+    mov [bp + 4], cl ; cl = 1 only if prev = 0, and cur = 1
+
+    pop cx
+    pop si
+    pop ax
+    pop bx
+    pop es
+    pop bp
+    ret
+endp keyClicked
+
+proc keyHeld
+    push bp
+    mov bp, sp
+    push es
+    push bx
+    push ax
+
+    mov bx, [bp + 4] ; key scan code
+    add bx, offset KeyStateTable
+
+    mov ax, seg KeyStateTable
+    mov es, ax
+
+    mov bl, [es:bx]
+    mov [bp + 4], bl
+
+    pop ax
+    pop bx
+    pop es
+    pop bp
+    ret
+endp keyHeld

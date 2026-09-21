@@ -1,0 +1,57 @@
+IDEAL
+MODEL small
+STACK 100h
+
+IMPORT utility.noasm
+
+IMPORT core/clock.noasm
+IMPORT core/array.noasm
+IMPORT core/controller.noasm
+IMPORT core/layer.noasm
+IMPORT core/memory.noasm
+IMPORT core/scene.noasm
+
+IMPORT ui/font.noasm
+IMPORT ui/label.noasm
+
+IMPORT math/math.noasm
+IMPORT math/random.noasm
+
+IMPORT input/keyboard.noasm
+IMPORT input/mouse.noasm
+
+IMPORT graphics/buffer.noasm
+IMPORT graphics/image.noasm
+IMPORT graphics/palette.noasm
+IMPORT graphics/rect.noasm
+IMPORT graphics/screen.noasm
+
+IMPORT components/animation.noasm
+IMPORT components/collision.noasm
+IMPORT components/physics.noasm
+IMPORT components/render.noasm
+IMPORT components/rotation.noasm
+
+DATASEG
+
+CODESEG
+
+start:
+    mov ax, @data
+    mov ds, ax ; set ds to data
+    xor ax, ax
+
+    call initGame
+
+keepAliveLoop:
+    jmp keepAliveLoop
+
+exit:
+    mov ah, 0
+    mov al, 2
+    int 10h
+    mov ax, 4C00h
+    int 21h
+    call endGame
+
+END start

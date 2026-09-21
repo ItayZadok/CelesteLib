@@ -1,0 +1,126 @@
+DATASEG
+
+GAME_SPEED equ 20 ; in ms (to calculate FPS -> 1024 / FPS)
+globalTime dw 0  ; in ms
+
+CODESEG
+
+; interrupt that hooks on to int70h
+; that is called by the computer
+; and call the "periodic" method 1024 times a sec
+proc clock far
+    push bp
+    mov bp, sp
+    push ax
+    push bx
+    push dx
+    push ds
+
+    ; Preserve port 70h contents
+    in al, 70h
+    mov bx, ax
+
+    ; Read status register C to acknowledge RTC interrupt
+    mov al, 0Ch
+    out 70h, al
+    mov al, 8Ch
+    out 70h, al
+    in al, 71h
+
+    ; Restore port 70h contents
+    mov ax, bx
+    out 70h, al
+
+    ; Notify PICs that interrupt is handled
+    mov al, 20h
+    out 0A0h, al
+    out 020h, al
+
+    push offset globalTime
+    call periodic ; every tick (1024 times a sec)
+
+    pop ds
+    pop dx
+    pop bx
+    pop ax
+    pop bp
+    iret
+endp clock
+
+; setup the game clock
+proc setupClock
+    push bp
+    mov bp, sp
+    push ax
+    push ds
+    push dx
+
+    cli
+
+    ; Set frequency divisor in RTC register A
+    mov al, 0Ah
+    out 70h, al
+    mov al, 8Ah
+    out 70h, al
+    in al, 71h
+    and al, 11110000b ; Clear rate bits
+    or al, 0110b      ; Set rate to 1024 Hz
+    out 71h, al
+    in al, 71h        ; Ensure the write is complete
+
+    ; Enable periodic interrupts in RTC register B
+    mov al, 0Bh
+    out 70h, al
+    mov al, 8Bh
+    out 70h, al
+    in al, 71h
+    or al, 40h        ; Set PI (bit 6)
+    out 71h, al
+    in al, 71h        ; Acknowledge the change
+
+    ; Set new interrupt handler for interrupt 70h
+    mov al, 70h       ; Interrupt vector 70h
+    mov ah, 25h       ; Set interrupt vector
+    mov dx, offset clock ; Offset of the ISR
+    push seg clock
+    pop ds
+    int 21h
+    sti
+
+    pop dx
+    pop ds
+    pop ax
+    pop bp
+    ret
+endp setupClock
+
+; called 1024 times a sec
+; calls gameLoop every GAME_SPEED ms
+proc periodic
+    push bp
+    mov bp, sp
+    push bx
+    push cx
+    push dx
+    push ax
+    mov bx, [bp + 4]
+    inc [word ptr bx]
+    cmp [word ptr bx], 1025
+    jl .skipReset
+    mov [word ptr bx], 1
+.skipReset:
+    mov ax, [bx]
+    mov cx, GAME_SPEED
+    xor dx, dx
+    div cx
+    cmp dx, 0
+    jne .skipGameLoop
+    call gameLoop
+.skipGameLoop:
+    pop ax
+    pop dx
+    pop cx
+    pop bx
+    pop bp
+    ret 2
+endp periodic

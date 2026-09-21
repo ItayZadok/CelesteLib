@@ -1,0 +1,53 @@
+DATASEG
+
+PALETTE_PORT equ 3C8h
+
+PaletteLength equ 0
+PaletteData   equ 2
+
+COLOR_EMPTY equ -1
+COLOR_BLACK equ 0
+COLOR_WHITE equ 1
+
+
+CODESEG
+
+
+; input - palette pointer
+; sets it to the screen's palette
+proc setPalette
+    push bp
+    mov bp, sp
+    push ax
+    push si
+    push cx
+    push dx
+    push es
+
+	mov si, [bp + 6] ; si -> palette offset
+	mov es, [bp + 4] ; es -> palette segment
+
+	mov cx, [es:si + PaletteLength]
+    add si, PaletteData
+	mov dx, PALETTE_PORT
+	mov al, 0
+	out dx, al ; copy starting color to port 3C8h
+	inc dx     ; copy palette itself to port 3C9h
+.setLoop:
+	mov al, [es:si]     ; red
+	out dx, al
+	mov al, [es:si + 1] ; green
+	out dx, al
+	mov al, [es:si + 2] ; blue
+	out dx, al
+	add si, 3      ; move to next color
+	loop .setLoop
+
+    pop es
+    pop dx
+    pop cx
+    pop si
+    pop ax
+    pop bp
+	ret 4
+endp setPalette

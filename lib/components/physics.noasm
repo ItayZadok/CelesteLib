@@ -1,0 +1,253 @@
+DATASEG
+
+PhysicsComponentId            equ 4
+PhysicsComponentAxisX         equ 0
+PhysicsComponentAddX          equ 0
+PhysicsComponentVelocityX     equ 2
+PhysicsComponentAccelerationX equ 4
+PhysicsComponentFrictionX     equ 6
+PhysicsComponentMaxVelocityX  equ 8
+PhysicsComponentAxisY         equ 10
+PhysicsComponentAddY          equ 10
+PhysicsComponentVelocityY     equ 12
+PhysicsComponentAccelerationY equ 14
+PhysicsComponentFrictionY     equ 16
+PhysicsComponentMaxVelocityY  equ 18
+
+PhysicsComponentAxisAdd          equ 0
+PhysicsComponentAxisVelocity     equ 2
+PhysicsComponentAxisAcceleration equ 4
+PhysicsComponentAxisFriction     equ 6
+PhysicsComponentAxisMaxVelocity  equ 8
+
+SubPixelAmount equ 16
+
+CODESEG
+
+; input - velocity controller
+; update its velocity (x and y)
+proc updateVelocity
+    push bp
+    mov bp, sp
+    push bx
+    push ax
+    push si
+    
+    mov bx, [bp + 6] ; bx -> controller
+    mov si, [bp + 4] ; si -> segment
+
+    push bx ; bx -> controller
+    push si ; si -> segment
+    push PhysicsComponentId
+    call getControllerComponent
+    pop bx ; bx -> physics component
+    pop si ; si -> component segment
+
+    mov ax, bx
+    add ax, PhysicsComponentAxisX
+    push ax ; x axis
+    push si ; segment
+    call updatePhysicsAxis ; update x axis
+
+    mov ax, bx
+    add ax, PhysicsComponentAxisY
+    push ax ; y axis
+    push si ; segment
+    call updatePhysicsAxis ; update y axis
+
+    pop si
+    pop ax
+    pop bx
+    pop bp
+    ret 4
+endp updateVelocity
+
+; input - velocity axis (start of each axis part)
+; updates its velocity
+proc updatePhysicsAxis
+    push bp
+    mov bp, sp
+    push bx
+    push dx
+    push si
+    push cx
+    push ds
+
+    mov si, [bp + 6] ; si -> physics axis
+    mov ds, [bp + 4] ; ds -> axis segment
+
+    mov dx, [si + PhysicsComponentAxisFriction]    ; dx -> friction
+    mov bx, [si + PhysicsComponentAxisVelocity]    ; bx -> velocity
+    mov cx, [si + PhysicsComponentAxisMaxVelocity] ; cx -> max velocity
+    
+    mov bx, [si + PhysicsComponentAxisAcceleration] ; accerlation
+    add [si + PhysicsComponentAxisVelocity], bx     ; add velocity acceleration
+    mov bx, [si + PhysicsComponentAxisVelocity]
+
+    cmp bx, 0
+    jl .positiveFriction ; if we go negative
+
+    cmp bx, 0
+    jg .negativeFriction ; if we go positive
+
+    jmp .end
+.negativeFriction:
+    sub bx, dx ; check if the gravity is too much it will become positive, if so reset it
+    cmp bx, 0
+    jl .resetFriction
+
+    mov [si + PhysicsComponentAxisVelocity], bx
+
+    jmp .limitPositiveVelocity
+.positiveFriction:
+    add bx, dx ; check if the gravity is too much it will become negative, if so reset it
+    cmp bx, 0
+    jg .resetFriction
+
+    mov [si + PhysicsComponentAxisVelocity], bx
+
+    jmp .limitNegativeVelocity
+.resetFriction:
+    mov [word ptr si + PhysicsComponentAxisVelocity], 0
+    jmp .end
+.limitPositiveVelocity:
+    cmp [si + PhysicsComponentAxisVelocity], cx
+    jl .limitNegativeVelocity
+    mov [si + PhysicsComponentAxisVelocity], cx
+.limitNegativeVelocity:
+    neg cx
+    cmp [si + PhysicsComponentAxisVelocity], cx
+    jg .end
+    mov [si + PhysicsComponentAxisVelocity], cx
+.end:
+
+    pop ds
+    pop cx
+    pop si
+    pop dx
+    pop bx
+    pop bp
+    ret 4
+endp updatePhysicsAxis
+
+
+; input - physics controller
+; adds the velocity to the controllers using the subPixelAmount
+; const to enable sub-pixel movement, for example - 0.5 pixels/frame
+proc applyVelocity
+    push bp
+    mov bp, sp
+    push bx
+    push ax
+    push di
+    push dx
+    push cx
+    push ds
+    push es
+
+    mov bx, [bp + 6] ; bx -> controller pointer
+    mov ds, [bp + 4] ; ds -> controller segment
+
+    push bx ; controller offset
+    push ds ; controller segment
+    push PhysicsComponentId
+    call getControllerComponent
+    pop di ; physics component
+    pop es ; es -> physics component segment
+
+    push bx ; controller offset
+    push ds ; controller segment
+    push RenderComponentId
+    call getControllerComponent
+    pop bx ; render component
+    pop ds ; render component segment
+
+    mov cx, [ds:bx + RenderComponentPositionX] ; cx -> x
+    mov dx, [ds:bx + RenderComponentPositionY] ; dx -> y
+
+    push [es:di + PhysicsComponentVelocityY]
+    push SubPixelAmount
+    call divideModulo
+    pop ax     ; ax -> y add
+    add dx, ax ; dx -> new y
+
+    pop ax ; ax -> left over
+    add [es:di + PhysicsComponentAddY], ax
+
+    push [es:di + PhysicsComponentAddY]
+    push SubPixelAmount
+    call divideModulo
+    pop ax
+    add dx, ax
+    pop [es:di + PhysicsComponentAddY]
+
+    push [es:di + PhysicsComponentVelocityX]
+    push SubPixelAmount
+    call divideModulo
+    pop ax     ; ax -> x add
+    add cx, ax ; cx -> new x
+
+    pop ax ; ax -> left over
+    add [es:di + PhysicsComponentAddX], ax
+
+    push [es:di + PhysicsComponentAddX]
+    push SubPixelAmount
+    call divideModulo
+    pop ax
+    add cx, ax
+    pop [es:di + PhysicsComponentAddX]
+
+    push [ds:bx + RenderComponentWidth]
+    push [ds:bx + RenderComponentHeight]
+    push cx ; x
+    push dx ; y
+    call getClampedXandY
+    pop [ds:bx + RenderComponentPositionX]
+    pop [ds:bx + RenderComponentPositionY]
+
+    mov ax, [ds:bx + RenderComponentPositionY]
+
+    cmp ax, dx
+    je .notGrounded
+
+    mov [word ptr ds:bx + RenderComponentIsGrounded], 1
+    jmp .end
+.notGrounded:
+    cmp [word ptr ds:bx + RenderComponentIsGrounded], 0
+    je .end
+    mov [word ptr ds:bx + RenderComponentIsGrounded], 0
+.end:
+    
+    pop es
+    pop ds
+    pop cx
+    pop dx
+    pop di
+    pop ax
+    pop bx
+    pop bp
+    ret 4
+endp applyVelocity
+
+proc updateAndApplyVelocity
+    push bp
+    mov bp, sp
+    push bx
+    push ax
+
+    mov bx, [bp + 6] ; controller
+    mov ax, [bp + 4] ; segment
+
+    push bx ; controller
+    push ax ; segment
+    call updateVelocity
+
+    push bx ; controller
+    push ax ; segment
+    call applyVelocity
+
+    pop ax
+    pop bx
+    pop bp
+    ret 4
+endp updateAndApplyVelocity

@@ -1,0 +1,19 @@
+DATASEG
+
+procPtr dw 0, 0
+
+CODESEG
+
+proc executeProcIfTrue
+    push bp
+    mov bp, sp
+
+    cmp [bp + 4], 0
+    je .end
+
+    call [bp + 6]
+
+.end:
+    pop bp
+    ret 4
+endp executeProcIfTrue

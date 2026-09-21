@@ -1,0 +1,169 @@
+DATASEG
+
+MouseComponentId           equ 7
+MouseComponentLeftPressed  equ 0
+MouseComponentRightPressed equ 1
+MouseComponentLeftClicked  equ 2
+MouseComponentRightClicked equ 3
+
+; maybe make the mouse a static object, instead of a component
+; NEED WORK
+
+CODESEG
+
+
+proc enableMouse
+    push ax
+    push bx
+
+    mov ax, 0  ; init Mouse
+    int 33h
+    mov ax, 2  ; disable default mouse icon
+    int 33h
+
+    pop bx
+    pop ax
+    ret
+endp enableMouse
+
+
+proc disableMouse
+
+    ret
+endp disableMouse
+
+
+proc updateMouse
+    push bp
+    mov bp, sp
+    push bx
+    push ax
+    push dx
+    push cx
+    push di
+    push ds
+
+    mov di, [bp + 6] ; controller
+    mov ds, [bp + 4] ; segment
+
+    ; --- Get mouse position and buttons ---
+    mov ax, 3
+    int 33h   ; cx -> x, dx -> y, bx -> button status
+    shr cx, 1 ; convert x from 0–639 to 0–319
+
+    push di ; controller
+    push ds ; segment
+    push cx ; x
+    push dx ; y
+    call setControllerXandY
+
+    ; --- Access Mouse component from controller ---
+    push di   ; controller
+    push ds   ; segment
+    push MouseComponentId
+    call getControllerComponent
+    pop di    ; di -> mouse component pointer
+    pop ds    ; ds -> component segment
+
+    ; --- Extract button states ---
+    mov al, bl
+    and al, 1         ; al -> left button (bit 0)
+
+    mov ah, bl
+    shr ah, 1
+    and ah, 1         ; ah -> right button (bit 1)
+
+    ; === Detect Left Click ===
+    mov bh, al                                  ; current left
+    mov bl, [ds:di + MouseComponentLeftPressed] ; previous left
+    not bl
+    and bl, bh
+    and bl, 1
+    mov [ds:di + MouseComponentLeftClicked], bl
+
+    ; === Detect Right Click ===
+    mov bh, ah
+    mov bl, [ds:di + MouseComponentRightPressed]
+    not bl
+    and bl, bh
+    and bl, 1
+    mov [ds:di + MouseComponentRightClicked], bl
+
+    ; --- Save current button states ---
+    mov [ds:di + MouseComponentLeftPressed], al
+    mov [ds:di + MouseComponentRightPressed], ah
+
+    pop ds
+    pop di
+    pop cx
+    pop dx
+    pop ax
+    pop bx
+    pop bp
+    ret 4
+endp updateMouse
+
+
+; ********************************* CONTROLLER / MOUSE HELPERS *********************************
+proc initAndUploadMouse
+    push bp
+    mov bp, sp
+    push ax
+    push bx
+    push cx
+    push dx
+
+    mov ax, 3
+    int 33h   ; cx -> x, dx -> y, bx -> button status
+    shr cx, 1 ; convert x from 0–639 to 0–319 
+
+    push [bp + 10] ; layer offset
+    push [bp + 8]  ; layer segment
+    push 1
+    push cx
+    push dx
+    push [bp + 6]  ; mouse offset
+    push [bp + 4]  ; mouse segment
+    call initAndUploadControllerToLayers ;  init to the middle of the screen
+
+    pop dx
+    pop cx
+    pop bx
+    pop ax
+    pop bp
+    ret 8
+endp initAndUploadMouse
+
+
+proc isClicking
+    push bp
+    mov bp, sp
+    push ax
+
+    push [bp + 10] ; mouse controller
+    push [bp + 8]  ; mouse segment
+    push MouseComponentId
+    push MouseComponentLeftClicked
+    call getControllerByteValue
+    pop ax
+
+    cmp ax, 0
+    jz .end ; if did not click
+
+    push [bp + 6] ; button controller
+    push [bp + 4] ; button segment
+
+    push [bp + 10] ; mouse controller
+    push [bp + 8]  ; mouse segment
+    call getControllerXandY
+
+    call doesPointCollideController
+    pop ax  ; result (1/0)
+
+.end:
+    mov [bp + 10], ax
+
+    pop ax
+    pop bp
+    ret 6
+endp isClicking

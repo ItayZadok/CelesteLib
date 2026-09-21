@@ -1,0 +1,96 @@
+DATASEG
+
+RectId     equ 10
+RectWidth  equ 1
+RectHeight equ 3
+RectColor  equ 5
+
+CODESEG
+
+proc printRect
+    push bp
+    mov bp, sp
+    push bx
+    push es
+
+    mov bx, [bp + 8] ; rect pointer
+    mov es, [bp + 6] ; rect segment
+    
+    push [es:bx + RectColor]
+    push [es:bx + RectWidth]
+    push [es:bx + RectHeight]
+    push [bp + 4] ; screen position (left top)
+    call printRectBySize
+
+    pop es
+    pop bx
+    pop bp
+    ret 6
+endp printRect
+
+
+proc printRectBySize
+    push bp
+    mov bp, sp
+    push di
+    push ax
+    push bx
+    push cx
+    push dx
+    push si
+    push es
+
+    mov ax, PRINT_LOCATION ; set the print location
+    mov es, ax
+    
+    mov bx, [bp + 10] ; color
+    mov dx, [bp + 8]  ; width
+    mov cx, [bp + 6]  ; height
+    mov di, [bp + 4]  ; screen start position
+
+    cmp bl, -1 ; skip draw if color is transparent
+    je .end
+
+    ; Adjust size to screen boundaries
+    push dx
+    push cx
+    push di
+    call clampSizeToScreenBounds
+    pop dx  ; adjusted width
+    pop cx  ; adjusted height
+    pop ax  ; skip draw flag
+
+    cmp ax, -1
+    je .end ; skip draw if completely out of bounds
+
+    ; di = current screen position
+    ; dx = width
+    ; bx = color
+    ; cx = height counter
+    ; si = x counter within current row
+
+    mov si, 0
+.printLoop:
+    mov [byte ptr es:di], bl ; draw pixel
+.skipPixel:
+    inc di         ; next screen pixel
+    inc si
+    cmp si, dx     ; if row not done, continue
+    jne .printLoop
+; move to next row
+    add di, SCREEN_WIDTH
+    sub di, dx     ; move to next row
+    xor si, si     ; reset x counter
+    dec cx
+    jnz .printLoop ; repeat for next row
+.end:
+    pop es
+    pop si
+    pop dx
+    pop cx
+    pop bx
+    pop ax
+    pop di
+    pop bp
+    ret 8
+endp printRectBySize

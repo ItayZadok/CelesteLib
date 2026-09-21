@@ -1,0 +1,41 @@
+DATASEG
+
+segment frameBuffer
+    db 64000 dup(0)
+ends
+
+CODESEG
+
+proc printBuffer
+    push bp
+    mov bp, sp
+    push ds
+    push es
+    push ax
+    push bx
+
+    mov ax, PRINT_LOCATION
+    mov ds, ax
+
+    cmp ax, VIDEO_MEMORY
+    jz .dontPrint
+
+    mov ax, VIDEO_MEMORY
+    mov es, ax ; es -> video memory
+
+    mov bx, SCREEN_HEIGHT * SCREEN_WIDTH
+.printLoop:
+
+    mov al, [ds:bx] ; al -> pixel from buffer
+    mov [es:bx], al ; print it to the screen
+
+    dec bx
+    jnz .printLoop
+.dontPrint:
+    pop bx
+    pop ax
+    pop es
+    pop ds
+    pop bp
+    ret
+endp printBuffer

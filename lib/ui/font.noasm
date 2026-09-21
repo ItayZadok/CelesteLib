@@ -1,0 +1,427 @@
+DATASEG
+
+charAsterisk db ImageId
+dw 4, 5
+db 1,-1,1,-1,-1,1,-1,-1,1,1,1,-1,-1,1,-1,-1,1,-1,1,-1
+char0 db ImageId
+dw 4, 5
+db 1,1,1,-1,1,-1,1,-1,1,-1,1,-1,1,-1,1,-1,1,1,1,-1
+char1 db ImageId
+dw 4, 5
+db 1,1,-1,-1,-1,1,-1,-1,-1,1,-1,-1,-1,1,-1,-1,1,1,1,-1
+char2 db ImageId
+dw 4, 5
+db 1,1,1,-1,-1,-1,1,-1,1,1,1,-1,1,-1,-1,-1,1,1,1,-1
+char3 db ImageId
+dw 4, 5
+db 1,1,1,-1,-1,-1,1,-1,-1,1,1,-1,-1,-1,1,-1,1,1,1,-1
+char4 db ImageId
+dw 4, 5
+db 1,-1,1,-1,1,-1,1,-1,1,1,1,-1,-1,-1,1,-1,-1,-1,1,-1
+char5 db ImageId
+dw 4, 5
+db 1,1,1,-1,1,-1,-1,-1,1,1,1,-1,-1,-1,1,-1,1,1,1,-1
+char6 db ImageId
+dw 4, 5
+db 1,-1,-1,-1,1,-1,-1,-1,1,1,1,-1,1,-1,1,-1,1,1,1,-1
+char7 db ImageId
+dw 4, 5
+db 1,1,1,-1,-1,-1,1,-1,-1,-1,1,-1,-1,-1,1,-1,-1,-1,1,-1
+char8 db ImageId
+dw 4, 5
+db 1,1,1,-1,1,-1,1,-1,1,1,1,-1,1,-1,1,-1,1,1,1,-1
+char9 db ImageId
+dw 4, 5
+db 1,1,1,-1,1,-1,1,-1,1,1,1,-1,-1,-1,1,-1,-1,-1,1,-1
+charA db ImageId
+dw 4, 5
+db 1,1,1,-1,1,-1,1,-1,1,1,1,-1,1,-1,1,-1,1,-1,1,-1
+charB db ImageId
+dw 4, 5
+db 1,1,1,-1,1,-1,1,-1,1,1,-1,-1,1,-1,1,-1,1,1,1,-1
+charC db ImageId
+dw 4, 5
+db -1,1,1,-1,1,-1,-1,-1,1,-1,-1,-1,1,-1,-1,-1,-1,1,1,-1
+charD db ImageId
+dw 4, 5
+db 1,1,-1,-1,1,-1,1,-1,1,-1,1,-1,1,-1,1,-1,1,1,-1,-1
+charE db ImageId
+dw 4, 5
+db 1,1,1,-1,1,-1,-1,-1,1,1,-1,-1,1,-1,-1,-1,1,1,1,-1
+charF db ImageId
+dw 4, 5
+db 1,1,1,-1,1,-1,-1,-1,1,1,-1,-1,1,-1,-1,-1,1,-1,-1,-1
+charG db ImageId
+dw 4, 5
+db 1,1,1,-1,1,-1,-1,-1,1,-1,1,-1,1,-1,1,-1,1,1,1,-1
+charH db ImageId
+dw 4, 5
+db 1,-1,1,-1,1,-1,1,-1,1,1,1,-1,1,-1,1,-1,1,-1,1,-1
+charI db ImageId
+dw 4, 5
+db 1,1,1,-1,-1,1,-1,-1,-1,1,-1,-1,-1,1,-1,-1,1,1,1,-1
+charJ db ImageId
+dw 4, 5
+db 1,1,1,-1,-1,1,-1,-1,-1,1,-1,-1,-1,1,-1,-1,1,1,-1,-1
+charK db ImageId
+dw 4, 5
+db 1,-1,1,-1,1,-1,1,-1,1,1,-1,-1,1,-1,1,-1,1,-1,1,-1
+charL db ImageId
+dw 4, 5
+db 1,-1,-1,-1,1,-1,-1,-1,1,-1,-1,-1,1,-1,-1,-1,1,1,1,-1
+charM db ImageId
+dw 4, 5
+db 1,1,1,-1,1,1,1,-1,1,-1,1,-1,1,-1,1,-1,1,-1,1,-1
+charN db ImageId
+dw 4, 5
+db 1,1,-1,-1,1,-1,1,-1,1,-1,1,-1,1,-1,1,-1,1,-1,1,-1
+charO db ImageId
+dw 4, 5
+db -1,1,1,-1,1,-1,1,-1,1,-1,1,-1,1,-1,1,-1,1,1,-1,-1
+charP db ImageId
+dw 4, 5
+db 1,1,1,-1,1,-1,1,-1,1,1,1,-1,1,-1,-1,-1,1,-1,-1,-1
+charQ db ImageId
+dw 4, 5
+db -1,1,-1,-1,1,-1,1,-1,1,-1,1,-1,1,1,-1,-1,-1,1,1,-1
+charR db ImageId
+dw 4, 5
+db 1,1,1,-1,1,-1,1,-1,1,1,-1,-1,1,-1,1,-1,1,-1,1,-1
+charS db ImageId
+dw 4, 5
+db -1,1,1,-1,1,-1,-1,-1,1,1,1,-1,-1,-1,1,-1,1,1,-1,-1
+charT db ImageId
+dw 4, 5
+db 1,1,1,-1,-1,1,-1,-1,-1,1,-1,-1,-1,1,-1,-1,-1,1,-1,-1
+charU db ImageId
+dw 4, 5
+db 1,-1,1,-1,1,-1,1,-1,1,-1,1,-1,1,-1,1,-1,-1,1,1,-1
+charV db ImageId
+dw 4, 5
+db 1,-1,1,-1,1,-1,1,-1,1,-1,1,-1,1,1,1,-1,-1,1,-1,-1
+charW db ImageId
+dw 4, 5
+db 1,-1,1,-1,1,-1,1,-1,1,-1,1,-1,1,1,1,-1,1,1,1,-1
+charX db ImageId
+dw 4, 5
+db 1,-1,1,-1,1,-1,1,-1,-1,1,-1,-1,1,-1,1,-1,1,-1,1,-1
+charY db ImageId
+dw 4, 5
+db 1,-1,1,-1,1,-1,1,-1,1,1,1,-1,-1,-1,1,-1,1,1,1,-1
+charZ db ImageId
+dw 4, 5
+db 1,1,1,-1,-1,-1,1,-1,-1,1,-1,-1,1,-1,-1,-1,1,1,1,-1
+charColon db ImageId
+dw 4, 5
+db 5 dup(-1),1,7 dup(-1),1,6 dup(-1)
+charComma db ImageId
+dw 4, 5
+db 13 dup(-1),1,-1,-1,1,-1,-1,-1
+charDollar db ImageId
+dw 4, 5
+db 1,1,1,-1,1,1,-1,-1,-1,1,1,-1,1,1,1,-1,-1,1,-1,-1
+charDot db ImageId
+dw 4, 5
+db 17 dup(-1),1,-1,-1
+charEquals db ImageId
+dw 4, 5
+db 4 dup(-1),1,1,1,5 dup(-1),1,1,1,5 dup(-1)
+charExclamation db ImageId
+dw 4, 5
+db -1,1,-1,-1,-1,1,-1,-1,-1,1,7 dup(-1),1,-1,-1
+charGreaterThan db ImageId
+dw 4, 5
+db 1,4 dup(-1),1,4 dup(-1),1,-1,-1,1,-1,-1,1,-1,-1,-1
+charLessThan db ImageId
+dw 4, 5
+db -1,-1,1,-1,-1,1,-1,-1,1,4 dup(-1),1,4 dup(-1),1,-1
+charNeg db ImageId
+dw 4, 5
+db 8 dup(-1),1,1,1,9 dup(-1)
+charParenthesesEnd db ImageId
+dw 4, 5
+db -1,1,4 dup(-1),1,-1,-1,-1,1,-1,-1,-1,1,-1,-1,1,-1,-1
+charParenthesesStart db ImageId
+dw 4, 5
+db -1,1,-1,-1,1,-1,-1,-1,1,-1,-1,-1,1,4 dup(-1),1,-1,-1
+charPercent db ImageId
+dw 4, 5
+db 1,-1,1,-1,-1,-1,1,-1,-1,1,-1,-1,1,-1,-1,-1,1,-1,1,-1
+charPlus db ImageId
+dw 4, 5
+db 5 dup(-1),1,-1,-1,1,1,1,-1,-1,1,6 dup(-1)
+charQuestionMark db ImageId
+dw 4, 5
+db 1,1,1,-1,-1,-1,1,-1,-1,1,1,6 dup(-1),1,-1,-1
+charQuotationEnd db ImageId
+dw 5, 5
+db -1,1,-1,1,-1,-1,1,-1,1,16 dup(-1)
+charQuotationStart db ImageId
+dw 4, 5
+db 1,-1,1,-1,1,-1,1,13 dup(-1)
+charSemicolon db ImageId
+dw 4, 5
+db 5 dup(-1),1,7 dup(-1),1,-1,-1,1,-1,-1,-1
+charSlash db ImageId
+dw 4, 5
+db -1,-1,1,-1,-1,1,-1,-1,-1,1,-1,-1,-1,1,-1,-1,1,-1,-1,-1
+charSpace db ImageId
+dw 4, 5
+db 20 dup(-1)
+
+font db FontId
+dw 56 ; length
+db '0123456789abcdefghijklmnopqrstuvwxyz()*:,$.=!><-%+?"";/ ' ; order of chars
+dw offset char0,  seg char0,  offset char1,  seg char1,  offset char2,  seg char2,  offset char3,  seg char3
+dw offset char4,  seg char4,  offset char5,  seg char5,  offset char6,  seg char6,  offset char7,  seg char7
+dw offset char8,  seg char8,  offset char9,  seg char9,  offset charA,  seg charA,  offset charB,  seg charB
+dw offset charC,  seg charC,  offset charD,  seg charD,  offset charE,  seg charE,  offset charF,  seg charF
+dw offset charG,  seg charG,  offset charH,  seg charH,  offset charI,  seg charI,  offset charJ,  seg charJ
+dw offset charK,  seg charK,  offset charL,  seg charL,  offset charM,  seg charM,  offset charN,  seg charN
+dw offset charO,  seg charO,  offset charP,  seg charP,  offset charQ,  seg charQ,  offset charR,  seg charR
+dw offset charS,  seg charS,  offset charT,  seg charT,  offset charU,  seg charU,  offset charV,  seg charV
+dw offset charW,  seg charW,  offset charX,  seg charX,  offset charY,  seg charY,  offset charZ,  seg charZ
+dw offset charParenthesesStart, seg charParenthesesStart, offset charParenthesesEnd, seg charParenthesesEnd
+dw offset charAsterisk,       seg charAsterisk,       offset charColon,          seg charColon
+dw offset charComma,          seg charComma,          offset charDollar,         seg charDollar
+dw offset charDot,            seg charDot,            offset charEquals,         seg charEquals
+dw offset charExclamation,    seg charExclamation,    offset charGreaterThan,    seg charGreaterThan
+dw offset charLessThan,       seg charLessThan,       offset charNeg,            seg charNeg
+dw offset charPercent,        seg charPercent,        offset charPlus,           seg charPlus
+dw offset charQuestionMark,   seg charQuestionMark,   offset charQuotationEnd,   seg charQuotationEnd
+dw offset charQuotationStart, seg charQuotationStart, offset charSemicolon,      seg charSemicolon
+dw offset charSlash,          seg charSlash,          offset charSpace,          seg charSpace
+
+FontId         equ 15
+FontSize       equ 1
+FontData       equ 3
+
+CODESEG
+
+
+proc getCharFromFont
+    push bp
+    mov bp, sp
+    push bx
+    push ax
+    push dx
+    push cx
+    push ds
+    push si
+
+    mov bx, [bp + 8] ; bx -> font offset
+    mov ds, [bp + 6] ; ds -> font segment
+    mov al, [bp + 4] ; al -> ascii character to look for
+
+    mov cx, [bx + FontSize] ; cx -> total chars in font
+    mov dx, cx              ; dx -> original size
+    add bx, FontData        ; bx -> pointer to ascii array
+
+    xor si, si ; si -> index
+.findChar:
+    cmp [bx + si], al ; compare with target char
+    jz .found
+
+    inc si
+    dec cx
+    jnz .findChar
+    mov si, 0 ; if not found return the first char
+.found:
+    ; calculate offset to char image pointer
+    mov ax, si ; ax -> index
+    shl ax, 2  ; ax -> index * 4
+    add bx, dx ; bx -> pointer to char image array
+    add bx, ax ; bx -> pointer to correct char
+    
+    mov ax, [bx + PointerSegment]
+    mov [bp + 6], ax
+    mov ax, [bx + PointerOffset]
+    mov [bp + 8], ax
+
+    pop si
+    pop ds
+    pop cx
+    pop dx
+    pop ax
+    pop bx
+    pop bp
+    ret 2
+endp getCharFromFont
+
+
+proc printChar
+    push bp
+    mov bp, sp
+    push dx
+    push ax
+
+    mov dl, [bp + 4] ; dl -> char ascii
+    add dl, 30h      ; dl -> dl + 30h (convert to correct number ascii)
+    mov ah, 2
+    int 21h
+    mov dl, ' ' ; print space
+    mov ah, 2
+    int 21h     ; print the char
+
+    pop ax
+    pop dx
+    pop bp
+    ret 2
+endp printChar
+
+
+proc printNumber
+    push bp
+    mov bp, sp
+    push dx
+    push ax
+    push cx
+    push si
+
+    mov ax, [bp + 4] ; ax -> number to print
+    mov si, 10       ; si -> 0
+    mov cx, 0        ; cx -> digit counter
+
+    cmp ax, 0
+    jge .saveLoop    ; if positive or zero, proceed normally
+
+    ; if negative, print '-' and make number positive for correct ASCII
+    push ax
+    mov dl, '-'
+    mov ah, 2
+    int 21h
+    pop ax
+
+    neg ax
+
+.saveLoop:
+    cwd
+    idiv si  ; ax / 10 -> quotient in ax, remainder in dx
+
+    add dl, '0'  ; Convert remainder to correct number ASCII
+    push dx      ; Store digit on stack (to not print in reversed)
+    inc cx       ; Count number of digits
+
+    test ax, ax
+    jnz .saveLoop ; if ax = 0 stop
+
+.printLoop:
+    pop dx    ; get digit from stack
+    mov ah, 2
+    int 21h   ; print char
+
+    dec cx
+    jnz .printLoop
+
+    ; print space at the end
+    mov dl, ' '
+    mov ah, 2
+    int 21h
+    
+    pop si
+    pop cx
+    pop ax
+    pop dx
+    pop bp
+    ret 2
+endp printNumber
+
+
+proc printCharFromFont
+    push bp
+    mov bp, sp
+    push ax
+    push bx
+    push ds
+
+    mov ax, [bp + 4]  ; position
+
+    push [bp + 10] ; font offset
+    push [bp + 8]  ; font segment
+    push [bp + 6]  ; char ascii
+    call getCharFromFont
+    pop ds ; char image segment
+    pop bx ; char image offset
+
+    push bx
+    push ds
+    push ax
+    call printImage
+
+    add ax, [bx + ImageWidth]
+    mov [bp + 10], ax ; return the new position
+
+    pop ds
+    pop bx
+    pop ax
+    pop bp
+    ret 6
+endp printCharFromFont
+
+
+proc printNumberByFont
+    push bp
+    mov bp, sp
+    push dx
+    push ax
+    push cx
+    push si
+    push bx
+    push di
+
+    mov ax, [bp + 6] ; number to print
+    mov bx, [bp + 4] ; position
+
+    mov si, 10
+    mov cx, 0
+
+    ; check if negative
+    cmp ax, 0
+    jge .saveLoop    ; if positive or zero, proceed normally
+
+    ; if negative, print '-' and make number positive for correct ASCII
+    xor dx, dx
+    mov dx, '-'
+
+    push [bp + 10]
+    push [bp + 8]
+    push dx
+    push bx
+    call printCharFromFont
+    pop bx
+
+    neg ax
+
+.saveLoop:
+    cwd
+    idiv si  ; ax / 10 -> quotient in ax, remainder in dx
+
+    add dl, '0'
+    push dx      ; Store digit on stack
+    inc cx       ; Count number of digits
+
+    test ax, ax
+    jnz .saveLoop
+
+.printLoop:
+    pop dx    ; get digit from stack
+
+    push [bp + 10]
+    push [bp + 8]
+    push dx
+    push bx
+    call printCharFromFont
+    pop bx
+
+    dec cx
+    jnz .printLoop
+    
+    pop di
+    pop bx
+    pop si
+    pop cx
+    pop ax
+    pop dx
+    pop bp
+    ret 8
+endp printNumberByFont

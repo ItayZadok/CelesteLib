@@ -1,0 +1,41 @@
+DATASEG
+
+MallocManagerId               equ 12
+MallocManagerSegment          equ 1
+MallocManagerBytesLeft        equ 3
+MallocManagerBytesUsed        equ 5
+MallocManagerBytesAllocations equ 7
+
+CODESEG
+    
+proc allocateMemory
+    push bp
+    mov bp, sp
+    push bx
+    push ax
+    push cx
+    push dx
+    push ds
+
+    mov bx, [bp + 8] ; malloc manager
+    mov ds, [bp + 6] ; segment
+    mov ax, [bp + 4] ; bytes to allocate
+
+    mov dx, [bx + MallocManagerSegment]
+    mov cx, [bx + MallocManagerBytesLeft]
+    add cx, [bx + MallocManagerBytesUsed] ; cx -> head
+
+    mov [bp + 6], cx ; pointer
+    mov [bp + 8], dx ; segment
+
+    add [bx + MallocManagerBytesUsed], ax
+    sub [bx + MallocManagerBytesLeft], ax
+
+    pop ds
+    pop dx
+    pop cx
+    pop ax
+    pop bx
+    pop bp
+    ret 2
+endp allocateMemory

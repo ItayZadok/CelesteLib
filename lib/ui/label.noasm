@@ -1,0 +1,226 @@
+DATASEG
+
+LabelId          equ 14
+LabelFontOffset  equ 1
+LabelFontSegment equ 3
+LabelFontSize    equ 5
+LabelSize        equ 6
+LabelData        equ 7
+
+CODESEG
+
+proc printLabelByCenter
+   push bp
+    mov bp, sp
+    push bx
+    push ax
+    push cx
+    push di
+    push si
+    push dx
+    push ds
+    push es
+
+    mov bx, [bp + 10] ; bx -> label offset
+    mov ds, [bp + 8] ; ds -> label segment
+    xor ax, ax
+    mov ch, [bx + LabelFontSize] ; ch -> font size
+    mov cl, [bx + LabelSize]     ; cl -> number of characters
+
+    mov di, [bx + LabelFontOffset]  ; di -> font offset
+    mov si, [bx + LabelFontSegment] ; si -> font segment
+    add bx, LabelData               ; bx -> pointer to char array
+
+.charLoop:
+    xor dx, dx
+    mov dl, [bx] ; di -> ascii char
+
+    push bx ; store bx
+
+    push di ; font offset
+    push si ; font segment
+    push dx ; ascii char
+    call getCharFromFont
+    pop es ; char image segment
+    pop bx ; char image offset
+
+    xor dx, dx
+    mov dl, ch
+
+    push [es:bx + ImageWidth]
+    push dx
+    call multiply
+    pop dx
+    add ax, dx ; add position the multiplied width
+
+    pop bx ; restore bx
+
+    inc bx
+    dec cl
+    jnz .charLoop
+
+    push 0
+    push ax
+    call toXandY
+    pop dx
+    pop cx
+
+    sar dx, 1
+    sar cx, 1
+
+    push dx
+    push cx
+    call toScreenPos
+    pop ax
+
+    push [bp + 6]
+    push [bp + 4]
+    call toScreenPos
+    pop si
+    sub si, ax
+
+    push [bp + 10]
+    push [bp + 8]
+    push si
+    call printLabel
+
+    pop es
+    pop ds
+    pop dx
+    pop si
+    pop di
+    pop cx
+    pop ax
+    pop bx
+    pop bp
+    ret 8
+endp printLabelByCenter
+
+proc printLabel
+    push bp
+    mov bp, sp
+    push bx
+    push ax
+    push cx
+    push di
+    push si
+    push dx
+    push ds
+    push es
+
+    mov bx, [bp + 8] ; bx -> label offset
+    mov ds, [bp + 6] ; ds -> label segment
+    mov ax, [bp + 4] ; ax -> position
+    mov ch, [bx + LabelFontSize] ; ch -> font size
+    mov cl, [bx + LabelSize]     ; cl -> number of characters
+
+    mov di, [bx + LabelFontOffset]  ; di -> font offset
+    mov si, [bx + LabelFontSegment] ; si -> font segment
+    add bx, LabelData               ; bx -> pointer to char array
+
+.charLoop:
+    xor dx, dx
+    mov dl, [bx] ; di -> ascii char
+
+    push bx ; store bx
+
+    push di ; font offset
+    push si ; font segment
+    push dx ; ascii char
+    call getCharFromFont
+    pop es ; char image segment
+    pop bx ; char image offset
+
+    push bx ; char image offset
+    push es ; char image segment
+    push ax ; position
+    xor dx, dx
+    mov dl, ch
+    push dx ; font size
+    call printImageUpscaled
+    
+    push [es:bx + ImageWidth]
+    push dx
+    call multiply
+    pop dx
+    add ax, dx ; add position the multiplied width
+
+    pop bx ; restore bx
+
+    inc bx
+    dec cl
+    jnz .charLoop
+
+    pop es
+    pop ds
+    pop dx
+    pop si
+    pop di
+    pop cx
+    pop ax
+    pop bx
+    pop bp
+    ret 6
+endp printLabel
+
+proc setLabelByNumber
+    push bp
+    mov bp, sp
+    push bx
+    push ax
+    push dx
+    push di
+    push cx
+    push ds
+
+    mov bx, [bp + 8] ; bx -> label offset
+    mov ds, [bp + 6] ; dx -> label segment
+    mov ax, [bp + 4] ; ax -> number
+
+    mov si, 10 ; si -> 10
+    xor di, di ; di -> number of digits
+    xor cx, cx
+
+    cmp ax, 0  ; if number is negative, save '-' turn number to positive for correct ASCII
+    jge .saveLoop
+
+    mov [byte ptr bx + LabelData], '-'
+    mov cx, 1
+
+    neg ax
+
+.saveLoop:
+    cwd
+    idiv si  ; ax / 10 -> quotient in ax, remainder in dx
+
+    add dl, '0'
+    push dx
+    inc di
+
+    test ax, ax
+    jnz .saveLoop
+
+    mov ax, di
+    mov [byte ptr bx + LabelSize], al
+    add [bx + LabelSize], cl
+    add bx, cx ; start with the second char if negative
+
+.setLoop:
+    pop dx
+
+    mov [bx + LabelData], dl
+
+    inc bx
+    dec di
+    jnz .setLoop
+
+
+    pop ds
+    pop cx
+    pop di
+    pop dx
+    pop ax
+    pop bx
+    pop bp
+    ret 6
+endp setLabelByNumber

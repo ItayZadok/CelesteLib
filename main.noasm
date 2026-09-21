@@ -1,0 +1,21 @@
+IMPORT lib/lib.noasm
+
+DATASEG
+
+CODESEG
+
+proc initGame
+
+    ret
+endp initGame
+
+proc gameLoop
+
+    ret
+endp gameLoop
+
+proc endGame
+
+    ret
+endp endGame
+

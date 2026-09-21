@@ -1,0 +1,957 @@
+DATASEG
+
+RaycastPrecision equ 128
+
+CODESEG
+
+proc getDistanceBetweenColliders
+    push bp
+    mov bp, sp
+    push di
+    push si
+    push cx
+    push dx
+    push bx
+    push ax
+    push ds
+    push es
+
+    push [bp + 10] ; si -> controller1 offset
+    push [bp + 8]  ; ds -> controller1 segment
+    push RenderComponentId
+    call getControllerComponent
+    pop si ; si -> component offset
+    pop ds ; ds -> component segment
+    
+    push [bp + 6]  ; bx -> controller2 offset
+    push [bp + 4]  ; es -> controller2 segment
+    push RenderComponentId
+    call getControllerComponent
+    pop di ; bx -> component offset
+    pop es ; es -> component segment
+
+    mov ax, [si + RenderComponentPositionX]    ; ax -> left1
+    mov cx, [es:di + RenderComponentPositionX] ; cx -> left2
+    mov dx, ax
+    add dx, [si + RenderComponentWidth]        ; dx -> right1
+    mov bx, cx
+    add bx, [es:di + RenderComponentWidth]     ; bx -> right2
+    sub ax, bx ; ax -> left1 - right2
+    sub cx, dx ; cx -> left2 - right1
+    push ax
+    push cx
+    call max ; store dx in stack
+
+    mov ax, [si + RenderComponentPositionY]    ; ax -> top1
+    mov cx, [es:di + RenderComponentPositionY] ; cx -> top2
+    mov dx, ax
+    add dx, [si + RenderComponentHeight]        ; dx -> bottom1
+    mov bx, cx
+    add bx, [es:di + RenderComponentHeight]     ; bx -> bottom2
+    sub ax, bx ; ax -> top1 - bottom2
+    sub cx, dx ; cx -> top2 - bottom1
+    push ax
+    push cx
+    call max
+    
+    pop bx ; bx -> dy
+    pop ax ; ax -> dx
+
+    push bx
+    push 0
+    call max
+    pop bx ; bx -> corrected dy
+    
+    push ax
+    push 0
+    call max
+    pop ax ; ax -> corrected dx
+
+    push bx
+    push 2
+    call getPower
+    pop bx ; bx -> dy^2
+
+    push ax
+    push 2
+    call getPower
+    pop ax ; ax -> dx^2
+    
+    add ax, bx ; ax -> dx^2 + dy^2
+
+    push ax
+    call getSquareRoot
+    pop ax
+
+    mov [bp + 10], ax ; return distance
+
+    pop es
+    pop ds
+    pop ax
+    pop bx
+    pop dx
+    pop cx
+    pop si
+    pop di
+    pop bp
+    ret 6
+endp getDistanceBetweenColliders
+
+
+proc getFirstCollisionFromLayer
+    push bp
+    mov bp, sp
+    push cx
+    push si
+    push ax
+    push dx
+    push di
+    push ds
+    push bx
+
+    mov bx, [bp + 6] ; collision layer offset
+    mov ds, [bp + 4] ; collision layer segment
+
+    mov cx, [bx + PointerArraySize] ; collision layer size
+    mov di, bx
+    add di, PointerArrayData ; start of data (colliders)
+.collisionLoop:
+    push [bp + 10] ; controller offset
+    push [bp + 8]  ; controller segment
+    push [di + PointerOffset]    ; collider offset
+    push [di  + PointerSegment]  ; collider segment
+    call areControllersCollidingThisFrame
+    pop dx ; x overlap
+    pop si ; y overlap
+    pop ax ; collision flag
+
+    cmp ax, 1
+    je .end ; if collided
+
+    add di, PointerSize ; next collider
+
+    dec cx
+    cmp cx, 0
+    jge .collisionLoop
+
+.didntCollide:
+    mov dx, 0
+    mov si, 0
+    mov ax, 0
+.end:
+    mov [bp + 6], dx  ; x overlap
+    mov [bp + 8], si  ; y overlap
+    mov [bp + 10], ax ; collision flag
+
+    pop bx
+    pop ds
+    pop di
+    pop dx
+    pop ax
+    pop si
+    pop cx
+    pop bp
+    ret 2
+endp getFirstCollisionFromLayer
+
+
+proc sortCollisionLayerByDistance
+    push bp
+    mov bp, sp
+    push bx
+    push cx
+    push ax
+    push ds
+    push si
+    push di
+
+    mov bx, [bp + 10] ; layer offset
+    mov ds, [bp + 8]  ; layer segment
+
+    mov cx, [bx + PointerArraySize]
+    xor di, di
+
+.sortLoop:
+    cmp di, cx
+    je .end
+
+    push bx ; layer offset
+    push ds ; layer segment
+    push di        ; offset
+    push [bp + 6]  ; controller offset
+    push [bp + 4]  ; controller segment
+    call getMinDistanceColliderIndex
+    pop ax
+
+    push bx ; layer offset
+    push ds ; layer segment
+    push ax ; min distance index
+    push di ; current index
+    call swapPointers
+
+    inc di
+    jmp .sortLoop
+.end:
+
+    pop di
+    pop si
+    pop ds
+    pop ax
+    pop cx
+    pop bx
+    pop bp
+    ret 8
+endp sortCollisionLayerByDistance
+
+
+proc areControllersColliding
+    push bp
+    mov bp, sp
+    push ax
+    push bx
+    push si
+    push cx
+    push di
+    push dx
+    push ds
+
+    push [bp + 10] ; controller offset
+    push [bp + 8]  ; controller segment
+    push RenderComponentId
+    call getControllerComponent
+    pop di ; di -> render component
+    pop ds ; ds -> component segment
+
+    push [di + RenderComponentPositionX] ; save original x
+    push [di + RenderComponentPositionY] ; save original y
+
+    push [di + RenderComponentPositionX]
+    push [di + RenderComponentPositionY]
+    push [di + RenderComponentPreviousPositionX]
+    push [di + RenderComponentPreviousPositionY]
+    call getStepElements
+    pop cx ; cx -> diffX
+    pop dx ; dx -> diffY
+    pop ax ; ax -> amount of steps
+
+    ; if no movement, don't raycast
+    cmp ax, 0
+    jne .startRaycast
+
+    push [bp + 10] ; controller offset
+    push [bp + 8]  ; controller segment
+    push [bp + 6]  ; collider offset
+    push [bp + 4]  ; collider segment
+    call areControllersCollidingThisFrame
+    pop dx ; x overlap
+    pop cx ; y overlap
+    pop ax ; collision flag
+    jmp .cleanup
+
+.startRaycast:
+
+    push cx ; diffX
+    push ax ; steps
+    call divide
+    pop cx ; cx -> stepX
+
+    push dx ; diffY
+    push ax ; steps
+    call divide
+    pop dx ; dx -> stepY
+
+    ; start raycast from previous position
+    mov bx, [di + RenderComponentPreviousPositionX]
+    mov [di + RenderComponentPositionX], bx
+    mov bx, [di + RenderComponentPreviousPositionY]
+    mov [di + RenderComponentPositionY], bx
+
+    xor bx, bx ; reset sumX
+    xor si, si ; reset sumY
+
+.raycastLoop:
+    push cx ; store cx
+
+    add bx, cx ; sumX += step X
+    add si, dx ; sumY += step Y
+
+    push bx ; sumX
+    push RaycastPrecision
+    call divideModulo
+    pop cx  ; addX
+    pop bx  ; updated sumX
+    add [di + RenderComponentPositionX], cx ; apply step x
+
+    push si ; sumY
+    push RaycastPrecision
+    call divideModulo
+    pop cx  ; addY
+    pop si  ; updated sumY
+    add [di + RenderComponentPositionY], cx ; apply step y
+
+    pop cx ; restore cx
+
+    push ax ; store ax (steps left)
+    push dx ; store dx
+    push cx ; store cx
+
+    ; check collision at current position
+    push [bp + 10] ; controller pointer
+    push [bp + 8]  ; controller segment
+    push [bp + 6]  ; collider pointer
+    push [bp + 4]  ; collider segment
+    call areControllersCollidingThisFrame
+    pop dx ; dx -> x change to correctly collide
+    pop cx ; cx -> y change to correctly collide
+    pop ax ; ax -> collision flag (1/0)
+
+    ; push [bp + 10]
+    ; push [bp + 8]
+    ; push 90
+    ; call printControllerByColor ; to visualize
+
+    cmp ax, 0
+    je .didntCollide
+
+    pop bx ; clear the store of ax
+    pop bx ; clear the store of dx
+    pop bx ; clear the store of cx
+    jmp .cleanup
+
+.didntCollide:
+    pop cx ; restore cx
+    pop dx ; restore dx
+    pop ax ; restore ax (steps left)
+
+    dec ax
+    jnz .raycastLoop
+    mov ax, 0
+
+.cleanup:
+    pop bx ; get original y
+    pop si ; get original x
+
+    cmp ax, 1 ; if collision detect don't restore the position
+    je .didCollide
+
+    mov [di + RenderComponentPositionX], si
+    mov [di + RenderComponentPositionY], bx
+
+.didCollide:
+
+    mov bx, [bp + 10]
+    mov si, [bp + 8]
+
+    mov [bp + 6], dx  ; x change to correctly collide
+    mov [bp + 8], cx  ; y change to correctly collide
+    mov [bp + 10], ax ; collision flag (1/0)
+
+    mov ax, 0
+    cmp cx, 0
+    jz .notGrounded
+
+    mov ax, 1
+.notGrounded:
+
+    push bx ; controller pointer
+    push si ; controller segment
+    push ax
+    push RenderComponentId
+    push RenderComponentIsGrounded
+    call setControllerWordValue
+
+    pop ds
+    pop dx
+    pop di
+    pop cx
+    pop si
+    pop bx
+    pop ax
+    pop bp
+    ret 2
+endp areControllersColliding
+
+proc areControllerCollidingLayer
+    push bp
+    mov bp, sp
+    push ax
+    push bx
+    push si
+    push cx
+    push di
+    push dx
+    push ds
+
+    push [bp + 10] ; controller offset
+    push [bp + 8]  ; controller segment
+    push RenderComponentId
+    call getControllerComponent
+    pop di ; di -> render component
+    pop ds ; ds -> component segment
+
+    push [di + RenderComponentPositionX] ; save original x
+    push [di + RenderComponentPositionY] ; save original y
+
+    push [di + RenderComponentPositionX]
+    push [di + RenderComponentPositionY]
+    push [di + RenderComponentPreviousPositionX]
+    push [di + RenderComponentPreviousPositionY]
+    call getStepElements
+    pop cx ; cx -> diffX
+    pop dx ; dx -> diffY
+    pop ax ; ax -> amount of steps
+
+    ; if no movement, don't raycast
+    cmp ax, 0
+    jne .startRaycast
+
+    push [bp + 10] ; controller offset
+    push [bp + 8]  ; controller segment
+    push [bp + 6]  ; collider offset
+    push [bp + 4]  ; collider segment
+    call getFirstCollisionFromLayer
+    pop dx ; x overlap
+    pop cx ; y overlap
+    pop ax ; collision flag
+    jmp .cleanup
+
+.startRaycast:
+    push cx ; diffX
+    push ax ; steps
+    call divide
+    pop cx ; cx -> stepX
+
+    push dx ; diffY
+    push ax ; steps
+    call divide
+    pop dx ; dx -> stepY
+
+    ; start raycast from previous position
+    mov bx, [di + RenderComponentPreviousPositionX]
+    mov [di + RenderComponentPositionX], bx
+    mov bx, [di + RenderComponentPreviousPositionY]
+    mov [di + RenderComponentPositionY], bx
+
+    xor bx, bx ; reset sumX
+    xor si, si ; reset sumY
+
+.raycastLoop:
+    push cx ; store cx
+
+    add bx, cx ; sumX += step X
+    add si, dx ; sumY += step Y
+
+    push bx ; sumX
+    push RaycastPrecision
+    call divideModulo
+    pop cx  ; addX
+    pop bx  ; updated sumX
+    add [di + RenderComponentPositionX], cx ; apply step x
+
+    push si ; sumY
+    push RaycastPrecision
+    call divideModulo
+    pop cx  ; addY
+    pop si  ; updated sumY
+    add [di + RenderComponentPositionY], cx ; apply step y
+
+    pop cx ; restore cx
+
+    push ax ; store ax (steps left)
+    push dx ; store dx
+    push cx ; store cx
+
+    ; check collision at current position
+    push [bp + 10] ; controller pointer
+    push [bp + 8]  ; controller segment
+    push [bp + 6]  ; collider pointer
+    push [bp + 4]  ; collider segment
+    call getFirstCollisionFromLayer
+    pop dx ; dx -> x change to correctly collide
+    pop cx ; cx -> y change to correctly collide
+    pop ax ; ax -> collision flag (1/0)
+
+    ; push [bp + 10]
+    ; push [bp + 8]
+    ; push 90
+    ; call printControllerByColor ; to visualize
+
+    cmp ax, 0
+    je .didntCollide
+
+    pop bx ; clear the store of ax
+    pop bx ; clear the store of dx
+    pop bx ; clear the store of cx
+    jmp .cleanup
+
+.didntCollide:
+    pop cx ; restore cx
+    pop dx ; restore dx
+    pop ax ; restore ax (steps left)
+
+    dec ax
+    jnz .raycastLoop
+    mov ax, 0
+
+.cleanup:
+    pop bx ; get original y
+    pop si ; get original x
+
+    cmp ax, 1 ; if collision detect don't restore the position
+    je .didCollide
+
+    mov [di + RenderComponentPositionX], si
+    mov [di + RenderComponentPositionY], bx
+
+.didCollide:
+
+    mov [bp + 6], dx  ; x change to correctly collide
+    mov [bp + 8], cx  ; y change to correctly collide
+    mov [bp + 10], ax ; collision flag (1/0)
+
+    pop ds
+    pop dx
+    pop di
+    pop cx
+    pop si
+    pop bx
+    pop ax
+    pop bp
+    ret 2
+endp areControllerCollidingLayer
+
+
+proc areControllersCollidingThisFrame
+    push bp
+    mov bp, sp
+    push ax
+    push bx
+    push si
+    push dx
+    push ds
+    push es
+    
+    push [bp + 10] ; controller offset1
+    push [bp + 8]  ; controller segment1
+    push RenderComponentId
+    call getControllerComponent
+    pop bx ; bx -> render component1
+    pop es ; es -> component segment1
+
+    push [bp + 6]  ; controller offset2
+    push [bp + 4]  ; controller segment2
+    push RenderComponentId
+    call getControllerComponent
+    pop si ; si -> render component2
+    pop ds ; ds -> component segment2
+
+    push [es:bx + RenderComponentPositionX]
+    push [es:bx + RenderComponentWidth]
+    push [si + RenderComponentPositionX]
+    push [si + RenderComponentWidth]
+    call isAxisCollision
+    pop dx ; dx -> x collision
+
+    cmp dx, 0 ; if doesn't collide in x
+    jz .setFalse
+
+    push [es:bx + RenderComponentPositionY]
+    push [es:bx + RenderComponentHeight]
+    push [si + RenderComponentPositionY]
+    push [si + RenderComponentHeight]
+    call isAxisCollision
+    pop ax ; ax -> y collision
+
+    cmp ax, 0 ; if doesn't collide in y
+    je .setFalse
+    mov bx, 1
+
+    push dx ; x overlap
+    push ax ; y overlap
+    call getMinAbsIndex
+    pop si ; 0 -> x is smaller, 1 -> y is smaller
+
+    cmp si, 1 ; if y is smaller, reset x
+    je .resetX
+
+    mov ax, 0 ; reset y
+    jmp .end
+.resetX:
+    mov dx, 0 ; reset x
+
+    jmp .end
+.setFalse:
+    mov ax, 0
+    mov dx, 0
+    mov bx, 0
+.end:
+    mov [bp + 6], dx  ; x change to correctly collide
+    mov [bp + 8], ax  ; y change to correctly collide
+    mov [bp + 10], bx ; collision flag (1/0)
+
+    pop es
+    pop ds
+    pop dx
+    pop si
+    pop bx
+    pop ax
+    pop bp
+    ret 2
+endp areControllersCollidingThisFrame
+
+proc isAxisCollision
+    push bp
+    mov bp, sp
+    push cx
+    push dx
+    push bx
+    push ax
+    push si
+    push di
+
+    mov bx, [bp + 10] ; bx -> left/top1
+    mov ax, [bp + 8]  ; ax -> width/height1
+    mov dx, [bp + 6]  ; dx -> left/top2
+    mov cx, [bp + 4]  ; cx -> width/height2
+
+    add ax, bx ; ax -> right/bottom1
+    add cx, dx ; cx -> right/bottom2
+
+    cmp ax, dx  ; if bottom1 is less than top2
+    jle .noCollision
+    cmp cx, bx  ; if bottom2 is less than top1
+    jle .noCollision
+
+    push ax ; bottom1
+    push cx ; bottom2
+    call min
+    pop si ; si -> min (bottom1, bottom2)
+
+    push bx ; top1
+    push dx ; top2
+    call max
+    pop di ; di -> max (top1, top2)
+
+    sub di, si ; di -> overlap
+
+    cmp ax, cx ; if bottom1 < bottom2 the overlap is opposite
+    jle .end
+
+    neg di
+    jmp .end
+
+.noCollision:
+    mov di, 0
+.end:
+    mov [bp + 10], di
+
+    pop di
+    pop si
+    pop ax
+    pop bx
+    pop dx
+    pop cx
+    pop bp
+    ret 6
+endp isAxisCollision
+
+
+proc doesPointCollideController
+    push bp
+    mov bp, sp
+    push bx
+    push si
+    push ax
+    push cx
+    push dx
+    push di
+    push ds
+
+    push [bp + 10] ; bx -> controller pointer
+    push [bp + 8]  ; ds -> controller segment
+    push RenderComponentId
+    call getControllerComponent
+    pop bx ; bx -> render component
+    pop ds ; ds -> component segment
+
+    mov cx, [ds:bx + RenderComponentPositionX] ; cx -> controller x
+    mov si, [ds:bx + RenderComponentPositionY] ; si -> controller y
+    
+    push cx                             ; controller left x
+    add cx, [ds:bx + RenderComponentWidth]
+    push cx                             ; controller right x
+    push [bp + 4]                       ; point x
+    call inRange
+    pop ax                              ; if there is collision
+
+    cmp ax, 0
+    jz .setFalse
+
+    push si                              ; controller top y
+    add si, [ds:bx + RenderComponentHeight]
+    push si                              ; controller bottom y
+    push [bp + 6]                        ; point y
+    call inRange
+    pop ax                               ; if there is collision
+    cmp ax, 0
+    jz .setFalse
+
+    mov ax, 1 ; return true if both tests passed
+    jmp .end
+
+.setFalse:
+    mov ax, 0
+.end:
+    mov [bp + 10], ax
+
+    pop ds
+    pop di
+    pop dx
+    pop cx
+    pop ax
+    pop si
+    pop bx
+    pop bp
+    ret 6
+endp doesPointCollideController
+
+proc didControllerCollide
+    push bp
+    mov bp, sp
+    push ax
+    push cx
+    push dx
+
+    push [bp + 10] ; controller offset
+    push [bp + 8]  ; controller segment
+    push [bp + 6]  ; collider offset
+    push [bp + 4]  ; collider segment
+    call areControllersColliding
+    pop cx ; cx -> x overlap
+    pop dx ; dx -> y overlap
+    pop ax ; ax -> collision flag (1/0)
+
+    mov [bp + 10], ax ; return collision flag
+
+    pop dx
+    pop cx
+    pop ax
+    pop bp
+    ret 6
+endp didControllerCollide
+
+
+; ********************************* LAYER COLLISION HELPERS *********************************
+proc getStepElements
+    push bp
+    mov bp, sp
+    push dx
+    push cx
+    push ax
+
+    mov dx, [bp + 10] ; x1
+    mov cx, [bp + 8]  ; y1
+    sub dx, [bp + 6]  ; dx -> diff x
+    sub cx, [bp + 4]  ; cx -> diff y
+
+    push dx ; diff x
+    push cx ; diff y
+    call getMaxAbs
+    pop ax ; ax -> amount of steps
+
+    push dx ; diff x
+    push RaycastPrecision
+    call multiply
+    pop dx ; dx -> diff x * 128
+
+    push cx ; diff y
+    push RaycastPrecision
+    call multiply
+    pop cx ; cx -> diff x * 128
+
+    mov [bp + 6], dx ; diff x
+    mov [bp + 8], cx ; diff y
+    mov [bp + 10], ax ; amount of steps
+
+    pop ax
+    pop cx
+    pop dx
+    pop bp
+    ret 2
+endp getStepElements
+
+
+
+proc addToPosition
+    push bp
+    mov bp, sp
+
+    push [bp + 10] ; controller
+    push [bp + 8]  ; segment
+    push [bp + 6] ; x overlap
+    push RenderComponentId
+    push RenderComponentPositionX
+    call addControllerWordValue
+
+    push [bp + 10] ; controller
+    push [bp + 8]  ; segment
+    push [bp + 4] ; y overlap
+    push RenderComponentId
+    push RenderComponentPositionY
+    call addControllerWordValue
+
+    pop bp
+    ret 8
+endp addToPosition
+
+
+proc handleWallCollisionLayer
+    push bp
+    mov bp, sp
+    push bx
+    push ax
+    push dx
+    push ds
+    
+    push [bp + 6]
+    push [bp + 4]
+    push [bp + 10]
+    push [bp + 8]
+    call sortCollisionLayerByDistance
+
+    push [bp + 10] ; controller
+    push [bp + 8]  ; controller segment
+    push [bp + 6]  ; collider
+    push [bp + 4]  ; collider segment
+    call areControllerCollidingLayer
+    pop ax ; ax -> x overlap
+    pop dx ; dx -> y overlap
+    pop bx ; bx -> collision flag (1/0)
+
+    cmp bx, 0
+    je .skipResetX
+
+    push [bp + 10] ; controller
+    push [bp + 8]  ; segment
+    push ax ; x overlap
+    push dx ; y overlap
+    call addToPosition
+
+    cmp dx, 0
+    je .skipResetY
+
+    push [bp + 10]
+    push [bp + 8]
+    push 0
+    push PhysicsComponentId
+    push PhysicsComponentVelocityY
+    call setControllerWordValue
+    
+    jmp .skipResetX
+
+.skipResetY:
+
+    push [bp + 10]
+    push [bp + 8]
+    push 0
+    push PhysicsComponentId
+    push PhysicsComponentVelocityX
+    call setControllerWordValue
+
+.skipResetX:
+
+    pop ds
+    pop dx
+    pop ax
+    pop bx
+    pop bp
+    ret 8
+endp handleWallCollisionLayer
+
+
+proc getMinDistanceColliderIndex
+    push bp
+    mov bp, sp
+    push cx
+    push dx
+    push ax
+    push bx
+    push si
+    push ds
+    push di
+
+    mov bx, [bp + 12] ; bx -> layer offset
+    mov ds, [bp + 10] ; ds -> layer segment
+
+    mov di, [bx + PointerArraySize]  ; di -> size
+    sub di, [bp + 8] ; di -> corrected size (size - offset)
+
+    mov ax, [bp + 8]
+    sal ax, 2
+    add bx, ax
+    add bx, PointerArrayData ; corrected data (data + offset)
+
+    mov ax, 10000 ; ax -> min distance
+    mov dx, -1    ; dx -> min index
+    mov cx, 0     ; cx -> index
+
+.colliderLoop:
+    push [bx + PointerOffset]
+    push [bx + PointerSegment]
+    push [bp + 6]
+    push [bp + 4]
+    call getDistanceBetweenColliders
+    pop si ; si -> distance
+
+    cmp si, ax ; if current dist <= min dist
+    jge .skip
+
+    mov ax, si ; ax -> update min distance
+    mov dx, cx ; dx -> update min index 
+.skip:
+
+    add bx, PointerSize
+    inc cx
+
+    cmp cx, di
+    jnz .colliderLoop
+
+    add dx, [bp + 8]
+    mov [bp + 12], dx ; return min index
+
+    pop di
+    pop ds
+    pop si
+    pop bx
+    pop ax
+    pop dx
+    pop cx
+    pop bp
+    ret 8
+endp getMinDistanceColliderIndex
+
+
+proc didCollideWithLayer
+    push bp
+    mov bp, sp
+    push bx
+    push ax
+    push dx
+
+    push [bp + 10] ; controller offset
+    push [bp + 8]  ; controller segment
+    push [bp + 6]  ; collider offset
+    push [bp + 4]  ; collider segment
+    call areControllerCollidingLayer
+    pop ax ; ax -> x overlap
+    pop dx ; dx -> y overlap
+    pop bx ; bx -> collision flag (1/0)
+
+    mov [bp + 10], bx ; return collision flag
+
+    pop dx
+    pop ax
+    pop bx
+    pop bp
+    ret 6
+endp didCollideWithLayer

@@ -1,0 +1,369 @@
+DATASEG
+
+RenderComponentId                  equ 1
+RenderComponentPositionX           equ 0
+RenderComponentPositionY           equ 2
+RenderComponentImageOffset         equ 4
+RenderComponentImageSegment        equ 6
+RenderComponentPreviousPositionX   equ 8
+RenderComponentPreviousPositionY   equ 10
+RenderComponentIndex               equ 12
+RenderComponentSize                equ 14
+RenderComponentIsGrounded          equ 16
+RenderComponentWidth               equ 18
+RenderComponentHeight              equ 20
+RenderComponentBackground          equ 22
+
+CODESEG
+
+; prints a controller's outline by a color
+proc printControllerByColor
+    push bp
+    mov bp, sp
+    push bx
+    push ds
+
+    mov ds, [bp + 6] ; segment
+
+    push [bp + 8] ; controller
+    push ds
+    push RenderComponentId
+    call getControllerComponent
+    pop bx ; component
+    pop ds ; component segment
+
+    push [bp + 4] ; color
+    push [bx + RenderComponentWidth]
+    push [bx + RenderComponentHeight]
+
+    push [bx + RenderComponentPositionX]
+    push [bx + RenderComponentPositionY]
+    call toScreenPos
+
+    call printRectBySize
+    
+    pop ds
+    pop bx
+    pop bp
+    ret 6
+endp printControllerByColor
+
+
+; input - controller pointer
+; prints it to the screen
+proc printController
+    push bp
+    mov bp, sp
+    push di
+    push bx
+    push ax
+    push ds
+    push es
+    push dx
+    push cx
+
+    mov bx, [bp + 6] ; bx -> controller pointer
+    mov es, [bp + 4] ; es -> controller segment
+
+    push bx ; controller pointer
+    push es ; controller segment
+    push RenderComponentId
+    call getControllerComponent
+    pop di ; di -> render component
+    pop es ; es -> component segment
+
+    mov bx, [es:di + RenderComponentImageOffset]  ; bx -> image offset
+    mov ds, [es:di + RenderComponentImageSegment] ; ds -> image segment
+
+    push [es:di + RenderComponentPositionX]
+    push [es:di + RenderComponentPositionY]
+    call toScreenPos
+    pop dx ; dx -> position
+
+    mov cx, [es:di + RenderComponentSize] ; cx -> size
+
+    mov al, [bx] ; image type
+
+    cmp al, RectId
+    jz .isRect
+    cmp al, ImageId
+    jz .isImage
+    cmp al, ArrayId
+    jz .isArray
+    cmp al, LabelId
+    jz .isLabel
+
+    jmp .end
+.isRect:
+    push bx ; rect pointer
+    push ds ; rect segment
+    push dx ; position
+    call printRect
+    jmp .end
+.isArray:
+    push bx ; array pointer
+    push ds ; array segment
+    push [es:di + RenderComponentIndex]
+    call getArrayElementValue
+    push ds ; array segment
+    push dx ; position
+    push cx ; size
+    call printImageUpscaled
+    jmp .end
+.isLabel:
+    push bx ; label pointer
+    push ds ; label segment
+    push dx ; position
+    call printLabel
+    jmp .end
+.isImage:
+    push bx ; image pointer
+    push ds ; image segment
+    push dx ; position
+    push cx ; size
+    call printImageUpscaled
+.end:
+
+    pop cx
+    pop dx
+    pop es
+    pop ds
+    pop ax
+    pop bx
+    pop di
+    pop bp
+    ret 4
+endp printController
+
+
+; input - controller pointer (offset & segment)
+; saves the background to the controller so it could move without affecting the background
+proc saveControllerBackground
+    push bp
+    mov bp, sp
+    push di
+    push bx
+    push cx
+    push dx
+    push si
+    push ax
+    push es
+    push ds
+    
+    mov ax, PRINT_LOCATION ; set the input location
+    mov es, ax
+
+    push [bp + 6] ; controller offset
+    push [bp + 4] ; controller segment
+    push RenderComponentId
+    call getControllerComponent
+    pop di ; di -> render component
+    pop ds ; ds -> render segment
+
+    mov bx, di
+    add bx, RenderComponentBackground ; bx -> background saving place
+
+    mov dx, [ds:di + RenderComponentWidth]  ; dx -> width
+    mov cx, [ds:di + RenderComponentHeight] ; cx -> height
+
+    push [ds:di + RenderComponentPositionX]
+    push [ds:di + RenderComponentPositionY]
+    call toScreenPos
+    pop di ; di -> position
+    mov si, 0 ; si -> width counter
+.saveLoop:
+    mov al, [es:di] ; al -> color from screen
+    mov [ds:bx], al    ; save the color to the background array
+    inc di
+    inc bx
+    inc si
+    cmp si, dx ; if reached end of the row
+    jne .saveLoop
+    add di, SCREEN_WIDTH
+    sub di, dx ; point to the next column
+    xor si, si
+    dec cx
+    jnz .saveLoop
+
+    pop ds
+    pop es
+    pop ax
+    pop si
+    pop dx
+    pop cx
+    pop bx
+    pop di
+    pop bp
+    ret 4
+endp saveControllerBackground
+
+
+proc printControllerBackground
+    push bp
+    mov bp, sp
+    push di
+    push dx
+    push ds
+    
+    mov di, [bp + 6] ; controller
+    mov ds, [bp + 4] ; segment
+
+    push di ; controller
+    push ds ; segment
+    push RenderComponentId
+    call getControllerComponent
+    pop di ; di -> render component
+    pop ds ; ds -> render segment
+
+    mov dx, di
+    add dx, RenderComponentBackground
+
+    push dx ; background save location   ; color array
+    push ds ; component segment          ; array segment
+    push [ds:di + RenderComponentWidth]  ; width
+    push [ds:di + RenderComponentHeight] ; height
+    push [ds:di + RenderComponentPreviousPositionX]
+    push [ds:di + RenderComponentPreviousPositionY] 
+    call toScreenPos                      ; position
+    call printImageBySize
+
+    mov dx, [ds:di + RenderComponentPositionX]
+    mov [ds:di + RenderComponentPreviousPositionX], dx
+    mov dx, [ds:di + RenderComponentPositionY]
+    mov [ds:di + RenderComponentPreviousPositionY], dx
+
+    pop ds
+    pop dx
+    pop di
+    pop bp
+    ret 4
+endp printControllerBackground
+
+
+; ********************************* CONTROLLER HELPERS *********************************
+proc setControllerXandY
+    push bp
+    mov bp, sp
+    push ds
+    push bx
+    push ax
+
+    push [bp + 10] ; controller pointer
+    push [bp + 8]  ; controller segment
+    push RenderComponentId
+    call getControllerComponent
+    pop bx ; bx -> render component
+    pop ds ; ds -> render segment
+
+    mov ax, [bp + 6] ; x
+    mov [bx + RenderComponentPositionX], ax
+    mov ax, [bp + 4] ; y
+    mov [bx + RenderComponentPositionY], ax
+
+    pop ax
+    pop bx
+    pop ds
+    pop bp
+    ret 8
+endp setControllerXandY
+
+
+proc initAndPrintController
+    push bp
+    mov bp, sp
+    push ax
+    push bx
+    push dx
+    push cx
+
+    mov ax, [bp + 10]
+    mov bx, [bp + 8]
+    mov dx, [bp + 6]
+    mov cx, [bp + 4]
+
+    push ax
+    push bx
+    push dx
+    push cx
+    call initController
+
+    push ax
+    push bx
+    call printController
+
+    pop cx
+    pop dx
+    pop bx
+    pop ax
+    pop bp
+    ret 8
+endp initAndPrintController
+
+
+proc initController
+    push bp
+    mov bp, sp
+    push di
+    push ax
+    push bx
+    push ds
+    push es
+    push dx
+
+    mov di, [bp + 10] ; di -> controller pointer
+    mov ds, [bp + 8]  ; ds -> controller segment
+    mov ax, [bp + 6]  ; ax -> set x position
+    mov dx, [bp + 4]  ; dx -> set y position
+
+    push di ; controller offset
+    push ds ; controller segment
+    push RenderComponentId
+    call getControllerComponent
+    pop bx ; bx -> component offset
+    pop es ; es -> component segment
+
+    mov [es:bx + RenderComponentPositionX], ax
+    mov [es:bx + RenderComponentPreviousPositionX], ax
+    mov [es:bx + RenderComponentPositionY], dx
+    mov [es:bx + RenderComponentPreviousPositionY], dx
+    
+    push di ; controller offset
+    push ds ; controller segment
+    call saveControllerBackground
+
+    pop dx
+    pop es
+    pop ds
+    pop bx
+    pop ax
+    pop di
+    pop bp
+    ret 8
+endp initController
+
+
+proc getControllerXandY
+    push bp
+    mov bp, sp
+    push ds
+    push di
+    push ax
+    
+    push [bp + 6] ; controller pointer
+    push [bp + 4] ; controller segment
+    push RenderComponentId
+    call getControllerComponent
+    pop di ; component
+    pop ds ; component segment
+
+    mov ax, [ds:di + RenderComponentPositionX]
+    mov [bp + 4], ax ; x
+    mov ax, [ds:di + RenderComponentPositionY]
+    mov [bp + 6], ax ; y
+
+    pop ax
+    pop di
+    pop ds
+    pop bp
+    ret
+endp getControllerXandY

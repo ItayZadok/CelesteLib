@@ -1,0 +1,118 @@
+DATASEG
+
+
+CODESEG
+
+
+; handles buffers like a jump buffer in platformers
+proc handleBuffer
+    push bp
+    mov bp, sp
+    push bx
+    push es
+    push ax
+    push si
+
+    mov ax, [bp + 10] ; ax -> input (1 / 0)
+    mov si, [bp + 8]  ; si -> buffer duration
+    mov bx, [bp + 6]  ; bx -> time since last input offset
+    mov es, [bp + 4]  ; es -> time since last input segment
+
+    cmp ax, 0
+    je .noInput
+    mov [word ptr es:bx], 1 ; if input -> timer = 1
+.noInput:
+
+    cmp [word ptr es:bx], si ; if timer reached the duration
+    je .end
+
+    inc [word ptr es:bx] ; update the timer (+1)
+    mov ax, 1 ; return 1
+
+.end:
+    mov [bp + 10], ax ; return 1 / 0
+
+    pop si
+    pop ax
+    pop es
+    pop bx
+    pop bp
+    ret 6
+endp handleBuffer
+
+
+proc setGrounded
+
+    push [bp + 10]
+    push [bp + 8]
+    push 1
+    push RenderComponentId
+    push RenderComponentIsGrounded
+    call setControllerWordValue
+
+    ret
+endp setGrounded
+
+
+; input - word directionX pointer, word directionY pointer
+proc updateDirection
+    push bp
+    mov bp, sp
+    push ax
+    push si
+    push di
+    push ds
+    push es
+
+    mov si, [bp + 10] ; directionX offset
+    mov ds, [bp + 8]  ; directionX segment
+    mov di, [bp + 6]  ; directionY offset
+    mov es, [bp + 4]  ; directionY segment
+    
+    xor ax, ax
+    mov [ds:si], ax ; reset directionX
+    mov [es:di], ax ; reset directionY
+
+    ; Horizontal input
+    push SCAN_CODE_A
+    call isKeyHeld
+    pop ax
+    cmp al, 0
+    jz  .checkD
+    mov [word ptr ds:si], -1
+    jmp .checkVertical
+
+.checkD:
+    push SCAN_CODE_D
+    call isKeyHeld
+    pop ax
+    cmp al, 0
+    jz  .checkVertical
+    mov [word ptr ds:si], 1
+
+.checkVertical:
+    push SCAN_CODE_W
+    call isKeyHeld
+    pop ax
+    cmp al, 0
+    jz  .checkS
+    mov [word ptr es:di], -1
+    jmp .end
+
+.checkS:
+    push SCAN_CODE_S
+    call isKeyHeld
+    pop ax
+    cmp al, 0
+    jz  .end
+    mov [word ptr es:di], 1
+
+.end:
+    pop es
+    pop ds
+    pop di
+    pop si
+    pop ax
+    pop bp
+    ret 8
+endp updateDirection

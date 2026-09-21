@@ -1,0 +1,91 @@
+DATASEG
+randomSeed dw 0
+
+CODESEG
+
+; calculates pseudo random numbers by a seed
+; based on LFSR https://en.wikipedia.org/wiki/Linear-feedback_shift_register#Xorshift_LFSRs
+proc getRandomWord
+    push bp
+    mov bp, sp
+    push ax
+    push cx
+    push si
+    push ds
+    push es
+    push dx
+
+    mov si, offset randomSeed
+    mov ax, seg randomSeed
+    mov ds, ax
+
+    mov ax, 0040h
+    mov es, ax
+    mov ax, [es:006Ch]
+    mov dx, [es:006Eh]
+    xor ax, dx
+    xor ax, [ds:si]
+    xor ax, sp
+    xor ax, [bp] ; generating random shit
+
+    ; xorshift-style PRNG
+    mov cx, ax
+    shl cx, 5
+    xor ax, cx
+
+    mov cx, ax
+    shr cx, 3
+    xor ax, cx
+
+    mov cx, ax
+    shl cx, 4
+    xor ax, cx
+
+    mov [ds:si], ax  ; change the seed
+    mov [bp + 4], ax ; return the random number
+
+    pop dx
+    pop es
+    pop ds
+    pop si
+    pop cx
+    pop ax
+    pop bp
+    ret
+endp getRandomWord
+
+proc getRandomInRange
+    push bp
+    mov bp, sp
+    push bx
+    push ax
+    push dx
+
+    push -1 ; garbage
+    call getRandomWord
+    pop bx ; bx -> word random value
+
+    mov ax, [bp + 4] ; max
+    sub ax, [bp + 6] ; max - min
+    inc ax           ; ax -> number of possibilities
+
+    push bx ; random word
+    push ax ; number of possibilities
+    call divideModulo
+    pop ax ; garbage
+    pop bx ; random in range
+
+    test bx, bx
+    jns .skip
+    neg bx
+.skip:
+
+    add bx, [bp + 6] ; add min value
+    mov [bp + 6], bx ; return it
+
+    pop dx
+    pop ax
+    pop bx
+    pop bp
+    ret 2
+endp getRandomInRange

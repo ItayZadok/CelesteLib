@@ -1,0 +1,230 @@
+DATASEG
+
+RotationComponentId              equ 16
+RotationComponentCurrentRotation equ 0
+RotationComponentMaxIndex        equ 2
+
+RotationPercision equ 128
+
+FULL_ROTATION_DEG equ 360
+
+CODESEG
+
+proc updateControllerRotation
+    push bp
+    mov bp, sp
+    push bx
+    push es
+    push ax
+    push cx
+
+    mov bx, [bp + 12] ; bx -> controller offset
+    mov es, [bp + 10] ; es -> controller segment
+    mov ax, [bp + 8]  ; ax -> rotate speed
+
+    push [bp + 4] ; Left Key
+    call keyHeld
+    pop cx
+    cmp cx, 0
+    je .skipLeft  ; if pressed Left neg and jmp to update the speed
+
+    neg ax
+    jmp .updateRotation
+.skipLeft:
+
+    push [bp + 6] ; Right Key
+    call keyHeld
+    pop cx
+    cmp cx, 0
+    je .skipRight  ;  if pressed Right update the speed
+.updateRotation:
+
+    push bx ; controller offset
+    push es ; controller segment
+    push RotationComponentId
+    call getControllerComponent
+    pop bx ; bx -> component offset
+    pop es ; es -> component segment
+
+    mov cx, [es:bx + RotationComponentCurrentRotation] ; cx -> current rotation
+    add cx, ax ; cx -> current rotation + speed
+
+    ; TODO - fix that if it's 0 and we go -30 it sets it to 359 and not 329 (caused due to the clamp)
+
+    push cx ; rotation
+    push 0
+    push FULL_ROTATION_DEG - 1
+    call getInverseClamp
+    pop [es:bx + RotationComponentCurrentRotation] ; clamp and set the rotation to the (0-359) range
+.skipRight:
+
+    pop cx
+    pop ax
+    pop es
+    pop bx
+    pop bp
+    ret 10
+endp updateControllerRotation
+
+
+proc applyControllerRotation
+    push bp
+    mov bp, sp
+    push bx
+    push es
+    push cx
+    push ax
+    push dx
+
+    mov bx, [bp + 6] ; bx -> controller offset
+    mov es, [bp + 4] ; es -> controller segment
+
+    push bx
+    push es
+    push RotationComponentId
+    push RotationComponentCurrentRotation
+    call getControllerWordValue
+    pop cx ; cx -> rotation
+
+    push bx
+    push es
+    push RotationComponentId
+    push RotationComponentMaxIndex
+    call getControllerWordValue
+    pop ax ; ax -> max index
+
+    push FULL_ROTATION_DEG
+    push ax
+    call divide
+    pop dx
+
+    push cx
+    push dx
+    call divide
+    pop cx
+
+    dec ax
+    push cx
+    push ax
+    call min ; limit cx to not surpass the array
+    pop cx
+
+    push bx ; controller offset
+    push es ; controller segment
+    push cx ; new rotation
+    push RenderComponentId
+    push RenderComponentIndex
+    call setControllerWordValue
+
+    pop dx
+    pop ax
+    pop cx
+    pop es
+    pop bx
+    pop bp
+    ret 4
+endp applyControllerRotation
+
+
+proc rotateController
+    push bp
+    mov bp, sp
+    push bx
+    push es
+    push cx
+    push ax
+    push dx
+    push si
+
+    mov bx, [bp + 12] ; bx -> controller offset
+    mov es, [bp + 10] ; es -> controller segment
+    mov si, [bp + 8]  ; si -> speed
+
+    push bx
+    push es
+    push RotationComponentId
+    push RotationComponentCurrentRotation
+    call getControllerWordValue
+    pop cx ; cx -> current rotation
+
+    push [bp + 4] ; Forward Key
+    call keyHeld
+    pop dx
+    cmp dx, 0
+    je .skipForward
+
+    push cx
+    call getCos
+    push si
+    call divide
+    pop ax
+
+    neg ax
+
+    push bx
+    push es
+    push ax
+    push RenderComponentId
+    push RenderComponentPositionY
+    call addControllerWordValue
+
+    push cx
+    call getSin
+    push si
+    call divide
+    pop ax
+
+    push bx
+    push es
+    push ax
+    push RenderComponentId
+    push RenderComponentPositionX
+    call addControllerWordValue
+
+.skipForward:
+
+    push [bp + 6] ; Back Key
+    call keyHeld
+    pop dx
+    cmp dx, 0
+    je .skipBackward
+
+    push cx
+    call getCos
+    push si
+    call divide
+    pop ax
+
+    push bx
+    push es
+    push ax
+    push RenderComponentId
+    push RenderComponentPositionY
+    call addControllerWordValue
+    push cx
+    call getSin
+    push si
+    call divide
+    pop ax
+
+    neg ax
+
+    push bx
+    push es
+    push ax
+    push RenderComponentId
+    push RenderComponentPositionX
+    call addControllerWordValue
+
+
+.skipBackward:
+
+    pop si
+    pop dx
+    pop ax
+    pop cx
+    pop es
+    pop bx
+    pop bp
+    ret 10
+endp rotateController

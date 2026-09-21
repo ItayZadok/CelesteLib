@@ -1,0 +1,109 @@
+DATASEG
+
+SceneManagerCurrentScene equ 0
+SceneManagerSceneAmount  equ 1
+SceneManagerData         equ 2
+
+CODESEG
+
+
+proc resetCurrentScene
+    push bp
+    mov bp, sp
+    push bx
+    push si
+    push es
+    push ax
+
+    mov si, [bp + 6] ; sceneManager offset
+    mov es, [bp + 4] ; sceneManager segment
+
+    xor bh, bh
+    mov bl, [es:si + SceneManagerCurrentScene]
+    mov al, bl
+    add bl, al
+    add bl, al
+    add bl, al
+    add bl, al
+    add bl, al
+
+    add si, bx
+    call [es:si + SceneManagerData + 4] ; reset
+
+    pop ax
+    pop es
+    pop si
+    pop bx
+    pop bp
+    ret 4
+endp resetCurrentScene
+
+proc switchScene
+    push bp
+    mov bp, sp
+    push bx
+    push si
+    push ax
+    push es
+
+    mov si, [bp + 8] ; sceneManager offset
+    mov es, [bp + 6] ; sceneManager segment
+
+    xor bh, bh
+    mov bl, [bp + 4] ; scene index
+    mov [es:si + SceneManagerCurrentScene], bl
+
+    mov al, bl
+    add bl, al
+    add bl, al
+    add bl, al
+    add bl, al
+    add bl, al
+
+    add si, bx
+    mov si, [es:si + SceneManagerData]
+
+    call si ; init
+
+    pop es
+    pop ax
+    pop si
+    pop bx
+    pop bp
+    ret 6
+endp switchScene
+
+proc updateCurrentScene
+    push bp
+    mov bp, sp
+    push bx
+    push ax
+    push si
+    push es
+
+    mov si, [bp + 6] ; sceneManager offset
+    mov es, [bp + 4] ; sceneManager segment
+
+    xor bx, bx
+    xor ah, ah
+    mov al, [es:si + SceneManagerCurrentScene]
+    
+    add bx, ax
+    add bx, ax
+    add bx, ax
+    add bx, ax
+    add bx, ax
+    add bx, ax
+
+    add si, bx
+    mov si, [es:si + SceneManagerData + 2]
+
+    call si
+
+    pop es
+    pop si
+    pop ax
+    pop bx
+    pop bp
+    ret 4
+endp updateCurrentScene

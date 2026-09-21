@@ -1,0 +1,248 @@
+DATASEG
+
+AnimatorComponentId                    equ 3
+AnimatorComponentCurrentAnimationIndex equ 0
+AnimatorComponentCurrentFrameIndex     equ 1
+AnimatorComponentAnimationAmount       equ 2
+AnimatorComponentData                  equ 3
+
+AnimationId         equ 2
+AnimationSize       equ 1
+AnimationSpeed      equ 2
+AnimationData       equ 3
+
+animationTime dw 0
+
+CODESEG
+
+
+; input - animated controller pointer (offset & segment)
+; moves the current animation a frame (if last frame go to first)
+proc moveToNextAnimationFrame
+    push bp
+    mov bp, sp
+    push di
+    push bx
+    push ax
+    push ds
+    push es
+
+    mov di, [bp + 6] ; controller offset
+    mov ds, [bp + 4] ; controller segment
+    xor ax, ax
+    
+    push di ; controller
+    push ds ; controller segment
+    call getCurrentAnimation
+    pop bx ; current animation
+    pop es ; animtion segment
+    mov bl, [es:bx + AnimationSize] ; animation size
+
+    push di ; controller
+    push ds ; controller segment
+    push AnimatorComponentId
+    call getControllerComponent
+    pop di ; component pointer
+    pop ds ; component segment
+
+    mov al, [ds:di + AnimatorComponentCurrentFrameIndex] ; current frame number
+    inc al ; next frame
+
+    cmp al, bl
+    jne .end
+
+    mov al, 0
+.end:
+    mov [ds:di + AnimatorComponentCurrentFrameIndex], al ; set the frame
+    
+    pop es
+    pop ds
+    pop ax
+    pop bx
+    pop di
+    pop bp
+    ret 4
+endp moveToNextAnimationFrame
+
+; input - controller pointer, byte animation number
+; sets the current animation by index
+proc setAnimation
+    push bp
+    mov bp, sp
+    push di
+    push ax
+    push ds
+
+    mov di, [bp + 8] ; di -> controller pointer
+    mov ds, [bp + 6] ; ds -> controller segment
+    mov al, [bp + 4] ; al -> animation index
+
+    push di ; controller pointer
+    push ds ; controller segment
+    push AnimatorComponentId
+    call getControllerComponent
+    pop di ; di -> animator component
+    pop ds ; ds -> animator segment
+
+    mov [di + AnimatorComponentCurrentAnimationIndex], al     ; set current animation
+    mov [byte ptr di + AnimatorComponentCurrentFrameIndex], 0 ; set current frame 0
+
+    pop ds
+    pop ax
+    pop di
+    pop bp
+    ret 6
+endp setAnimation
+
+proc getFrameImage
+    push bp
+    mov bp, sp
+    push bx
+    push si
+    push ds
+
+    mov bx, [bp + 8] ; animation pointer
+    mov ds, [bp + 6] ; animation segment
+    mov si, [bp + 4] ; frame index
+
+    add bx, AnimationData ; first animation
+    sal si, 2  ; byte * 4 = 2 words
+    add bx, si ; current animation (every anim is 2 words)
+
+    mov si, [bx]     ; image pointer
+    mov bx, [bx + 2] ; image segment
+
+    mov [bp + 6], si ; image pointer
+    mov [bp + 8], bx ; image segment
+
+    pop ds
+    pop si
+    pop bx
+    pop bp
+    ret 2
+endp getFrameImage
+
+; input - animated controller, current time (0-255)
+; updates it's current animation
+proc updateAnimation
+    push bp
+    mov bp, sp
+    push ax
+    push bx
+    push di
+    push cx
+    push ds
+    push es
+
+    mov di, [bp + 8] ; di -> controller pointer
+    mov ds, [bp + 6] ; ds -> controller segment
+    mov al, [bp + 4] ; al -> current time
+
+    push di ; controller pointer
+    push ds ; controller segment
+    call getCurrentAnimation
+    pop bx ; bx -> animation pointer
+    pop es ; es -> animation segment
+    
+    mov ch, [es:bx + AnimationSpeed] ; animation speed
+    div ch ; ah -> current time % animation speed
+    cmp ah, 0
+    jne .end ; if correct time, move to next frame
+
+    push di ; controller pointer
+    push ds ; controller segment
+    call moveToNextAnimationFrame
+
+    push di ; controller pointer
+    push ds ; controller segment
+    push AnimatorComponentId
+    push AnimatorComponentCurrentFrameIndex
+    call getControllerByteValue
+    pop cx ; cl -> current frame index
+
+    push bx ; animation pointer
+    push es ; animation segment
+    push cx ; frame index
+    call getFrameImage
+    pop bx ; bx -> image pointer
+    pop cx ; cx -> image segment
+
+    push di ; controller pointer
+    push ds ; controller segment
+    push RenderComponentId
+    call getControllerComponent
+    pop di ; di -> render component
+    pop ds ; ds -> component segment
+
+    mov [di + RenderComponentImageOffset], bx
+    mov [di + RenderComponentImageSegment], cx
+
+.end:
+    pop es
+    pop ds
+    pop cx
+    pop di
+    pop bx
+    pop ax
+    pop bp
+    ret 6
+endp updateAnimation
+
+; updates animation time
+proc updateAnimationTime
+    push bp
+    mov bp, sp
+    push bx
+    push ds
+
+    mov bx, [bp + 6]    ; time pointer
+    mov ds, [bp + 4]    ; time segment
+
+    cmp [byte ptr bx], 255
+    jnz .continue
+    mov [byte ptr bx], 0
+.continue:
+    inc [byte ptr bx]
+
+    pop ds
+    pop bx
+    pop bp
+    ret 4
+endp updateAnimationTime
+
+
+; input - animated controller
+; returns the current animation
+proc getCurrentAnimation
+    push bp
+    mov bp, sp
+    push di
+    push bx
+    push ds
+
+    push [bp + 6] ; controller pointer
+    push [bp + 4] ; controller segment
+    push AnimatorComponentId
+    call getControllerComponent
+    pop di ; component
+    pop ds ; segment
+
+    xor bx, bx
+    mov bl, [di + AnimatorComponentCurrentAnimationIndex]  ; current animation index
+    add di, AnimatorComponentData ; animation list
+    shl bx, 2                     ; each animation is 2 words     
+    add di, bx                    ; current animation
+
+    mov bx, [di + 2]              ; segment
+    mov di, [di]                  ; get the pointer to anim and not the pointer to the pointer
+    
+    mov [bp + 4], di ; animation offset
+    mov [bp + 6], bx ; animation segment
+
+    pop ds
+    pop bx
+    pop di
+    pop bp
+    ret
+endp getCurrentAnimation
+
