@@ -1,0 +1,23 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Run Assembly in DOSBox",
+        "type": "shell",
+        "command": "python",
+        "args": [
+          "${workspaceFolder}/.vscode/compile.py",
+          "${relativeFileDirname}",
+          "${fileBasename}",
+          "${fileDirname}"
+        ],
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        },
+        "problemMatcher": [],
+        "detail": "DOSBox asm runner"
+      }
+    ]
+  }
+  
