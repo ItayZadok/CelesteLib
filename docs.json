@@ -1,0 +1,859 @@
+{
+    "project": "CelesteLib",
+    "procedures": {
+        "utility.noasm": [
+            {
+                "name": "executeProcIfTrue",
+                "inputs": "condition, procedure pointer",
+                "outputs": "none",
+                "functionality": "Calls the procedure pointer when the condition is non-zero."
+            }
+        ],
+        "graphics/buffer.noasm": [
+            {
+                "name": "printBuffer",
+                "inputs": "none",
+                "outputs": "none",
+                "functionality": "Copies the 320x200 framebuffer to video memory."
+            }
+        ],
+        "graphics/image.noasm": [
+            {
+                "name": "printImage",
+                "inputs": "image ptr, screen position",
+                "outputs": "none",
+                "functionality": "Draws an image"
+            },
+            {
+                "name": "printImageUpscaled",
+                "inputs": "image ptr, screen position, scale",
+                "outputs": "none",
+                "functionality": "Draws an image enlarged by a scale factor."
+            },
+            {
+                "name": "printImageBySize",
+                "inputs": "image data ptr, data segment, width, height, screen position",
+                "outputs": "none",
+                "functionality": "Draws raw image data with transparent pixels skipped and screen clipping."
+            },
+            {
+                "name": "printImageBySizeUpscaled",
+                "inputs": "image data ptr, data segment, width, height, position, scale",
+                "outputs": "none",
+                "functionality": "Draws raw image data enlarged by a scale factor."
+            },
+            {
+                "name": "clampSizeToScreenBoundsUpscaled",
+                "inputs": "width, height, position, scale",
+                "outputs": "adjusted width, adjusted height, skip flag",
+                "functionality": "Clips a scaled image to the screen."
+            },
+            {
+                "name": "clampSizeToScreenBounds",
+                "inputs": "width, height, position",
+                "outputs": "adjusted width, adjusted height, skip flag",
+                "functionality": "Clips an image or rectangle to the screen."
+            }
+        ],
+        "graphics/palette.noasm": [
+            {
+                "name": "setPalette",
+                "inputs": "palette ptr",
+                "outputs": "none",
+                "functionality": "Sends a palette to VGA palette registers."
+            }
+        ],
+        "graphics/rect.noasm": [
+            {
+                "name": "printRect",
+                "inputs": "rectangle ptr, screen position",
+                "outputs": "none",
+                "functionality": "Draws a stored rectangle."
+            },
+            {
+                "name": "printRectBySize",
+                "inputs": "color, width, height, screen position",
+                "outputs": "none",
+                "functionality": "Draws a solid rectangle, clipped to the screen."
+            }
+        ],
+        "graphics/screen.noasm": [
+            {
+                "name": "RGBFromScreen",
+                "inputs": "x, y",
+                "outputs": "r, g, b",
+                "functionality": "Reads the color at a framebuffer pixel and retrieves its RGB values."
+            },
+            {
+                "name": "activateGraphicScreen",
+                "inputs": "none",
+                "outputs": "none",
+                "functionality": "Switches to BIOS video mode 13h (320x200x256)."
+            },
+            {
+                "name": "clearScreen",
+                "inputs": "none",
+                "outputs": "none",
+                "functionality": "Clears the framebuffer to black."
+            },
+            {
+                "name": "toScreenPos",
+                "inputs": "x, y",
+                "outputs": "screen offset",
+                "functionality": "Converts (x, y) to y * SCREEN_WIDTH + x."
+            },
+            {
+                "name": "printAllColors",
+                "inputs": "none",
+                "outputs": "none",
+                "functionality": "Writes color indices 0-255 into the beginning of the framebuffer."
+            },
+            {
+                "name": "printPixel",
+                "inputs": "screen position, color",
+                "outputs": "none",
+                "functionality": "Writes one pixel to the framebuffer."
+            },
+            {
+                "name": "getClampedXandY",
+                "inputs": "object width, height, x, y",
+                "outputs": "clamped x, clamped y",
+                "functionality": "Clamps an object's position so it stays inside the screen."
+            },
+            {
+                "name": "toXandY",
+                "inputs": "screen offset",
+                "outputs": "x, y",
+                "functionality": "Converts a framebuffer offset back to coordinates."
+            }
+        ],
+        "core/array.noasm": [
+            {
+                "name": "getArrayElementValue",
+                "inputs": "array ptr, index",
+                "outputs": "element value",
+                "functionality": "Retrieves an array element."
+            },
+            {
+                "name": "getArrayElementPointer",
+                "inputs": "array ptr, index",
+                "outputs": "element offset",
+                "functionality": "Gets the memory offset of an array element."
+            },
+            {
+                "name": "setArrayElement",
+                "inputs": "array ptr, value, index",
+                "outputs": "none",
+                "functionality": "Writes a value into an array element."
+            },
+            {
+                "name": "pushToArray",
+                "inputs": "array ptr, value",
+                "outputs": "none",
+                "functionality": "Appends a value and increases the array size."
+            },
+            {
+                "name": "popFromArray",
+                "inputs": "array ptr",
+                "outputs": "popped value",
+                "functionality": "Removes the last element and returns it."
+            },
+            {
+                "name": "createArray",
+                "inputs": "array location, length, element size",
+                "outputs": "none",
+                "functionality": "Initializes an array header."
+            },
+            {
+                "name": "goThroughArrayDownwards",
+                "inputs": "array ptr, current index",
+                "outputs": "next index, element value",
+                "functionality": "Iterates through an array from the end toward the beginning."
+            },
+            {
+                "name": "goThroughArrayUpwardsValue",
+                "inputs": "array ptr, current counter",
+                "outputs": "next counter, element value",
+                "functionality": "Iterates through an array in the opposite direction and returns values."
+            },
+            {
+                "name": "goThroughArrayUpwardsOffset",
+                "inputs": "array ptr, current counter",
+                "outputs": "next counter, element offset",
+                "functionality": "Iterates through an array and returns element addresses."
+            },
+            {
+                "name": "create2DArray",
+                "inputs": "array location, columns, rows, element size",
+                "outputs": "none",
+                "functionality": "Initializes a 2D array header."
+            },
+            {
+                "name": "get2DArrayElement",
+                "inputs": "2D array, column, row",
+                "outputs": "element value",
+                "functionality": "Retrieves a 2D array element."
+            },
+            {
+                "name": "get2DArrayRow",
+                "inputs": "2D array, row",
+                "outputs": "row pointer",
+                "functionality": "Gets the start of a row."
+            },
+            {
+                "name": "goThroughRowUpwards",
+                "inputs": "2D array, row pointer, current index",
+                "outputs": "next index, row pointer",
+                "functionality": "Iterates through a row in one direction."
+            },
+            {
+                "name": "goThroughRowDownwards",
+                "inputs": "2D array, row pointer, current index",
+                "outputs": "next index, row pointer",
+                "functionality": "Iterates through a row in the opposite direction."
+            }
+        ],
+        "core/clock.noasm": [
+            {
+                "name": "clock",
+                "inputs": "none; hardware ISR",
+                "outputs": "none",
+                "functionality": "RTC interrupt handler; acknowledges the interrupt and advances the game timer."
+            },
+            {
+                "name": "setupClock",
+                "inputs": "none",
+                "outputs": "none",
+                "functionality": "Configures the RTC for periodic interrupts and installs clock as the handler."
+            },
+            {
+                "name": "periodic",
+                "inputs": "pointer to timer",
+                "outputs": "none",
+                "functionality": "Advances the timer and calls gameLoop every GAME_SPEED milliseconds."
+            }
+        ],
+        "core/controller.noasm": [
+            {
+                "name": "getControllerComponent",
+                "inputs": "controller ptr, component ID",
+                "outputs": "component ptr",
+                "functionality": "Searches a controller for a component with a given ID."
+            },
+            {
+                "name": "getControllerWordValue",
+                "inputs": "controller ptr, component ID, parameter offset",
+                "outputs": "word value",
+                "functionality": "Reads a word field from a controller component."
+            },
+            {
+                "name": "getControllerByteValue",
+                "inputs": "controller ptr, component ID, parameter offset",
+                "outputs": "byte value",
+                "functionality": "Reads a byte field from a controller component."
+            },
+            {
+                "name": "setControllerWordValue",
+                "inputs": "controller ptr, value, component ID, parameter offset",
+                "outputs": "none",
+                "functionality": "Writes a word field in a controller component."
+            },
+            {
+                "name": "addControllerWordValue",
+                "inputs": "controller ptr, amount, component ID, parameter offset",
+                "outputs": "none",
+                "functionality": "Adds a value to a word field in a controller component."
+            }
+        ],
+        "core/layer.noasm": [
+            {
+                "name": "pushPointer",
+                "inputs": "pointer-array ptr, object ptr",
+                "outputs": "none",
+                "functionality": "Adds an object pointer to a pointer array."
+            },
+            {
+                "name": "swapPointers",
+                "inputs": "pointer-array ptr, index1, index2",
+                "outputs": "none",
+                "functionality": "Swaps two pointers in a layer or pointer array."
+            },
+            {
+                "name": "initAndUploadControllerToLayers",
+                "inputs": "controller ptr, x, y, list count, list pointers",
+                "outputs": "none",
+                "functionality": "Initializes a controller and inserts it into multiple layer lists."
+            },
+            {
+                "name": "printLayer",
+                "inputs": "layer ptr",
+                "outputs": "none",
+                "functionality": "Restores backgrounds, saves new backgrounds, then renders every controller in the layer."
+            },
+            {
+                "name": "updateAndApplyVelocityLayer",
+                "inputs": "layer ptr",
+                "outputs": "none",
+                "functionality": "Updates and applies physics to every controller in a layer."
+            },
+            {
+                "name": "updateAnimationLayer",
+                "inputs": "layer ptr, animation time",
+                "outputs": "none",
+                "functionality": "Updates animation for every controller in a layer."
+            },
+            {
+                "name": "clearPointerArray",
+                "inputs": "pointer-array ptr",
+                "outputs": "none",
+                "functionality": "Sets the pointer-array size to zero."
+            },
+            {
+                "name": "getPointerValue",
+                "inputs": "pointer ptr",
+                "outputs": "pointed-to word",
+                "functionality": "Reads a word through a pointer."
+            },
+            {
+                "name": "pushPointerToLists",
+                "inputs": "controller ptr, list count, list pointers",
+                "outputs": "none",
+                "functionality": "Inserts one controller into multiple lists."
+            },
+            {
+                "name": "clearPointerArrays",
+                "inputs": "list count, list pointers",
+                "outputs": "none",
+                "functionality": "Clears multiple pointer arrays."
+            }
+        ],
+        "core/memory.noasm": [
+            {
+                "name": "allocateMemory",
+                "inputs": "memory manager ptr, byte count",
+                "outputs": "allocated ptr",
+                "functionality": "Allocates a block from the custom linear memory manager and advances its usage counters."
+            }
+        ],
+        "core/scene.noasm": [
+            {
+                "name": "resetCurrentScene",
+                "inputs": "scene manager ptr",
+                "outputs": "none",
+                "functionality": "Calls the reset callback of the current scene."
+            },
+            {
+                "name": "switchScene",
+                "inputs": "scene manager ptr, scene index",
+                "outputs": "none",
+                "functionality": "Changes the current scene and calls its initialization callback."
+            },
+            {
+                "name": "updateCurrentScene",
+                "inputs": "scene manager ptr",
+                "outputs": "none",
+                "functionality": "Calls the update callback of the current scene."
+            }
+        ],
+        "input/keyboard.noasm": [
+            {
+                "name": "keyboardHandler",
+                "inputs": "hardware interrupt state",
+                "outputs": "none",
+                "functionality": "Keyboard ISR; reads the scan code and updates the current key-state table."
+            },
+            {
+                "name": "setupKeyboardHandler",
+                "inputs": "none",
+                "outputs": "none",
+                "functionality": "Installs the keyboard ISR at interrupt 9."
+            },
+            {
+                "name": "updateKeyboard",
+                "inputs": "none",
+                "outputs": "none",
+                "functionality": "Copies current key states into the previous-frame table."
+            },
+            {
+                "name": "keyClicked",
+                "inputs": "scan code",
+                "outputs": "1/0",
+                "functionality": "Returns true when a key transitioned from released to pressed this frame."
+            },
+            {
+                "name": "keyHeld",
+                "inputs": "scan code",
+                "outputs": "1/0",
+                "functionality": "Returns whether a key is currently held."
+            }
+        ],
+        "input/mouse.noasm": [
+            {
+                "name": "enableMouse",
+                "inputs": "none",
+                "outputs": "none",
+                "functionality": "Initializes the mouse and hides the default mouse cursor."
+            },
+            {
+                "name": "disableMouse",
+                "inputs": "none",
+                "outputs": "none",
+                "functionality": "Currently does nothing."
+            },
+            {
+                "name": "updateMouse",
+                "inputs": "mouse/controller ptr",
+                "outputs": "none",
+                "functionality": "Reads mouse position and buttons, then updates controller position and click states."
+            },
+            {
+                "name": "initAndUploadMouse",
+                "inputs": "mouse controller ptr, layer ptr",
+                "outputs": "none",
+                "functionality": "Initializes a mouse controller at the current mouse position and inserts it into a layer."
+            },
+            {
+                "name": "isClicking",
+                "inputs": "mouse controller ptr, button controller ptr",
+                "outputs": "1/0",
+                "functionality": "Checks whether the mouse left-clicked and whether its position overlaps the supplied button controller."
+            }
+        ],
+        "ui/font.noasm": [
+            {
+                "name": "getCharFromFont",
+                "inputs": "font ptr, ASCII character",
+                "outputs": "image ptr",
+                "functionality": "Finds the image belonging to a character in a font."
+            },
+            {
+                "name": "printChar",
+                "inputs": "numeric character or digit",
+                "outputs": "none",
+                "functionality": "Prints a character to the DOS console using int 21h."
+            },
+            {
+                "name": "printNumber",
+                "inputs": "number",
+                "outputs": "none",
+                "functionality": "Prints a decimal number to the DOS console."
+            },
+            {
+                "name": "printCharFromFont",
+                "inputs": "font ptr, character, position",
+                "outputs": "next position",
+                "functionality": "Draws one font character and returns the position after it."
+            },
+            {
+                "name": "printNumberByFont",
+                "inputs": "font ptr, number, position",
+                "outputs": "none",
+                "functionality": "Renders a decimal number using font images."
+            }
+        ],
+        "ui/label.noasm": [
+            {
+                "name": "printLabelByCenter",
+                "inputs": "label ptr, center x, center y",
+                "outputs": "none",
+                "functionality": "Draws a label centered around a screen position."
+            },
+            {
+                "name": "printLabel",
+                "inputs": "label ptr, position",
+                "outputs": "none",
+                "functionality": "Draws all characters of a label."
+            },
+            {
+                "name": "setLabelByNumber",
+                "inputs": "label ptr, number",
+                "outputs": "none",
+                "functionality": "Converts a number into the label's character data and updates its size."
+            }
+        ],
+        "components/animation.noasm": [
+            {
+                "name": "moveToNextAnimationFrame",
+                "inputs": "animated controller ptr",
+                "outputs": "none",
+                "functionality": "Advances the current frame, wrapping back to zero."
+            },
+            {
+                "name": "setAnimation",
+                "inputs": "controller ptr, animation index",
+                "outputs": "none",
+                "functionality": "Selects an animation and resets its frame to zero."
+            },
+            {
+                "name": "getFrameImage",
+                "inputs": "animation ptr, frame index",
+                "outputs": "image ptr",
+                "functionality": "Gets the image associated with an animation frame."
+            },
+            {
+                "name": "updateAnimation",
+                "inputs": "controller ptr, current time",
+                "outputs": "none",
+                "functionality": "Advances animation when its timing threshold is reached and updates the render image."
+            },
+            {
+                "name": "updateAnimationTime",
+                "inputs": "timer ptr",
+                "outputs": "none",
+                "functionality": "Increments an 8-bit animation timer, wrapping at 255."
+            },
+            {
+                "name": "getCurrentAnimation",
+                "inputs": "controller ptr",
+                "outputs": "animation ptr",
+                "functionality": "Returns the currently selected animation."
+            }
+        ],
+        "components/collision.noasm": [
+            {
+                "name": "getDistanceBetweenColliders",
+                "inputs": "controller1 ptr, controller2 ptr",
+                "outputs": "distance",
+                "functionality": "Calculates distance between two rectangular colliders based on their separation."
+            },
+            {
+                "name": "getFirstCollisionFromLayer",
+                "inputs": "controller ptr, collision-layer ptr",
+                "outputs": "x overlap, y overlap, collision flag",
+                "functionality": "Checks the layer until the first collision is found."
+            },
+            {
+                "name": "sortCollisionLayerByDistance",
+                "inputs": "collision-layer ptr, controller ptr",
+                "outputs": "none",
+                "functionality": "Sorts layer entries by distance from a controller."
+            },
+            {
+                "name": "areControllersColliding",
+                "inputs": "controller ptr, collider ptr",
+                "outputs": "x overlap, y overlap, collision flag",
+                "functionality": "Performs swept or raycast-style collision from previous to current position."
+            },
+            {
+                "name": "areControllerCollidingLayer",
+                "inputs": "controller ptr, collision-layer ptr",
+                "outputs": "x overlap, y overlap, collision flag",
+                "functionality": "Performs swept collision logic against a whole layer."
+            },
+            {
+                "name": "areControllersCollidingThisFrame",
+                "inputs": "controller1 ptr, controller2 ptr",
+                "outputs": "x overlap, y overlap, collision flag",
+                "functionality": "Performs immediate AABB collision detection and returns the smaller penetration axis as the correction."
+            },
+            {
+                "name": "isAxisCollision",
+                "inputs": "position1, size1, position2, size2",
+                "outputs": "signed overlap",
+                "functionality": "Calculates signed overlap along one axis."
+            },
+            {
+                "name": "doesPointCollideController",
+                "inputs": "controller ptr, point x, point y",
+                "outputs": "1/0",
+                "functionality": "Checks whether a point lies inside a controller rectangle."
+            },
+            {
+                "name": "didControllerCollide",
+                "inputs": "controller ptr, collider ptr",
+                "outputs": "collision flag",
+                "functionality": "Convenience wrapper around swept collision detection that returns only the flag."
+            },
+            {
+                "name": "getStepElements",
+                "inputs": "x1, y1, x2, y2",
+                "outputs": "scaled dx, scaled dy, step count",
+                "functionality": "Calculates raycast movement increments using RaycastPrecision."
+            },
+            {
+                "name": "addToPosition",
+                "inputs": "controller ptr, x adjustment, y adjustment",
+                "outputs": "none",
+                "functionality": "Adds offsets directly to the controller's position."
+            },
+            {
+                "name": "handleWallCollisionLayer",
+                "inputs": "controller ptr, collision layer ptr",
+                "outputs": "none",
+                "functionality": "Sorts colliders, resolves collision penetration, and zeroes the corresponding velocity."
+            },
+            {
+                "name": "getMinDistanceColliderIndex",
+                "inputs": "collision layer ptr, start index, controller ptr",
+                "outputs": "collider index",
+                "functionality": "Finds the closest collider from a given starting index."
+            },
+            {
+                "name": "didCollideWithLayer",
+                "inputs": "controller ptr, collision layer ptr",
+                "outputs": "collision flag",
+                "functionality": "Convenience wrapper around layer collision detection that returns only the flag."
+            }
+        ],
+        "components/physics.noasm": [
+            {
+                "name": "updateVelocity",
+                "inputs": "controller ptr",
+                "outputs": "none",
+                "functionality": "Updates both X and Y physics axes."
+            },
+            {
+                "name": "updatePhysicsAxis",
+                "inputs": "physics-axis ptr",
+                "outputs": "none",
+                "functionality": "Applies acceleration and friction, then clamps velocity to plus or minus max velocity."
+            },
+            {
+                "name": "applyVelocity",
+                "inputs": "controller ptr",
+                "outputs": "none",
+                "functionality": "Applies velocity using fixed-point or sub-pixel movement and clamps the final position."
+            },
+            {
+                "name": "updateAndApplyVelocity",
+                "inputs": "controller ptr",
+                "outputs": "none",
+                "functionality": "Calls updateVelocity followed by applyVelocity."
+            }
+        ],
+        "components/render.noasm": [
+            {
+                "name": "printControllerByColor",
+                "inputs": "controller ptr, color",
+                "outputs": "none",
+                "functionality": "Draws the controller's render rectangle using the specified color."
+            },
+            {
+                "name": "printController",
+                "inputs": "controller ptr",
+                "outputs": "none",
+                "functionality": "Renders a controller according to its image type: rectangle, image, array element, or label."
+            },
+            {
+                "name": "saveControllerBackground",
+                "inputs": "controller ptr",
+                "outputs": "none",
+                "functionality": "Saves the pixels currently underneath the controller."
+            },
+            {
+                "name": "printControllerBackground",
+                "inputs": "controller ptr",
+                "outputs": "none",
+                "functionality": "Restores the saved background at the previous position and updates the previous position."
+            },
+            {
+                "name": "setControllerXandY",
+                "inputs": "controller ptr, x, y",
+                "outputs": "none",
+                "functionality": "Sets the render component's position."
+            },
+            {
+                "name": "initAndPrintController",
+                "inputs": "controller ptr, x, y",
+                "outputs": "none",
+                "functionality": "Initializes a controller and immediately renders it."
+            },
+            {
+                "name": "initController",
+                "inputs": "controller ptr, x, y",
+                "outputs": "none",
+                "functionality": "Sets current and previous position and saves the initial background."
+            },
+            {
+                "name": "getControllerXandY",
+                "inputs": "controller ptr",
+                "outputs": "x, y",
+                "functionality": "Retrieves the controller's current render position."
+            }
+        ],
+        "components/rotation.noasm": [
+            {
+                "name": "updateControllerRotation",
+                "inputs": "controller ptr, rotation speed, left key, right key",
+                "outputs": "none",
+                "functionality": "Changes the controller's stored rotation according to keyboard input."
+            },
+            {
+                "name": "applyControllerRotation",
+                "inputs": "controller ptr",
+                "outputs": "none",
+                "functionality": "Converts the stored rotation in degrees into an animation or image index."
+            },
+            {
+                "name": "rotateController",
+                "inputs": "controller ptr, movement speed, forward key, back key",
+                "outputs": "none",
+                "functionality": "Moves the controller forward or backward according to its current rotation."
+            }
+        ],
+        "extensions/platformer.noasm": [
+            {
+                "name": "handleBuffer",
+                "inputs": "input flag, buffer duration, timer ptr",
+                "outputs": "1/0",
+                "functionality": "Implements an input buffer that stays active for a number of frames."
+            },
+            {
+                "name": "setGrounded",
+                "inputs": "controller ptr",
+                "outputs": "none",
+                "functionality": "Sets the render component's grounded flag to true."
+            },
+            {
+                "name": "updateDirection",
+                "inputs": "direction-X ptr, direction-Y ptr",
+                "outputs": "none",
+                "functionality": "Reads WASD and writes movement direction as -1, 0, or 1 on each axis."
+            }
+        ],
+        "extensions/pong.noasm": [
+            {
+                "name": "verticalMover",
+                "inputs": "controller ptr, speed, up key, down key",
+                "outputs": "none",
+                "functionality": "Sets vertical velocity according to two keyboard inputs."
+            },
+            {
+                "name": "handleBounceCollisionLayer",
+                "inputs": "controller ptr, collision layer ptr",
+                "outputs": "none",
+                "functionality": "Resolves a collision and reverses the appropriate X or Y velocity to bounce."
+            }
+        ],
+        "math/math.noasm": [
+            {
+                "name": "getSquareRoot",
+                "inputs": "number",
+                "outputs": "integer square root",
+                "functionality": "Calculates an integer square root using binary search."
+            },
+            {
+                "name": "getPower",
+                "inputs": "base, exponent",
+                "outputs": "base^exponent",
+                "functionality": "Calculates an integer power."
+            },
+            {
+                "name": "getDistanceBetweenPoints",
+                "inputs": "x1, y1, x2, y2",
+                "outputs": "distance",
+                "functionality": "Calculates Euclidean distance using integer math."
+            },
+            {
+                "name": "clamp",
+                "inputs": "value, min, max",
+                "outputs": "clamped value",
+                "functionality": "Returns max(min, min(value, max))."
+            },
+            {
+                "name": "min",
+                "inputs": "value1, value2",
+                "outputs": "minimum",
+                "functionality": "Returns the smaller value."
+            },
+            {
+                "name": "max",
+                "inputs": "value1, value2",
+                "outputs": "maximum",
+                "functionality": "Returns the larger value."
+            },
+            {
+                "name": "getAbs",
+                "inputs": "value",
+                "outputs": "absolute value",
+                "functionality": "Returns the absolute value."
+            },
+            {
+                "name": "inRange",
+                "inputs": "value, min, max",
+                "outputs": "1/0",
+                "functionality": "Checks whether a value is inside an inclusive range."
+            },
+            {
+                "name": "getSin",
+                "inputs": "rotation",
+                "outputs": "sine approximation",
+                "functionality": "Looks up a sine-table value for an angle."
+            },
+            {
+                "name": "getCos",
+                "inputs": "rotation",
+                "outputs": "cosine approximation",
+                "functionality": "Looks up a cosine-table value for an angle."
+            },
+            {
+                "name": "getInverseClamp",
+                "inputs": "value, min, max",
+                "outputs": "wrapped value",
+                "functionality": "Returns max below the minimum, min above the maximum, otherwise the original value."
+            },
+            {
+                "name": "getSign",
+                "inputs": "value",
+                "outputs": "-1/0/1",
+                "functionality": "Returns the sign of a value."
+            },
+            {
+                "name": "getMinAbs",
+                "inputs": "value1, value2",
+                "outputs": "smaller absolute value",
+                "functionality": "Compares absolute values and returns the smaller magnitude."
+            },
+            {
+                "name": "getMaxAbsIndex",
+                "inputs": "value1, value2",
+                "outputs": "0/1",
+                "functionality": "Returns an index indicating which value has the larger absolute magnitude."
+            },
+            {
+                "name": "getMinAbsIndex",
+                "inputs": "value1, value2",
+                "outputs": "0/1",
+                "functionality": "Returns an index indicating which value has the smaller absolute magnitude."
+            },
+            {
+                "name": "getMaxAbs",
+                "inputs": "value1, value2",
+                "outputs": "larger absolute value",
+                "functionality": "Returns the larger absolute magnitude."
+            },
+            {
+                "name": "multiply",
+                "inputs": "value1, value2",
+                "outputs": "product",
+                "functionality": "Integer multiplication."
+            },
+            {
+                "name": "divideModulo",
+                "inputs": "dividend, divisor",
+                "outputs": "quotient, remainder",
+                "functionality": "Integer division producing both quotient and remainder."
+            },
+            {
+                "name": "divide",
+                "inputs": "dividend, divisor",
+                "outputs": "quotient",
+                "functionality": "Integer division."
+            }
+        ],
+        "math/random.noasm": [
+            {
+                "name": "getRandomWord",
+                "inputs": "none",
+                "outputs": "random word",
+                "functionality": "Generates a pseudo-random 16-bit value using an xorshift-style algorithm and updates the seed."
+            },
+            {
+                "name": "getRandomInRange",
+                "inputs": "min, max",
+                "outputs": "random value",
+                "functionality": "Generates a pseudo-random value within the inclusive [min, max] range."
+            }
+        ]
+    }
+}

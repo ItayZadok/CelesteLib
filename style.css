@@ -1,0 +1,87 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    color: #111;
+    background: white;
+}
+
+header {
+    border-bottom: 1px solid #aaa;
+    padding: 10px 20px;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+header p {
+    margin: 4px 0 0;
+}
+
+main {
+    display: flex;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+aside {
+    width: 220px;
+    padding: 15px;
+    border-right: 1px solid #aaa;
+    min-height: calc(100vh - 90px);
+}
+
+aside h2 {
+    font-size: 18px;
+}
+
+.file-link {
+    display: block;
+    padding: 3px 0;
+    color: #0000aa;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+#content {
+    flex: 1;
+    padding: 15px 25px;
+}
+
+#file-title {
+    margin-top: 0;
+    font-size: 22px;
+}
+
+.procedure {
+    margin-bottom: 25px;
+}
+
+.procedure h3 {
+    font-family: monospace;
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.procedure table {
+    border-collapse: collapse;
+    margin-bottom: 8px;
+}
+
+.procedure th,
+.procedure td {
+    border: 1px solid #aaa;
+    padding: 4px 8px;
+    text-align: left;
+    vertical-align: top;
+}
+
+.procedure th {
+    background: #eee;
+    font-weight: normal;
+}
+
+.description {
+    margin: 0;
+}
